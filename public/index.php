@@ -37,7 +37,7 @@ if (!file_exists(BASE_PATH . '/config.php')) {
 header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: DENY");
 header("Referrer-Policy: strict-origin-when-cross-origin");
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self';");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self';");
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
@@ -197,5 +197,13 @@ $contenido_vista = ob_get_clean();
 
 $css_vista = $ruta_activa['css'] ?? [];
 $js_vista  = $ruta_activa['js']  ?? [];
+
+// ── Menú público dinámico ────────────────────────────────────────────────────
+// Si la plantilla actual es el layout público, se inyectan las opciones del menú.
+// La lógica de filtrado vive en LayoutPublicController; aquí solo se invoca.
+if (str_contains($ruta_activa['plantilla'], 'layout_public.php')) {
+    require_once BASE_PATH . '/controllers/LayoutPublicController.php';
+    $opciones_publicas = LayoutPublicController::obtenerMenu();
+}
 
 require $ruta_plantilla;

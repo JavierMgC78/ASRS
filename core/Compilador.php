@@ -46,9 +46,13 @@ class Compilador
 
             // La URI actúa como clave principal del arreglo.
             $rutas[$fila['uri']] = [
+                'uri'            => $fila['uri'],
+                'nombre_opcion'  => $fila['nombre_opcion'],
                 'vista'          => $fila['vista'],
                 'plantilla'      => $fila['plantilla'],
+                'controlador'    => $fila['controlador'],
                 'requiere_login' => (bool) $fila['requiere_login'],
+                'nivel_minimo'   => (int) $fila['nivel_minimo'],
                 'css'            => $css ?? [],
                 'js'             => $js  ?? [],
             ];

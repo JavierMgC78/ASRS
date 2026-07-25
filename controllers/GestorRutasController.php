@@ -84,7 +84,7 @@ $mensaje_gestor_rutas = null;
 function recompilar_cache_rutas(PDO $pdo): bool
 {
     $select_rutas = $pdo->query(
-        'SELECT uri, vista, plantilla, controlador, requiere_login, nivel_minimo, css, js
+        'SELECT uri, nombre_opcion, vista, plantilla, controlador, requiere_login, nivel_minimo, css, js
          FROM rutas
          ORDER BY id ASC'
     );
@@ -99,6 +99,7 @@ function recompilar_cache_rutas(PDO $pdo): bool
 
         $rutas_array[$fila['uri']] = [
             'uri'            => trim($fila['uri']),
+            'nombre_opcion'  => $fila['nombre_opcion'],
             'vista'          => trim($fila['vista']),
             'plantilla'      => trim($fila['plantilla']),
             'controlador'    => $fila['controlador'] ? trim($fila['controlador']) : null,
@@ -565,9 +566,27 @@ try {
     $stmt_lista = $pdo->query(
         'SELECT id, uri, vista, controlador, nivel_minimo, plantilla
          FROM rutas
-         ORDER BY id ASC'
+         ORDER BY nivel_minimo ASC, id ASC'
     );
-    $lista_rutas = $stmt_lista->fetchAll(PDO::FETCH_ASSOC);
+    $rutas_planas = $stmt_lista->fetchAll(PDO::FETCH_ASSOC);
+
+    $lista_rutas = [
+        'publicas' => [],
+        'privadas' => []
+    ];
+
+    foreach ($rutas_planas as $ruta) {
+        $plantilla = (string) $ruta['plantilla'];
+        if (str_starts_with($plantilla, 'templates/public/')) {
+            $lista_rutas['publicas'][] = $ruta;
+        } else {
+            $nivel = (int) $ruta['nivel_minimo'];
+            if (!isset($lista_rutas['privadas'][$nivel])) {
+                $lista_rutas['privadas'][$nivel] = [];
+            }
+            $lista_rutas['privadas'][$nivel][] = $ruta;
+        }
+    }
 
 } catch (PDOException $e) {
     error_log('GestorRutasController [listar]: ' . $e->getMessage());

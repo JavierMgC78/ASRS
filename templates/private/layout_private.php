@@ -86,7 +86,7 @@ $menu_herramientas = array_filter($menu_admin, fn($item) => $item['grupo'] === '
     <div class="d-flex" style="min-height: 100vh;">
 
         <!-- ══ SIDEBAR ══════════════════════════════════════════════════════ -->
-        <aside class="bg-secondary p-3 d-flex flex-column" style="width: 280px; min-height: 100vh;">
+        <aside class="bg-secondary p-3 d-flex flex-column" style="width: 280px; min-width: 280px; flex-shrink: 0; min-height: 100vh;">
 
             <!-- Marca -->
             <div class="d-flex align-items-center mb-3 me-md-auto text-white text-decoration-none">
@@ -177,7 +177,7 @@ $menu_herramientas = array_filter($menu_admin, fn($item) => $item['grupo'] === '
         <!-- ════════════════════════════════════════════════════════════════ -->
 
         <!-- ══ ÁREA DE CONTENIDO ════════════════════════════════════════════ -->
-        <main class="flex-grow-1 p-4" style="background-color: #0f111a; overflow-y: auto;">
+        <main class="flex-grow-1 p-4" style="background-color: #0f111a; overflow: auto; min-width: 0;">
 
             <!-- Topbar interno del área de contenido -->
             <header class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary pb-3">

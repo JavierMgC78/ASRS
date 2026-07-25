@@ -627,6 +627,21 @@
         flex-shrink: 0;
     }
 
+    /* ── Separadores de Sección en Tabla ── */
+    .gr-section-header {
+        background-color: rgba(30, 41, 59, 0.6);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .gr-section-header td {
+        padding: 0.6rem 1rem !important;
+        color: #94a3b8;
+        font-size: 0.82rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
     /* ── Responsive ── */
     @media (max-width: 860px) {
         .gr-card { padding: 1.2rem; }
@@ -821,19 +836,22 @@
                 </tr>
                 <!-- ══ FIN FILA DE INSERCIÓN RÁPIDA ══ -->
 
-                <?php if (!empty($lista_rutas)) : ?>
-                    <?php foreach ($lista_rutas as $ruta) : ?>
-                        <?php
-                            $safe_id          = htmlspecialchars((string) $ruta['id'],          ENT_QUOTES, 'UTF-8');
-                            $safe_uri         = htmlspecialchars((string) $ruta['uri'],         ENT_QUOTES, 'UTF-8');
-                            $safe_vista       = htmlspecialchars((string) $ruta['vista'],       ENT_QUOTES, 'UTF-8');
-                            $safe_ctrl        = htmlspecialchars((string) ($ruta['controlador'] ?? ''), ENT_QUOTES, 'UTF-8');
-                            $nivel_num        = (int) $ruta['nivel_minimo'];
-                            $plantilla_actual = (string) $ruta['plantilla'];
-                            
-                            // Validación de existencia de archivo físico
-                            $vista_fisica = realpath(BASE_PATH . '/' . $ruta['vista']);
-                            $vista_existe = $vista_fisica !== false && is_file($vista_fisica);
+                <?php 
+                    // Renderizamos en base a las agrupaciones si hay rutas
+                    $hay_rutas = !empty($lista_rutas);
+
+                    // Función anónima para renderizar filas de datos (para no repetir código)
+                    $renderizar_ruta = function($ruta) use ($vistas_disponibles, $controladores_disponibles, $roles_disponibles, $plantillas_privadas, $plantillas_publicas, $csrf_safe, $niveles_permitidos) {
+                        $safe_id          = htmlspecialchars((string) $ruta['id'],          ENT_QUOTES, 'UTF-8');
+                        $safe_uri         = htmlspecialchars((string) $ruta['uri'],         ENT_QUOTES, 'UTF-8');
+                        $safe_vista       = htmlspecialchars((string) $ruta['vista'],       ENT_QUOTES, 'UTF-8');
+                        $safe_ctrl        = htmlspecialchars((string) ($ruta['controlador'] ?? ''), ENT_QUOTES, 'UTF-8');
+                        $nivel_num        = (int) $ruta['nivel_minimo'];
+                        $plantilla_actual = (string) $ruta['plantilla'];
+                        
+                        // Validación de existencia de archivo físico
+                        $vista_fisica = realpath(BASE_PATH . '/' . $ruta['vista']);
+                        $vista_existe = $vista_fisica !== false && is_file($vista_fisica);
                         ?>
                         <tr id="fila-ruta-<?= $safe_id ?>">
 
@@ -935,12 +953,10 @@
                                         aria-label="Nivel mínimo de la ruta <?= $safe_uri ?>"
                                         onchange="this.classList.add('saving'); this.form.submit();"
                                     >
-                                        <?php
-                                        // Itera $roles_disponibles desde config/roles.php (sin hardcoding)
-                                        foreach ($roles_disponibles as $val => $label) :
-                                            $sel = ($nivel_num === $val) ? 'selected' : '';
-                                        ?>
-                                            <option value="<?= $val ?>" <?= $sel ?>><?= $val ?> — <?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?></option>
+                                        <?php foreach ($roles_disponibles as $val => $label) : ?>
+                                            <option value="<?= $val ?>" <?= ($nivel_num === $val) ? 'selected' : '' ?>>
+                                                Nivel <?= $val ?> — <?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?>
+                                            </option>
                                         <?php endforeach; ?>
                                     </select>
                                 </form>
@@ -1041,7 +1057,35 @@
                             </td>
 
                         </tr>
-                    <?php endforeach; ?>
+                        <?php
+                    };
+                ?>
+
+                <?php if ($hay_rutas) : ?>
+
+                    <?php if (!empty($lista_rutas['publicas'])) : ?>
+                        <tr class="gr-section-header">
+                            <td colspan="7">🌐 Rutas Públicas (Sin Login Requerido)</td>
+                        </tr>
+                        <?php foreach ($lista_rutas['publicas'] as $ruta) {
+                            $renderizar_ruta($ruta);
+                        } ?>
+                    <?php endif; ?>
+
+                    <?php if (!empty($lista_rutas['privadas'])) : ?>
+                        <?php foreach ($lista_rutas['privadas'] as $nivel => $rutas_nivel) : ?>
+                            <?php 
+                                $nombre_rol = $roles_disponibles[$nivel] ?? 'Desconocido'; 
+                            ?>
+                            <tr class="gr-section-header">
+                                <td colspan="7">🔒 Nivel <?= (int)$nivel ?> — <?= htmlspecialchars($nombre_rol, ENT_QUOTES, 'UTF-8') ?></td>
+                            </tr>
+                            <?php foreach ($rutas_nivel as $ruta) {
+                                $renderizar_ruta($ruta);
+                            } ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+
                 <?php else : ?>
                     <tr>
                         <td colspan="7">

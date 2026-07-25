@@ -34,11 +34,20 @@
                 Axe Framework
             </a>
 
+            <?php
+            // $opciones_publicas viene inyectado desde index.php vía LayoutPublicController
+            $uri_actual = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+            ?>
             <!-- Navegación principal -->
             <ul class="pub-nav-links">
-                <li><a href="/" class="<?= ($_SERVER['REQUEST_URI'] === '/') ? 'activo' : '' ?>">Inicio</a></li>
-                <li><a href="/nosotros" class="<?= ($_SERVER['REQUEST_URI'] === '/nosotros') ? 'activo' : '' ?>">Nosotros</a></li>
-                <li><a href="/acerca-de" class="<?= ($_SERVER['REQUEST_URI'] === '/acerca-de') ? 'activo' : '' ?>">Acerca de</a></li>
+                <?php foreach ($opciones_publicas as $opcion) : ?>
+                    <li>
+                        <a href="<?= htmlspecialchars($opcion['uri'], ENT_QUOTES, 'UTF-8') ?>" 
+                           class="<?= ($uri_actual === $opcion['uri']) ? 'activo' : '' ?>">
+                            <?= htmlspecialchars($opcion['titulo'], ENT_QUOTES, 'UTF-8') ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
             </ul>
 
             <!-- Botón de acceso (candado) -->

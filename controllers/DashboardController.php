@@ -176,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // ── 5d. Recompilación de Caché ────────────────────────────────────
             // Recuperar todas las rutas de la tabla para regenerar el archivo cache.
             $select_rutas = $pdo->query(
-                'SELECT uri, vista, plantilla, controlador, requiere_login, nivel_minimo, css, js
+                'SELECT uri, nombre_opcion, vista, plantilla, controlador, requiere_login, nivel_minimo, css, js
                  FROM rutas
                  ORDER BY id ASC'
             );
@@ -194,6 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $rutas_array[$fila['uri']] = [
                     'uri'            => trim($fila['uri']),
+                    'nombre_opcion'  => $fila['nombre_opcion'],
                     'vista'          => trim($fila['vista']),
                     'plantilla'      => trim($fila['plantilla']),
                     'controlador'    => $fila['controlador'] ? trim($fila['controlador']) : null,

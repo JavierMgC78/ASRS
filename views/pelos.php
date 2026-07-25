@@ -1,1 +1,0 @@
-<h1 class="frio">vista de prueba pelos<?php</h1>

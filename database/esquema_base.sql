@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS `auth_tokens` (
 CREATE TABLE IF NOT EXISTS `rutas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uri` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nombre_opcion` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `vista` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `plantilla` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `controlador` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -84,10 +85,16 @@ INSERT IGNORE INTO `roles` (`nivel`, `nombre`, `descripcion`) VALUES
 -- ==============================================================================
 -- Inserción de Datos Estructurales (Rutas del Core)
 -- ==============================================================================
-INSERT IGNORE INTO `rutas` (`uri`, `vista`, `plantilla`, `controlador`, `requiere_login`, `nivel_minimo`) VALUES
-('/', 'views/home.php', 'templates/default.php', 'controllers/HomeController.php', 0, 0),
-('/login', 'views/login.php', 'templates/default.php', 'controllers/LoginController.php', 0, 0),
-('/logout', 'views/home.php', 'templates/default.php', 'controllers/LogoutController.php', 0, 0),
-('/dashboard', 'views/dashboard.php', 'templates/layoutAdmin.php', 'controllers/DashboardController.php', 1, 100),
-('/gestor-rutas', 'views/gestor-rutas.php', 'templates/layoutAdmin.php', 'controllers/GestorRutasController.php', 1, 100),
-('/gestor-roles', 'views/gestor-roles.php', 'templates/layoutAdmin.php', 'controllers/GestorRolesController.php', 1, 100);
+INSERT IGNORE INTO `rutas` (`uri`, `nombre_opcion`, `vista`, `plantilla`, `controlador`, `requiere_login`, `nivel_minimo`, `css`, `js`) VALUES
+('/', '', 'views/public/home_public.php', 'templates/public/layout_public.php', 'controllers/HomeController.php', 0, 0, NULL, NULL),
+('/contacto', 'contacto', 'views/contacto.php', 'templates/default.php', NULL, 0, 0, NULL, NULL),
+('/login', 'login', 'views/login.php', 'templates/default.php', 'controllers/LoginController.php', 0, 0, NULL, NULL),
+('/nosotros', 'nosotros', 'views/public/nosotros_public.php', 'templates/public/layout_public.php', NULL, 0, 0, '["/assets/css/public/nosotrosPublic.css"]', '["/assets/js/public/nosotrosPublic.js"]'),
+('/dashboard', 'dashboard', 'views/private/dashboard_private.php', 'templates/private/layout_private.php', 'controllers/DashboardController.php', 1, 100, NULL, NULL),
+('/logout', 'logout', 'views/home.php', 'templates/default.php', 'controllers/LogoutController.php', 0, 0, NULL, NULL),
+('/acerca-de', 'acerca-de', 'views/public/acerca-de_public.php', 'templates/public/layout_public.php', NULL, 0, 50, '["/assets/css/acerca-de.css"]', '["/assets/js/acerca-de.js"]'),
+('/gestor-usuarios', 'gestor-usuarios', 'views/private/gestor-usuarios_private.php', 'templates/private/layout_private.php', 'controllers/UsuariosController.php', 1, 100, '["/assets/css/usuarios.css"]', '["/assets/js/usuarios.js"]'),
+('/bitacora-auditoria', 'bitacora-auditoria', 'views/private/bitacora-auditoria_private.php', 'templates/private/layout_private.php', 'controllers/AuditoriaController.php', 1, 100, '["/assets/css/auditoria.css"]', '["/assets/js/auditoria.js"]'),
+('/gestor-rutas', 'gestor-rutas', 'views/private/gestor-rutas_private.php', 'templates/private/layout_private.php', 'controllers/GestorRutasController.php', 1, 100, NULL, NULL),
+('/editor-vistas', 'editor-vistas', 'views/editor-vistas.php', 'templates/layoutAdmin.php', 'controllers/EditorVistasController.php', 1, 100, NULL, NULL),
+('/gestor-roles', 'gestor-roles', 'views/private/gestor-roles_private.php', 'templates/private/layout_private.php', 'controllers/GestorRolesController.php', 1, 100, NULL, NULL);
