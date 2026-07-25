@@ -1,0 +1,106 @@
+/* ==========================================
+   AXE FRAMEWORK - ESTILOS BASE (Admin Layout)
+   ========================================== */
+
+:root {
+    --bg-dark: #0f111a;          /* Fondo principal oscuro */
+    --bg-panel: #1a1d2d;         /* Fondo de paneles y sidebar */
+    --text-main: #e2e8f0;        /* Texto claro principal */
+    --text-muted: #94a3b8;       /* Texto secundario/apagado */
+    --primary: #6366f1;          /* Morado/Azul para botones principales */
+    --primary-hover: #4f46e5;
+    --border-color: #2d3748;     /* Líneas divisorias */
+    --danger: #ef4444;           /* Alertas y botones de salida */
+    --info: #38bdf8;             /* Enlaces informativos */
+}
+
+/* Reseteo Artesanal */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================
+   UTILIDADES FLEXBOX Y ESTRUCTURA
+   ========================================== */
+.d-flex { display: flex; }
+.flex-column { flex-direction: column; }
+.flex-grow-1 { flex-grow: 1; }
+.justify-content-between { justify-content: space-between; }
+.align-items-center { align-items: center; }
+
+/* Espaciados (Márgenes y Paddings) */
+.p-3 { padding: 1rem; }
+.p-4 { padding: 1.5rem; }
+.pb-3 { padding-bottom: 1rem; }
+.mb-0 { margin-bottom: 0; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 1rem; }
+.mb-4 { margin-bottom: 1.5rem; }
+.mt-2 { margin-top: 0.5rem; }
+.me-md-auto { margin-right: auto; }
+
+/* ==========================================
+   COLORES Y BORDES
+   ========================================== */
+.bg-dark { background-color: var(--bg-dark); }
+.bg-secondary { background-color: var(--bg-panel); }
+.text-white { color: var(--text-main); }
+.text-white-50 { color: var(--text-muted); }
+.text-primary { color: var(--primary); }
+.text-danger { color: var(--danger); }
+.text-info { color: var(--info); }
+.text-muted { color: var(--text-muted); }
+
+.border-bottom { border-bottom: 1px solid var(--border-color); }
+.border-secondary { border-color: var(--border-color) !important; }
+
+/* ==========================================
+   TIPOGRAFÍA Y ELEMENTOS
+   ========================================== */
+.fs-4 { font-size: 1.5rem; }
+.fw-bold { font-weight: 700; }
+.h3 { font-size: 1.75rem; font-weight: 600; }
+.text-decoration-none { text-decoration: none; }
+
+hr {
+    border: 0;
+    border-top: 1px solid var(--border-color);
+    margin: 1rem 0;
+}
+
+/* ==========================================
+   NAVEGACIÓN (SIDEBAR)
+   ========================================== */
+.nav {
+    list-style: none;
+    padding-left: 0;
+}
+
+.nav-link {
+    display: block;
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Estado activo del menú */
+.nav-link.active {
+    background-color: var(--primary);
+    color: #ffffff !important;
+    font-weight: 600;
+}

@@ -492,20 +492,20 @@
     }
     .gr-btn-modal-save:active { transform: scale(.97); }
 
-    /* ── Edición inline de la celda Vista ── */
-    .gr-vista-cell {
+    /* ── Edición inline de la celda Vista y Nombre Opción ── */
+    .gr-vista-cell, .gr-nombre-cell {
         display: flex;
         align-items: center;
         gap: .4rem;
     }
-    .gr-vista-text {
+    .gr-vista-text, .gr-nombre-text {
         color: #94a3b8; font-size: .79rem;
         font-family: 'Courier New', monospace;
         overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
         flex: 1;
         min-width: 0;
     }
-    .gr-btn-edit-vista {
+    .gr-btn-edit-vista, .gr-btn-edit-nombre {
         display: inline-flex; align-items: center; justify-content: center;
         width: 22px; height: 22px;
         background: transparent;
@@ -519,29 +519,33 @@
         opacity: 0;
     }
     tr:hover .gr-btn-edit-vista,
-    .gr-btn-edit-vista:focus {
+    .gr-btn-edit-vista:focus,
+    tr:hover .gr-btn-edit-nombre,
+    .gr-btn-edit-nombre:focus {
         opacity: 1;
     }
-    .gr-btn-edit-vista:hover {
+    .gr-btn-edit-vista:hover, .gr-btn-edit-nombre:hover {
         color: #818cf8;
         border-color: rgba(99,102,241,.3);
         background: rgba(99,102,241,.08);
     }
     /* Modo edición */
-    .gr-vista-edit-wrap {
+    .gr-vista-edit-wrap, .gr-nombre-edit-wrap {
         display: none;
         align-items: center;
         gap: .35rem;
         width: 100%;
     }
-    .gr-vista-edit-wrap.is-editing {
+    .gr-vista-edit-wrap.is-editing, .gr-nombre-edit-wrap.is-editing {
         display: flex;
     }
     .gr-vista-cell.is-editing .gr-vista-text,
-    .gr-vista-cell.is-editing .gr-btn-edit-vista {
+    .gr-vista-cell.is-editing .gr-btn-edit-vista,
+    .gr-nombre-cell.is-editing .gr-nombre-text,
+    .gr-nombre-cell.is-editing .gr-btn-edit-nombre {
         display: none;
     }
-    .gr-vista-input {
+    .gr-vista-input, .gr-nombre-input {
         flex: 1;
         min-width: 0;
         background: rgba(10,12,20,.9);
@@ -555,15 +559,15 @@
         box-shadow: 0 0 0 3px rgba(99,102,241,.1);
         transition: border-color .18s, box-shadow .18s;
     }
-    .gr-vista-input:focus {
+    .gr-vista-input:focus, .gr-nombre-input:focus {
         border-color: rgba(99,102,241,.7);
         box-shadow: 0 0 0 3px rgba(99,102,241,.18);
     }
-    .gr-vista-input.is-error {
+    .gr-vista-input.is-error, .gr-nombre-input.is-error {
         border-color: rgba(239,68,68,.55);
         box-shadow: 0 0 0 3px rgba(239,68,68,.12);
     }
-    .gr-btn-vista-save {
+    .gr-btn-vista-save, .gr-btn-nombre-save {
         display: inline-flex; align-items: center; justify-content: center;
         width: 26px; height: 26px;
         background: rgba(16,185,129,.18);
@@ -575,12 +579,12 @@
         flex-shrink: 0;
         transition: background .15s, border-color .15s, transform .12s;
     }
-    .gr-btn-vista-save:hover {
+    .gr-btn-vista-save:hover, .gr-btn-nombre-save:hover {
         background: rgba(16,185,129,.3);
         border-color: rgba(16,185,129,.6);
         transform: scale(1.08);
     }
-    .gr-btn-vista-cancel {
+    .gr-btn-vista-cancel, .gr-btn-nombre-cancel {
         display: inline-flex; align-items: center; justify-content: center;
         width: 26px; height: 26px;
         background: rgba(239,68,68,.1);
@@ -592,17 +596,19 @@
         flex-shrink: 0;
         transition: background .15s, border-color .15s, transform .12s;
     }
-    .gr-btn-vista-cancel:hover {
+    .gr-btn-vista-cancel:hover, .gr-btn-nombre-cancel:hover {
         background: rgba(239,68,68,.2);
         border-color: rgba(239,68,68,.5);
         transform: scale(1.08);
     }
     .gr-btn-vista-save.is-loading,
-    .gr-btn-vista-cancel.is-loading {
+    .gr-btn-vista-cancel.is-loading,
+    .gr-btn-nombre-save.is-loading,
+    .gr-btn-nombre-cancel.is-loading {
         opacity: .5; pointer-events: none;
     }
     /* ── Toast inline ── */
-    .gr-vista-toast {
+    .gr-vista-toast, .gr-nombre-toast {
         font-size: .72rem;
         padding: .18rem .5rem;
         border-radius: 5px;
@@ -613,8 +619,8 @@
         from { opacity: 0; transform: translateY(4px); }
         to   { opacity: 1; transform: translateY(0); }
     }
-    .gr-vista-toast.ok  { background: rgba(16,185,129,.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,.3); }
-    .gr-vista-toast.err { background: rgba(239,68,68,.12);  color: #fca5a5; border: 1px solid rgba(239,68,68,.3); }
+    .gr-vista-toast.ok, .gr-nombre-toast.ok  { background: rgba(16,185,129,.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,.3); }
+    .gr-vista-toast.err, .gr-nombre-toast.err { background: rgba(239,68,68,.12);  color: #fca5a5; border: 1px solid rgba(239,68,68,.3); }
 
     /* ── Indicador de estado de archivo físico ── */
     .gr-status-dot-error {
@@ -707,20 +713,22 @@
 
     <div class="gr-table-scroll">
         <table class="gr-table" id="tabla-rutas">
-            <!-- colgroup: define anchos fijos para las 7 columnas -->
+            <!-- colgroup: define anchos fijos para las 8 columnas -->
             <colgroup>
                 <col style="width: 70px">   <!-- # ID -->
-                <col style="width: 18%">    <!-- URI -->
-                <col style="width: 16%">    <!-- Vista -->
-                <col style="width: 16%">    <!-- Controlador -->
-                <col style="width: 14%">    <!-- Nivel Mín. -->
-                <col style="width: 14%">    <!-- Plantilla -->
+                <col style="width: 15%">    <!-- URI -->
+                <col style="width: 14%">    <!-- Nombre Opción -->
+                <col style="width: 14%">    <!-- Vista -->
+                <col style="width: 14%">    <!-- Controlador -->
+                <col style="width: 12%">    <!-- Nivel Mín. -->
+                <col style="width: 12%">    <!-- Plantilla -->
                 <col style="width: 110px">  <!-- Acciones -->
             </colgroup>
             <thead>
                 <tr>
                     <th scope="col"># ID</th>
                     <th scope="col">URI</th>
+                    <th scope="col">Nombre Opción</th>
                     <th scope="col">Vista</th>
                     <th scope="col">Controlador</th>
                     <th scope="col">Nivel Mín.</th>
@@ -756,6 +764,20 @@
                             required
                             form="formNuevaRuta"
                             aria-label="URI de la nueva ruta"
+                        >
+                    </td>
+
+                    <!-- Col 2.5: Nombre Opción -->
+                    <td>
+                        <input
+                            type="text"
+                            name="nombre_opcion"
+                            id="inline-nombre_opcion"
+                            class="gr-insert-input"
+                            placeholder="Ej: Dashboard"
+                            autocomplete="off"
+                            form="formNuevaRuta"
+                            aria-label="Nombre de la opción de navegación"
                         >
                     </td>
 
@@ -844,6 +866,7 @@
                     $renderizar_ruta = function($ruta) use ($vistas_disponibles, $controladores_disponibles, $roles_disponibles, $plantillas_privadas, $plantillas_publicas, $csrf_safe, $niveles_permitidos) {
                         $safe_id          = htmlspecialchars((string) $ruta['id'],          ENT_QUOTES, 'UTF-8');
                         $safe_uri         = htmlspecialchars((string) $ruta['uri'],         ENT_QUOTES, 'UTF-8');
+                        $safe_nombre_opcion = htmlspecialchars((string) ($ruta['nombre_opcion'] ?? ''), ENT_QUOTES, 'UTF-8');
                         $safe_vista       = htmlspecialchars((string) $ruta['vista'],       ENT_QUOTES, 'UTF-8');
                         $safe_ctrl        = htmlspecialchars((string) ($ruta['controlador'] ?? ''), ENT_QUOTES, 'UTF-8');
                         $nivel_num        = (int) $ruta['nivel_minimo'];
@@ -860,6 +883,65 @@
 
                             <!-- URI -->
                             <td><span class="gr-cell-uri"><?= $safe_uri ?></span></td>
+
+                            <!-- Nombre Opción -->
+                            <td>
+                                <div class="gr-nombre-cell" id="nombre-cell-<?= $safe_id ?>">
+                                    <!-- Texto actual -->
+                                    <span class="gr-nombre-text" id="nombre-text-<?= $safe_id ?>" title="<?= $safe_nombre_opcion ?>">
+                                        <?= $safe_nombre_opcion ?: '<em style="color:#64748b;font-size:0.75rem;">—</em>' ?>
+                                    </span>
+                                    <!-- Botón lápiz (inline, discreto) -->
+                                    <button
+                                        type="button"
+                                        class="gr-btn-edit-nombre"
+                                        id="btn-edit-nombre-<?= $safe_id ?>"
+                                        aria-label="Editar nombre de la ruta <?= $safe_uri ?>"
+                                        title="Editar nombre"
+                                        onclick="grActivarEdicionNombre(<?= $ruta['id'] ?>)"
+                                    >
+                                        <!-- lápiz mini -->
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                        </svg>
+                                    </button>
+                                    <!-- Controles de edición (ocultos por defecto) -->
+                                    <div class="gr-nombre-edit-wrap" id="nombre-edit-<?= $safe_id ?>">
+                                        <input
+                                            type="text"
+                                            class="gr-nombre-input"
+                                            id="nombre-input-<?= $safe_id ?>"
+                                            value="<?= $safe_nombre_opcion ?>"
+                                            aria-label="Nombre para <?= $safe_uri ?>"
+                                            data-original="<?= $safe_nombre_opcion ?>"
+                                            data-id="<?= $safe_id ?>"
+                                        >
+                                        <!-- Guardar -->
+                                        <button
+                                            type="button"
+                                            class="gr-btn-nombre-save"
+                                            id="btn-save-nombre-<?= $safe_id ?>"
+                                            title="Guardar (Enter)"
+                                            aria-label="Guardar nombre"
+                                            onclick="grGuardarNombre(<?= $ruta['id'] ?>)"
+                                        >
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                                        </button>
+                                        <!-- Cancelar -->
+                                        <button
+                                            type="button"
+                                            class="gr-btn-nombre-cancel"
+                                            id="btn-cancel-nombre-<?= $safe_id ?>"
+                                            title="Cancelar (Esc)"
+                                            aria-label="Cancelar edición"
+                                            onclick="grCancelarEdicionNombre(<?= $ruta['id'] ?>)"
+                                        >
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
 
                             <!-- Vista -->
                             <td>
@@ -1065,7 +1147,7 @@
 
                     <?php if (!empty($lista_rutas['publicas'])) : ?>
                         <tr class="gr-section-header">
-                            <td colspan="7">🌐 Rutas Públicas (Sin Login Requerido)</td>
+                            <td colspan="8">🌐 Rutas Públicas (Sin Login Requerido)</td>
                         </tr>
                         <?php foreach ($lista_rutas['publicas'] as $ruta) {
                             $renderizar_ruta($ruta);
@@ -1078,7 +1160,7 @@
                                 $nombre_rol = $roles_disponibles[$nivel] ?? 'Desconocido'; 
                             ?>
                             <tr class="gr-section-header">
-                                <td colspan="7">🔒 Nivel <?= (int)$nivel ?> — <?= htmlspecialchars($nombre_rol, ENT_QUOTES, 'UTF-8') ?></td>
+                                <td colspan="8">🔒 Nivel <?= (int)$nivel ?> — <?= htmlspecialchars($nombre_rol, ENT_QUOTES, 'UTF-8') ?></td>
                             </tr>
                             <?php foreach ($rutas_nivel as $ruta) {
                                 $renderizar_ruta($ruta);
@@ -1088,7 +1170,7 @@
 
                 <?php else : ?>
                     <tr>
-                        <td colspan="7">
+                        <td colspan="8">
                             <div class="gr-empty" id="gr-empty-state">
                                 <div class="gr-empty-icon">🗺️</div>
                                 <p>No hay rutas registradas todavía.<br>
@@ -1404,6 +1486,132 @@
         const toast = document.createElement('div');
         toast.id          = 'vista-toast-' + id;
         toast.className   = 'gr-vista-toast ' + tipo;
+        toast.textContent = msg;
+        td.appendChild(toast);
+
+        setTimeout(function () { toast.remove(); }, 3000);
+    }
+
+    // ───────────────────────────────────────────────────────────────────────
+    // EDICIÓN INLINE DE NOMBRE OPCIÓN (AJAX)
+    // ───────────────────────────────────────────────────────────────────────
+    window.grActivarEdicionNombre = function (id) {
+        const cell     = document.getElementById('nombre-cell-' + id);
+        const editWrap = document.getElementById('nombre-edit-' + id);
+        const input    = document.getElementById('nombre-input-' + id);
+
+        if (!cell || !editWrap || !input) return;
+
+        cell.classList.add('is-editing');
+        editWrap.classList.add('is-editing');
+        input.classList.remove('is-error');
+
+        input.focus();
+        input.select();
+
+        input._grKeyHandler = function (e) {
+            if (e.key === 'Enter')  { e.preventDefault(); grGuardarNombre(id); }
+            if (e.key === 'Escape') { grCancelarEdicionNombre(id); }
+        };
+        input.addEventListener('keydown', input._grKeyHandler);
+    };
+
+    window.grCancelarEdicionNombre = function (id) {
+        const cell     = document.getElementById('nombre-cell-' + id);
+        const editWrap = document.getElementById('nombre-edit-' + id);
+        const input    = document.getElementById('nombre-input-' + id);
+
+        if (!cell || !editWrap || !input) return;
+
+        input.value = input.dataset.original;
+        input.classList.remove('is-error');
+
+        cell.classList.remove('is-editing');
+        editWrap.classList.remove('is-editing');
+
+        if (input._grKeyHandler) {
+            input.removeEventListener('keydown', input._grKeyHandler);
+        }
+    };
+
+    window.grGuardarNombre = function (id) {
+        const cell      = document.getElementById('nombre-cell-' + id);
+        const editWrap  = document.getElementById('nombre-edit-' + id);
+        const input     = document.getElementById('nombre-input-' + id);
+        const btnSave   = document.getElementById('btn-save-nombre-' + id);
+        const btnCancel = document.getElementById('btn-cancel-nombre-' + id);
+        const textSpan  = document.getElementById('nombre-text-' + id);
+
+        if (!input) return;
+
+        const nuevoNombre = input.value.trim();
+        input.classList.remove('is-error');
+
+        if (nuevoNombre === input.dataset.original) {
+            grCancelarEdicionNombre(id);
+            return;
+        }
+
+        btnSave.classList.add('is-loading');
+        btnCancel.classList.add('is-loading');
+        input.disabled = true;
+
+        const body = new URLSearchParams({
+            csrf_token : CSRF_TOKEN,
+            accion     : 'ajax_actualizar_nombre_opcion',
+            id         : String(id),
+            nombre_opcion: nuevoNombre,
+        });
+
+        fetch('/gestor-rutas', {
+            method  : 'POST',
+            headers : { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body    : body.toString(),
+        })
+        .then(function (res) {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+        })
+        .then(function (data) {
+            if (data.ok) {
+                textSpan.innerHTML     = data.nombre_opcion ? data.nombre_opcion : '<em style="color:#64748b;font-size:0.75rem;">—</em>';
+                textSpan.title         = data.nombre_opcion;
+                input.dataset.original = data.nombre_opcion;
+
+                cell.classList.remove('is-editing');
+                editWrap.classList.remove('is-editing');
+                if (input._grKeyHandler) input.removeEventListener('keydown', input._grKeyHandler);
+
+                grMostrarToastNombre(id, '✓ Guardado', 'ok');
+            } else {
+                input.classList.add('is-error');
+                grMostrarToastNombre(id, data.error || 'Error al guardar', 'err');
+                input.focus();
+            }
+        })
+        .catch(function () {
+            input.classList.add('is-error');
+            grMostrarToastNombre(id, 'Error de red. Inténtalo de nuevo.', 'err');
+            input.focus();
+        })
+        .finally(function () {
+            btnSave.classList.remove('is-loading');
+            btnCancel.classList.remove('is-loading');
+            input.disabled = false;
+        });
+    };
+
+    function grMostrarToastNombre(id, msg, tipo) {
+        const previo = document.getElementById('nombre-toast-' + id);
+        if (previo) previo.remove();
+
+        const td = document.getElementById('nombre-cell-' + id) &&
+                   document.getElementById('nombre-cell-' + id).closest('td');
+        if (!td) return;
+
+        const toast = document.createElement('div');
+        toast.id          = 'nombre-toast-' + id;
+        toast.className   = 'gr-nombre-toast ' + tipo;
         toast.textContent = msg;
         td.appendChild(toast);
 

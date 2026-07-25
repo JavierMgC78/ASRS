@@ -69,8 +69,12 @@ $menu_herramientas = array_filter($menu_admin, fn($item) => $item['grupo'] === '
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($titulo ?? 'Panel de Administración', ENT_QUOTES, 'UTF-8') ?> | Axe Framework</title>
 
-    <!-- CSS estructural del layout admin -->
+    <!-- CSS estructural del layout (auto-enlazado desde index.php) -->
+    <?php if (!empty($css_layout)): ?>
+    <link rel="stylesheet" href="<?= htmlspecialchars($css_layout, ENT_QUOTES, 'UTF-8') ?>">
+    <?php else: ?>
     <link rel="stylesheet" href="/assets/css/layoutAdmin.css">
+    <?php endif; ?>
 
     <?php
     // Inyección de CSS específico por vista (columna css de la tabla rutas)

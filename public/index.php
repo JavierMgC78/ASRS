@@ -198,6 +198,19 @@ $contenido_vista = ob_get_clean();
 $css_vista = $ruta_activa['css'] ?? [];
 $js_vista  = $ruta_activa['js']  ?? [];
 
+// ── Auto-enlace CSS del layout ───────────────────────────────────────────────
+// Genera dinámicamente la ruta del CSS estructural del layout a partir del
+// nombre de archivo de la plantilla, sin leer disco ni usar regex.
+// Ej: 'templates/public/layout_public.php' → '/assets/css/public/layout_public.css'
+$nombre_layout = pathinfo($ruta_activa['plantilla'], PATHINFO_FILENAME);
+$css_layout    = null;
+
+if (str_contains($nombre_layout, '_public')) {
+    $css_layout = '/assets/css/public/' . $nombre_layout . '.css';
+} elseif (str_contains($nombre_layout, '_private')) {
+    $css_layout = '/assets/css/private/' . $nombre_layout . '.css';
+}
+
 // ── Menú público dinámico ────────────────────────────────────────────────────
 // Si la plantilla actual es el layout público, se inyectan las opciones del menú.
 // La lógica de filtrado vive en LayoutPublicController; aquí solo se invoca.

@@ -312,6 +312,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             goto fin_post;
         }
 
+        // Nombre Opción
+        $nombre_opcion_raw = trim((string) filter_input(INPUT_POST, 'nombre_opcion', FILTER_DEFAULT));
+        $nombre_opcion = empty($nombre_opcion_raw) ? null : $nombre_opcion_raw;
+
         try {
             // Verificar que la URI no exista ya
             $check = $pdo->prepare('SELECT COUNT(*) FROM rutas WHERE uri = :uri');
@@ -322,15 +326,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $stmt = $pdo->prepare(
-                'INSERT INTO rutas (uri, vista, controlador, nivel_minimo, plantilla, requiere_login, css, js)
-                 VALUES (:uri, :vista, :controlador, :nivel, :plantilla, 0, "[]", "[]")'
+                'INSERT INTO rutas (uri, nombre_opcion, vista, controlador, nivel_minimo, plantilla, requiere_login, css, js)
+                 VALUES (:uri, :nombre_opcion, :vista, :controlador, :nivel, :plantilla, 0, "[]", "[]")'
             );
             $stmt->execute([
-                ':uri'         => $uri,
-                ':vista'       => $valor_vista,
-                ':controlador' => $valor_ctrl,
-                ':nivel'       => $nivel,
-                ':plantilla'   => $valor_plantilla,
+                ':uri'           => $uri,
+                ':nombre_opcion' => $nombre_opcion,
+                ':vista'         => $valor_vista,
+                ':controlador'   => $valor_ctrl,
+                ':nivel'         => $nivel,
+                ':plantilla'     => $valor_plantilla,
             ]);
 
             $nuevo_id = (int) $pdo->lastInsertId();
@@ -493,6 +498,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // ══════════════════════════════════════════════════════════════════════════
+    // ── HANDLER AJAX: Actualizar solo el nombre_opcion inline — accion=ajax_actualizar_nombre_opcion
+    // ══════════════════════════════════════════════════════════════════════════
+    elseif ($accion === 'ajax_actualizar_nombre_opcion') {
+
+        header('Content-Type: application/json; charset=UTF-8');
+
+        $id = (int) filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        if ($id < 1) {
+            echo json_encode(['ok' => false, 'error' => 'ID de ruta inválido.']);
+            exit;
+        }
+
+        $nombre_opcion_raw = trim((string) filter_input(INPUT_POST, 'nombre_opcion', FILTER_DEFAULT));
+        $nombre_opcion = empty($nombre_opcion_raw) ? null : $nombre_opcion_raw;
+
+        try {
+            $stmt = $pdo->prepare('UPDATE rutas SET nombre_opcion = :nombre_opcion WHERE id = :id');
+            $stmt->execute([':nombre_opcion' => $nombre_opcion, ':id' => $id]);
+
+            if ($stmt->rowCount() === 0) {
+                $check = $pdo->prepare('SELECT COUNT(*) FROM rutas WHERE id = :id');
+                $check->execute([':id' => $id]);
+                if ((int) $check->fetchColumn() === 0) {
+                    echo json_encode(['ok' => false, 'error' => 'No se encontró la ruta con ese ID.']);
+                    exit;
+                }
+            }
+
+            if (!recompilar_cache_rutas($pdo)) {
+                echo json_encode(['ok' => false, 'error' => 'Nombre actualizado pero falló la recompilación del caché.']);
+                exit;
+            }
+
+            Auditoria::registrar((int) $usuario_autenticado_id, 'RUTA_NOMBRE_ACTUALIZADO_AJAX', 'gestor-rutas', [
+                'ruta_id'       => $id,
+                'nuevo_nombre'  => $nombre_opcion,
+            ]);
+
+            echo json_encode(['ok' => true, 'nombre_opcion' => $nombre_opcion]);
+            exit;
+
+        } catch (PDOException $e) {
+            error_log('GestorRutasController [ajax_actualizar_nombre_opcion]: ' . $e->getMessage());
+            echo json_encode(['ok' => false, 'error' => 'Error interno al actualizar el nombre.']);
+            exit;
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════════════════════
     // ── HANDLER: Refrescar caché — accion=refrescar_cache
     // ══════════════════════════════════════════════════════════════════════════
     // Consulta la tabla rutas y sobreescribe config/rutas_cache.php de forma
@@ -564,7 +618,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // ── 5. Lectura de Datos (GET / post-POST sin redirección) ─────────────────────
 try {
     $stmt_lista = $pdo->query(
-        'SELECT id, uri, vista, controlador, nivel_minimo, plantilla
+        'SELECT id, uri, nombre_opcion, vista, controlador, nivel_minimo, plantilla
          FROM rutas
          ORDER BY nivel_minimo ASC, id ASC'
     );
