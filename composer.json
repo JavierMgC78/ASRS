@@ -1,0 +1,12 @@
+{
+    "name": "asrs/framework",
+    "description": "Axe Secure Router System",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Core\\": "Core/",
+            "ViewsControllers\\": "Views_Controllers/"
+        }
+    },
+    "require": {}
+}
