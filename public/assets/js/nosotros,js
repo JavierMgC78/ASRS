@@ -1,0 +1,6 @@
+/**
+ * ASRS - Script Específico para la vista Nosotros
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("Vista 'Nosotros' inicializada correctamente.");
+});

@@ -4,7 +4,7 @@ return array (
   array (
     'id' => 1,
     'uri' => '/',
-    'file_path' => 'views/public/home.php',
+    'file_path' => 'views/public/inicio.php',
     'layout_type' => 'public',
     'type_access' => 'LA',
     'authorized_user' => NULL,
@@ -90,5 +90,18 @@ return array (
     'show_in_menu' => 0,
     'is_active' => 1,
     'created_at' => '2026-09-16 18:15:25',
+  ),
+  '/admin/login' => 
+  array (
+    'id' => 8,
+    'uri' => '/admin/login',
+    'file_path' => 'views/public/login.php',
+    'layout_type' => 'public',
+    'type_access' => 'LA',
+    'authorized_user' => NULL,
+    'menu_title' => 'Login',
+    'show_in_menu' => 0,
+    'is_active' => 1,
+    'created_at' => '2026-09-20 14:25:58',
   ),
 );

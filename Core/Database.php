@@ -12,11 +12,13 @@ class Database
     // Constructor privado para evitar instanciación directa (Patrón Singleton)
     private function __construct()
     {
+
     }
 
     // Prevenir clonación del objeto
     private function __clone()
     {
+        
     }
 
     // Método estático para obtener la instancia única de PDO
