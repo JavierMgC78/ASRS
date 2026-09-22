@@ -126,7 +126,7 @@
                 <button class="btn-route active" data-uri="/" data-file="views/public/inicio.php" data-layout="public" data-access="Libre Acceso (LA)">/</button>
                 <button class="btn-route" data-uri="/nosotros" data-file="views/public/nosotros.php" data-layout="public" data-access="Libre Acceso (LA)">/nosotros</button>
                 <button class="btn-route" data-uri="/contacto" data-file="views/public/contacto.php" data-layout="public" data-access="Libre Acceso (LA)">/contacto</button>
-                <button class="btn-route" data-uri="/admin/dashboard" data-file="views/private/dashboard.php" data-layout="private" data-access="Usuario Autorizado (AU)">/admin/dashboard</button>
+                <button class="btn-route" data-uri="/admin/dashboard" data-file="views/private/dashboard.php" data-layout="private" data-access="Autorized User (AU)">/admin/dashboard</button>
             </div>
         </div>
 

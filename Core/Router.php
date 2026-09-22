@@ -23,6 +23,21 @@ class Router {
             $uri = '/';
         }
 
+        // Manejo especial de la ruta de cierre de sesión (/admin/logout)
+        if ($uri === '/admin/logout') {
+            controllers\LogoutController::logout();
+            return;
+        }
+
+        // Manejo especial de la ruta de inicio de sesión (/admin/login)
+        // Se procesa ANTES del output buffer para que los headers de redirección funcionen correctamente
+        if ($uri === '/admin/login') {
+            $loginController = \Core\controllers\LoginController::handle();
+            // Si handle() no redirigió (GET sin sesión activa o POST con error),
+            // se continúa con el renderizado normal pasando el error a la vista
+            $GLOBALS['__login_error'] = $loginController['errorMessage'] ?? null;
+        }
+
         // 2. Obtener el mapa de rutas desde el sistema de caché (O(1))
         $routes = ViewCache::getRoutes();
 
@@ -78,24 +93,30 @@ class Router {
         }
 
         // Variables disponibles para el Template maestro
-        $pageTitle = $viewData['menu_title'] . ' - Coffee Flavored Software';
-        $brandName = 'Coffee Flavored Software';
+        $pageTitle    = $viewData['menu_title'] . ' - Coffee Flavored Software';
+        $brandName    = 'Coffee Flavored Software';
         $brandLogoUrl = $baseUrl . '/assets/img/logo.png';
-        $currentUri = $uri;
+        $currentUri   = $uri;
+
+        // Inyección de assets específicos de la vista por convención con verificación física
+        $assetBasePath = __DIR__ . '/../public/assets/';
+        $specificCss = file_exists($assetBasePath . 'css/' . $viewAssetName . '.css')
+            ? $baseUrl . '/assets/css/' . $viewAssetName . '.css'
+            : null;
+        $specificJs = file_exists($assetBasePath . 'js/' . $viewAssetName . '.js')
+            ? $baseUrl . '/assets/js/' . $viewAssetName . '.js'
+            : null;
 
         // 11. Ensamblaje y Renderizado Final
         require_once $templateFile;
     }
 
     /**
-     * Valida los permisos de acceso a la vista.
+     * Valida los permisos de acceso a la vista mediante AuthMiddleware en zonas privadas.
      */
     private static function checkAccess($viewData) {
-        // Ejemplo de validación de zonas privadas
-        if ($viewData['layout_type'] === 'private') {
-            // Aquí verificarías si existe sesión de usuario activo
-            // Si no está logueado, redirigir al login:
-            // header('Location: /admin/login'); exit;
+        if (($viewData['layout_type'] ?? '') === 'private') {
+            AuthMiddleware::handle();
         }
     }
 
