@@ -71,7 +71,7 @@
     </div>
 
     <!-- JS Global del Template Privado -->
-    <script src="/public/assets/js/template_private.js"></script>
+    <script src="/assets/js/template_private.js"></script>
 
     <!-- JS Específico de la Vista (Carga Convencional Dinámica por Core\Router) -->
     <?php if (!empty($specificJs)): ?>

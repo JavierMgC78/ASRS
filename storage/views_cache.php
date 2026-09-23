@@ -48,4 +48,16 @@ return array (
     'is_active' => 1,
     'created_at' => '2026-09-22 09:52:40',
   ),
+  '/admin/vistas/crear' => 
+  array (
+    'id' => 5,
+    'uri' => '/admin/vistas/crear',
+    'file_path' => 'views/private/crear.php',
+    'layout_type' => 'private',
+    'menu_group' => 'vistas',
+    'menu_title' => 'Crear Vista',
+    'show_in_menu' => 1,
+    'is_active' => 1,
+    'created_at' => '2026-09-22 19:36:13',
+  ),
 );

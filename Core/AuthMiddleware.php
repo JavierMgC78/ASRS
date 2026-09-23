@@ -94,4 +94,28 @@ class AuthMiddleware
         }
         exit;
     }
+
+    /**
+     * Verifica que el usuario en sesión posea el rol requerido.
+     * Si no lo tiene, redirige al dashboard con un código 403.
+     *
+     * @param string $roleName Nombre del rol requerido (ej. 'super_admin')
+     * @return void
+     */
+    public static function requireRole(string $roleName): void
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $currentRole = $_SESSION['user']['role'] ?? $_SESSION['user']['role_name'] ?? '';
+
+        if ($currentRole !== $roleName) {
+            http_response_code(403);
+            if (!headers_sent()) {
+                header('Location: /admin/dashboard');
+            }
+            exit;
+        }
+    }
 }

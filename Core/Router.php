@@ -38,6 +38,12 @@ class Router {
             $GLOBALS['__login_error'] = $loginController['errorMessage'] ?? null;
         }
 
+        // Manejo especial de la vista de creación de vistas (/admin/vistas/crear)
+        // Se procesa ANTES del output buffer: el controlador puede necesitar redirigir tras el POST
+        if ($uri === '/admin/vistas/crear') {
+            $GLOBALS['__views_data'] = \Core\controllers\ViewsController::handle();
+        }
+
         // 2. Obtener el mapa de rutas desde el sistema de caché (O(1))
         $routes = ViewCache::getRoutes();
 
