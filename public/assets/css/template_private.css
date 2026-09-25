@@ -79,36 +79,96 @@ body {
     padding: 15px 0;
 }
 
-.menu-section {
-    margin-bottom: 20px;
+/* --- ACCORDION DE GRUPOS DE MENÚ --- */
+.menu-accordion {
+    border-bottom: 1px solid #263248;
 }
 
-.menu-group-title {
-    display: block;
-    padding: 0 20px 8px;
+.accordion-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 11px 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #94a3b8;
     font-size: 11px;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #64748b;
-    font-weight: 700;
+    transition: color 0.2s, background 0.2s;
+    gap: 8px;
+}
+
+.accordion-trigger:hover {
+    color: #e2e8f0;
+    background-color: #263248;
+}
+
+.accordion-label {
+    flex: 1;
+    text-align: left;
+}
+
+.accordion-chevron {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.7;
+}
+
+/* Panel colapsable - se controla vía max-height para animación fluida */
+.accordion-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Estado abierto - JS añade/quita .is-open en .menu-accordion */
+.menu-accordion.is-open > .accordion-trigger {
+    color: #e2e8f0;
+    background-color: #1a2436;
+}
+
+.menu-accordion.is-open > .accordion-trigger > .accordion-chevron {
+    transform: rotate(180deg);
+    opacity: 1;
+}
+
+.menu-accordion.is-open > .accordion-panel {
+    max-height: 600px; /* suficientemente grande para cualquier número de ítems */
 }
 
 .menu-list {
     list-style: none;
+    padding: 4px 0;
 }
 
 .menu-list li a {
     display: block;
-    padding: 10px 20px;
+    padding: 9px 20px 9px 28px;
     color: var(--sidebar-color);
     text-decoration: none;
-    transition: background 0.2s, color 0.2s;
+    transition: background 0.2s, color 0.2s, padding-left 0.2s;
     font-weight: 500;
+    font-size: 13.5px;
+    border-left: 3px solid transparent;
 }
 
 .menu-list li a:hover {
     background-color: var(--sidebar-hover);
     color: #ffffff;
+    padding-left: 32px;
+}
+
+.menu-list li.active a {
+    background-color: rgba(37, 99, 235, 0.15);
+    color: #60a5fa;
+    border-left-color: var(--sidebar-active);
+    font-weight: 600;
 }
 
 .sidebar-footer {

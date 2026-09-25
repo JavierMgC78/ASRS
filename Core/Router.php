@@ -128,17 +128,21 @@ class Router {
 
     /**
      * Filtra el menú dinámicamente según la zona y si debe mostrarse.
+     * Retorna un array asociativo agrupado por 'menu_group':
+     *   [ 'NombreGrupo' => [ ['uri'=>..., 'raw_uri'=>..., 'menu_title'=>...], ... ], ... ]
      */
     private static function generateDynamicMenu($routes, $currentLayoutType, $baseUrl = '') {
         $menu = [];
         foreach ($routes as $route) {
             if ($route['layout_type'] === $currentLayoutType && $route['show_in_menu'] == 1 && $route['is_active'] == 1) {
                 $routeUri = ($route['uri'] === '/') ? '/' : $route['uri'];
-                $fullUri = ($baseUrl !== '' && $routeUri === '/') ? $baseUrl . '/' : $baseUrl . $routeUri;
-                $menu[] = [
-                    'uri' => $fullUri,
-                    'raw_uri' => $route['uri'],
-                    'menu_title' => $route['menu_title']
+                $fullUri  = ($baseUrl !== '' && $routeUri === '/') ? $baseUrl . '/' : $baseUrl . $routeUri;
+                $group    = !empty($route['menu_group']) ? $route['menu_group'] : 'General';
+
+                $menu[$group][] = [
+                    'uri'        => $fullUri,
+                    'raw_uri'    => $route['uri'],
+                    'menu_title' => $route['menu_title'],
                 ];
             }
         }

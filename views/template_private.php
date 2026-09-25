@@ -25,19 +25,42 @@
 
             <nav class="sidebar-nav">
                 <?php 
-                // El router inyecta el menú como array plano de items
+                // $dynamicMenu es un array agrupado: ['NombreGrupo' => [items...]]
+                // Se detecta si el grupo contiene la vista activa para abrirlo por defecto.
                 if (isset($dynamicMenu) && is_array($dynamicMenu) && count($dynamicMenu) > 0) {
-                    echo '<ul class="menu-list">';
-                    foreach ($dynamicMenu as $item) {
-                        if (!is_array($item)) continue;
-                        $isActive = ($currentUri ?? '') === ($item['raw_uri'] ?? '');
-                        echo '<li class="' . ($isActive ? 'active' : '') . '">';
-                        echo '<a href="' . htmlspecialchars($item['uri']) . '">'
-                           . htmlspecialchars($item['menu_title'])
-                           . '</a>';
-                        echo '</li>';
+                    foreach ($dynamicMenu as $groupName => $groupItems) {
+                        if (!is_array($groupItems) || count($groupItems) === 0) continue;
+
+                        // Detectar si algún ítem del grupo es la ruta activa
+                        $groupHasActive = false;
+                        foreach ($groupItems as $item) {
+                            if (($currentUri ?? '') === ($item['raw_uri'] ?? '')) {
+                                $groupHasActive = true;
+                                break;
+                            }
+                        }
+
+                        $openClass = $groupHasActive ? ' is-open' : '';
+                        echo '<div class="menu-accordion' . $openClass . '">';
+                        echo '  <button class="accordion-trigger" type="button" aria-expanded="' . ($groupHasActive ? 'true' : 'false') . '">';
+                        echo '    <span class="accordion-label">' . htmlspecialchars($groupName) . '</span>';
+                        echo '    <svg class="accordion-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+                        echo '  </button>';
+                        echo '  <div class="accordion-panel">';
+                        echo '    <ul class="menu-list">';
+                        foreach ($groupItems as $item) {
+                            if (!is_array($item)) continue;
+                            $isActive = ($currentUri ?? '') === ($item['raw_uri'] ?? '');
+                            echo '      <li class="' . ($isActive ? 'active' : '') . '">';
+                            echo '        <a href="' . htmlspecialchars($item['uri']) . '">'
+                                       . htmlspecialchars($item['menu_title'])
+                                       . '</a>';
+                            echo '      </li>';
+                        }
+                        echo '    </ul>';
+                        echo '  </div>';
+                        echo '</div>';
                     }
-                    echo '</ul>';
                 }
                 ?>
             </nav>
