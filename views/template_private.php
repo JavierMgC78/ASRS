@@ -6,9 +6,12 @@
     <title><?php echo $pageTitle ?? 'Panel Privado - Centro Educativo América'; ?></title>
     
     <!-- CSS Global del Template Privado (Según convención de ASRS) -->
-    <link rel="stylesheet" href="/assets/css/template_private.css">
+    <link rel="stylesheet" href="<?= ($baseUrl ?? '') ?>/assets/css/template_private.css">
 
-    <!-- CSS Específico de la Vista (Carga Convencional Dinámica por Core\Router) -->
+    <!-- CSS Específico de la Vista
+         Ruta estándar: assets/css/{menu_group}/{name_file}.css
+         La validación file_exists() es realizada por Core\Router::resolveViewAssets().
+         $specificCss es null si el archivo no existe físicamente (sin error 404). -->
     <?php if (!empty($specificCss)): ?>
         <link rel="stylesheet" href="<?= htmlspecialchars($specificCss) ?>">
     <?php endif; ?>
@@ -94,9 +97,12 @@
     </div>
 
     <!-- JS Global del Template Privado -->
-    <script src="/assets/js/template_private.js"></script>
+    <script src="<?= ($baseUrl ?? '') ?>/assets/js/template_private.js"></script>
 
-    <!-- JS Específico de la Vista (Carga Convencional Dinámica por Core\Router) -->
+    <!-- JS Específico de la Vista
+         Ruta estándar: assets/js/{menu_group}/{name_file}.js
+         La validación file_exists() es realizada por Core\Router::resolveViewAssets().
+         $specificJs es null si el archivo no existe físicamente (sin error 404). -->
     <?php if (!empty($specificJs)): ?>
         <script src="<?= htmlspecialchars($specificJs) ?>"></script>
     <?php endif; ?>

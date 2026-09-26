@@ -13,11 +13,12 @@
     <!-- CSS Global del Template Público -->
     <link rel="stylesheet" href="<?= ($baseUrl ?? '') ?>/assets/css/template_public.css">
 
-    <!-- CSS Específico de la Vista (Carga Convencional Dinámica) -->
-    <?php 
-    if (isset($viewAssetName) && file_exists(__DIR__ . '/../public/assets/css/' . $viewAssetName . '.css')): 
-    ?>
-        <link rel="stylesheet" href="<?= ($baseUrl ?? '') ?>/assets/css/<?= $viewAssetName ?>.css">
+    <!-- CSS Específico de la Vista
+         Ruta estándar: assets/css/{menu_group}/{name_file}.css
+         La validación file_exists() es realizada por Core\Router::resolveViewAssets().
+         $specificCss es null si el archivo no existe físicamente (sin error 404). -->
+    <?php if (!empty($specificCss)): ?>
+        <link rel="stylesheet" href="<?= htmlspecialchars($specificCss) ?>">
     <?php endif; ?>
 </head>
 <body class="asrs-body">
@@ -99,9 +100,12 @@
     <!-- JS Global del Template Público -->
     <script src="<?= ($baseUrl ?? '') ?>/assets/js/template_public.js"></script>
 
-    <!-- JS Específico de la Vista (Carga Convencional Dinámica) -->
-    <?php if (isset($viewAssetName) && file_exists(__DIR__ . '/../public/assets/js/' . $viewAssetName . '.js')): ?>
-        <script src="<?= ($baseUrl ?? '') ?>/assets/js/<?= $viewAssetName ?>.js"></script>
+    <!-- JS Específico de la Vista
+         Ruta estándar: assets/js/{menu_group}/{name_file}.js
+         La validación file_exists() es realizada por Core\Router::resolveViewAssets().
+         $specificJs es null si el archivo no existe físicamente (sin error 404). -->
+    <?php if (!empty($specificJs)): ?>
+        <script src="<?= htmlspecialchars($specificJs) ?>"></script>
     <?php endif; ?>
 
 </body>
