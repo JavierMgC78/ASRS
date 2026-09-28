@@ -35,9 +35,12 @@
                         if (!is_array($groupItems) || count($groupItems) === 0) continue;
 
                         // Detectar si algún ítem del grupo es la ruta activa
+                        // Comparamos la URI pública completa (con baseUrl) del ítem
+                        // contra baseUrl + currentUri para coincidir correctamente.
+                        $fullCurrentUri = ($baseUrl ?? '') . ($currentUri ?? '');
                         $groupHasActive = false;
                         foreach ($groupItems as $item) {
-                            if (($currentUri ?? '') === ($item['raw_uri'] ?? '')) {
+                            if ($fullCurrentUri === ($item['uri'] ?? '')) {
                                 $groupHasActive = true;
                                 break;
                             }
@@ -53,7 +56,7 @@
                         echo '    <ul class="menu-list">';
                         foreach ($groupItems as $item) {
                             if (!is_array($item)) continue;
-                            $isActive = ($currentUri ?? '') === ($item['raw_uri'] ?? '');
+                            $isActive = $fullCurrentUri === ($item['uri'] ?? '');
                             echo '      <li class="' . ($isActive ? 'active' : '') . '">';
                             echo '        <a href="' . htmlspecialchars($item['uri']) . '">'
                                        . htmlspecialchars($item['menu_title'])
@@ -77,10 +80,34 @@
         </aside>
 
         <!-- CONTENEDOR PRINCIPAL -->
-        <div class="asrs-main-wrapper">
             <header class="asrs-topbar">
                 <div class="topbar-left">
                     <span class="welcome-text">Hola, <strong><?php echo htmlspecialchars($_SESSION['user']['name'] ?? 'Administrador'); ?></strong></span>
+                </div>
+                <div class="topbar-right">
+                    <a href="<?= ($baseUrl ?? '') ?>/"
+                       class="topbar-portal-link"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       title="Abrir portal público en nueva pestaña">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2.2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10
+                                     15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                        <span>Ver Portal Público</span>
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2.5"
+                             stroke-linecap="round" stroke-linejoin="round"
+                             class="topbar-external-icon">
+                            <polyline points="15 3 21 3 21 9"/>
+                            <path d="M10 14L21 3"/>
+                            <polyline points="21 14 21 21 3 21 3 9"/>
+                        </svg>
+                    </a>
                 </div>
             </header>
 

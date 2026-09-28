@@ -5,9 +5,18 @@ namespace Core;
 use PDO;
 
 class Router {
-    
+
+    /**
+     * Prefijo para zona privada (fuente única: ViewCache::PRIVATE_PREFIX).
+     */
+    private const ADMIN_PREFIX = '/admin';
+
     /**
      * Despacha la petición HTTP actual según la URI solicitada.
+     *
+     * Las claves del caché ya incluyen el prefijo /admin/ para rutas privadas
+     * (generado por ViewCache::buildPublicUri), por lo que la comparación es O(1)
+     * directamente sobre la URI normalizada del navegador.
      */
     public static function dispatch() {
         // 1. Limpiar y normalizar la URI solicitada
@@ -25,31 +34,30 @@ class Router {
             $uri = '/';
         }
 
-        // Manejo especial de la ruta de cierre de sesión (/admin/logout)
-        if ($uri === '/admin/logout') {
+        // 2. Rutas especiales del núcleo procesadas ANTES del output buffer
+
+        // Cierre de sesión
+        if ($uri === self::ADMIN_PREFIX . '/logout') {
             controllers\LogoutController::logout();
             return;
         }
 
-        // Manejo especial de la ruta de inicio de sesión (/admin/login)
-        // Se procesa ANTES del output buffer para que los headers de redirección funcionen correctamente
-        if ($uri === '/admin/login') {
+        // Inicio de sesión: procesar lógica de autenticación
+        if ($uri === self::ADMIN_PREFIX . '/login') {
             $loginController = \Core\controllers\LoginController::handle();
-            // Si handle() no redirigió (GET sin sesión activa o POST con error),
-            // se continúa con el renderizado normal pasando el error a la vista
             $GLOBALS['__login_error'] = $loginController['errorMessage'] ?? null;
         }
 
-        // Manejo especial de la vista de creación de vistas (/admin/vistas/crear)
-        // Se procesa ANTES del output buffer: el controlador puede necesitar redirigir tras el POST
-        if ($uri === '/admin/vistas/crear') {
+        // Gestión de vistas: procesar POST antes de renderizar
+        if ($uri === self::ADMIN_PREFIX . '/vistas/crear') {
             $GLOBALS['__views_data'] = \Core\controllers\ViewsController::handle();
         }
 
-        // 2. Obtener el mapa de rutas desde el sistema de caché (O(1))
+        // 3. Obtener el mapa de rutas desde el sistema de caché (O(1))
+        //    Las claves ya incluyen el prefijo correcto (ej. '/admin/roles/ver')
         $routes = ViewCache::getRoutes();
 
-        // 3. Verificar si la ruta existe en el caché
+        // 4. Verificar si la ruta existe en el caché
         if (!isset($routes[$uri])) {
             self::renderError404();
             return;
@@ -57,28 +65,29 @@ class Router {
 
         $viewData = $routes[$uri];
 
-        // 4. Validar si la vista está activa
+        // 5. Validar si la vista está activa
         if (!$viewData['is_active']) {
             self::renderError404();
             return;
         }
 
-        // 5. Control de Acceso y Seguridad (Autenticación + RBAC)
+        // 6. Control de Acceso y Seguridad (Autenticación + RBAC)
         self::checkAccess($viewData);
 
-        // 6. Determinar Base URL para resolución correcta de assets y rutas
+        // 7. Determinar Base URL para resolución correcta de assets y rutas
         $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
         $baseUrl = rtrim(dirname($scriptName), '/\\');
         if ($baseUrl === '/' || $baseUrl === '\\') {
             $baseUrl = '';
         }
 
-        // 7. Generar el Menú Dinámico para la zona actual (Filtrado en memoria)
+        // 8. Generar el Menú Dinámico para la zona actual (filtrado por layout_type)
+        //    Las URIs del menú vienen directamente de las claves del caché (ya con prefijo)
         $dynamicMenu = self::generateDynamicMenu($routes, $viewData['layout_type'], $baseUrl);
 
-        // 8. Resolver la ruta física del archivo de la vista.
-        //    Estándar unificado: views/{layout_type}/{strtolower(menu_group)}/{name_file}.php
-        //    Ejemplo: views/public/general/inicio.php | views/private/roles/roles_crear.php
+        // 9. Resolver la ruta física del archivo de la vista.
+        //    Estándar: views/{layout_type}/{strtolower(menu_group)}/{name_file}.php
+        //    Ejemplo: views/public/general/inicio.php | views/private/roles/ver.php
         $viewFilepath = self::resolveViewFilepath($viewData);
 
         if (!file_exists($viewFilepath)) {
@@ -86,15 +95,15 @@ class Router {
             return;
         }
 
-        // 9. Resolver assets específicos de la vista con verificación física.
-        //    Ruta estándar: assets/css/{strtolower(menu_group)}/{name_file}.css
-        //                   assets/js/{strtolower(menu_group)}/{name_file}.js
+        // 10. Resolver assets específicos de la vista con verificación física.
+        //     Estándar: assets/css/{strtolower(menu_group)}/{name_file}.css
+        //               assets/js/{strtolower(menu_group)}/{name_file}.js
         [$specificCss, $specificJs] = self::resolveViewAssets($viewData, $baseUrl);
 
-        // 10. Renderizado Virtual de la Vista (Output Buffering)
+        // 11. Renderizado Virtual de la Vista (Output Buffering)
         $viewContent = self::renderVirtualView($viewFilepath, $viewData);
 
-        // 11. Determinar qué template maestro utilizar
+        // 12. Determinar qué template maestro utilizar
         $layoutType   = $viewData['layout_type']; // 'public' o 'private'
         $templateFile = ($layoutType === 'public')
             ? __DIR__ . '/../views/template_public.php'
@@ -109,10 +118,36 @@ class Router {
         $pageTitle    = $viewData['menu_title'] . ' - Coffee Flavored Software';
         $brandName    = 'Coffee Flavored Software';
         $brandLogoUrl = $baseUrl . '/assets/img/logo.png';
-        $currentUri   = $uri;
+        $currentUri   = $uri; // URI pública actual (con prefijo si es privada)
 
-        // 12. Ensamblaje y Renderizado Final
+        // 13. Ensamblaje y Renderizado Final
         require_once $templateFile;
+    }
+
+    // =========================================================================
+    // HELPERS PÚBLICOS DE URL
+    // =========================================================================
+
+    /**
+     * Genera la URL pública completa (con baseUrl) a partir de una raw_uri y su layout_type.
+     *
+     * Uso desde vistas/templates:
+     *   <?= Router::url('roles/ver') ?>        → /Proyectos/Axe/public/admin/roles/ver
+     *   <?= Router::url('login', 'public') ?>  → /Proyectos/Axe/public/login
+     *
+     * @param  string $rawUri     URI limpia de BD (sin prefijo de zona).
+     * @param  string $layoutType 'private' (por defecto) o 'public'.
+     * @return string URL pública completa con baseUrl.
+     */
+    public static function url(string $rawUri, string $layoutType = 'private'): string {
+        $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+        $baseUrl = rtrim(dirname($scriptName), '/\\');
+        if ($baseUrl === '/' || $baseUrl === '\\') {
+            $baseUrl = '';
+        }
+
+        $publicUri = ViewCache::buildPublicUri($rawUri, $layoutType);
+        return $baseUrl . $publicUri;
     }
 
     // =========================================================================
@@ -166,6 +201,15 @@ class Router {
         $nameFile      = $viewData['name_file']  ?? null;
         $menuGroup     = $viewData['menu_group'] ?? null;
         $assetBasePath = __DIR__ . '/../public/assets/';
+
+        // Fallback inteligente: extraer del file_path si faltan name_file o menu_group
+        if (empty($nameFile) || empty($menuGroup)) {
+            $filePath = $viewData['file_path'] ?? '';
+            if (preg_match('#views/[^/]+/([^/]+)/([^/]+)\.php$#i', $filePath, $matches)) {
+                $menuGroup = $menuGroup ?: $matches[1];
+                $nameFile  = $nameFile  ?: $matches[2];
+            }
+        }
 
         if (empty($nameFile) || empty($menuGroup)) {
             return [null, null];
@@ -235,7 +279,7 @@ class Router {
         if ($viewId > 0 && !self::roleHasPermission($viewId)) {
             http_response_code(403);
             if (!headers_sent()) {
-                header('Location: /admin/dashboard');
+                header('Location: ' . self::ADMIN_PREFIX . '/dashboard');
             }
             exit;
         }
@@ -271,21 +315,38 @@ class Router {
     }
 
     /**
-     * Filtra el menú dinámicamente según la zona y si debe mostrarse.
-     * Retorna un array asociativo agrupado por 'menu_group':
+     * Genera el menú dinámico agrupado por 'menu_group', filtrado por zona (layout_type).
+     *
+     * Las URIs del menú provienen directamente del caché, cuyas claves ya incluyen
+     * el prefijo correcto (/admin/ para privadas). No se añade prefijo adicional
+     * aquí: la clave $publicUri del caché ES la URL pública correcta.
+     *
+     * Retorna:
      *   [ 'NombreGrupo' => [ ['uri'=>..., 'raw_uri'=>..., 'menu_title'=>...], ... ], ... ]
+     *
+     * @param  array  $routes            Mapa del caché (indexado por URI pública).
+     * @param  string $currentLayoutType Zona actual ('public' o 'private').
+     * @param  string $baseUrl           Base URL del sistema.
+     * @return array  Menú agrupado.
      */
     private static function generateDynamicMenu(array $routes, string $currentLayoutType, string $baseUrl = ''): array {
         $menu = [];
-        foreach ($routes as $route) {
-            if ($route['layout_type'] === $currentLayoutType && $route['show_in_menu'] == 1 && $route['is_active'] == 1) {
-                $routeUri = ($route['uri'] === '/') ? '/' : $route['uri'];
-                $fullUri  = ($baseUrl !== '' && $routeUri === '/') ? $baseUrl . '/' : $baseUrl . $routeUri;
-                $group    = !empty($route['menu_group']) ? $route['menu_group'] : 'General';
+        foreach ($routes as $publicUri => $route) {
+            if (
+                $route['layout_type'] === $currentLayoutType
+                && $route['show_in_menu'] == 1
+                && $route['is_active']   == 1
+            ) {
+                // La URI pública ya es correcta (con o sin prefijo /admin/)
+                $fullUri = ($baseUrl !== '' && $publicUri === '/')
+                    ? $baseUrl . '/'
+                    : $baseUrl . $publicUri;
+
+                $group = !empty($route['menu_group']) ? $route['menu_group'] : 'General';
 
                 $menu[$group][] = [
                     'uri'        => $fullUri,
-                    'raw_uri'    => $route['uri'],
+                    'raw_uri'    => $route['raw_uri'] ?? $publicUri,
                     'menu_title' => $route['menu_title'],
                 ];
             }

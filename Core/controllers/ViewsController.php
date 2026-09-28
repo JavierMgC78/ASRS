@@ -32,6 +32,12 @@ class ViewsController
     /**
      * Procesa el formulario POST para registrar una nueva vista.
      *
+     * Contrato de URI:
+     *   - La URI se almacena en BD SIN prefijo de zona (ej. 'roles/ver', 'dashboard', '/').
+     *   - El Router (vía ViewCache::buildPublicUri) añade automáticamente el prefijo
+     *     /admin/ para vistas con layout_type = 'private' al construir la URL pública.
+     *   - Si el usuario ingresó el prefijo /admin/ por error, se elimina antes de guardar.
+     *
      * @return array ['error' => string|null, 'success' => string|null]
      */
     public static function processCreate(): array
@@ -40,6 +46,7 @@ class ViewsController
         $menuTitle   = trim($_POST['menu_title'] ?? '');
         $menuGroup   = trim($_POST['menu_group'] ?? 'General');
         $uri         = trim($_POST['uri'] ?? '');
+        $nameFile    = trim($_POST['name_file'] ?? '');
         $filePath    = trim($_POST['file_path'] ?? '');
         $layoutType  = in_array($_POST['layout_type'] ?? '', ['public', 'private'])
                        ? $_POST['layout_type']
@@ -47,14 +54,25 @@ class ViewsController
         $showInMenu  = isset($_POST['show_in_menu']) ? 1 : 0;
         $isActive    = isset($_POST['is_active']) ? 1 : 0;
 
-        // 2. Validaciones básicas
+        // 2. Normalizar URI: eliminar prefijo /admin/ si fue incluido por error
+        $adminPrefix = \Core\ViewCache::PRIVATE_PREFIX;
+        if (str_starts_with($uri, $adminPrefix . '/') || $uri === $adminPrefix) {
+            $uri = '/' . ltrim(substr($uri, strlen($adminPrefix)), '/');
+        }
+        // Asegurar que empiece con /
+        if ($uri !== '' && $uri[0] !== '/') {
+            $uri = '/' . $uri;
+        }
+
+        // 3. Validaciones básicas
         if (empty($menuTitle)) {
             return ['error' => 'El campo "Título del Menú" es obligatorio.', 'success' => null];
         }
         if (empty($uri)) {
             return ['error' => 'La URI generada no puede estar vacía.', 'success' => null];
         }
-        if (!preg_match('#^/[a-z0-9/_-]+$#', $uri)) {
+        // Permitir '/' o segmentos con letras, números, guiones y barras
+        if ($uri !== '/' && !preg_match('#^/[a-z0-9/_-]+$#', $uri)) {
             return ['error' => 'La URI contiene caracteres inválidos. Usa solo minúsculas, números, guiones y barras.', 'success' => null];
         }
         if (empty($filePath)) {
@@ -63,18 +81,20 @@ class ViewsController
 
         $db = Database::getInstance();
 
-        // 3. Verificar que la URI no esté duplicada
+        // 4. Verificar que la URI no esté duplicada (comparar en BD, sin prefijo)
         $stmtCheck = $db->prepare('SELECT id FROM views WHERE uri = :uri LIMIT 1');
         $stmtCheck->bindValue(':uri', $uri, PDO::PARAM_STR);
         $stmtCheck->execute();
 
         if ($stmtCheck->fetch()) {
-            return ['error' => "La URI <strong>{$uri}</strong> ya existe en el sistema. Elige un título diferente.", 'success' => null];
+            // Mostrar la URL pública real en el mensaje de error para mayor claridad
+            $publicUri = \Core\ViewCache::buildPublicUri($uri, $layoutType);
+            return ['error' => "La URL pública <strong>{$publicUri}</strong> ya existe en el sistema. Elige un título diferente.", 'success' => null];
         }
 
-        // 4. Insertar en la tabla views
-        $sql = "INSERT INTO views (uri, file_path, layout_type, menu_group, menu_title, show_in_menu, is_active)
-                VALUES (:uri, :file_path, :layout_type, :menu_group, :menu_title, :show_in_menu, :is_active)";
+        // 5. Insertar en la tabla views (se guarda la raw_uri, sin prefijo de zona)
+        $sql = "INSERT INTO views (uri, file_path, layout_type, menu_group, menu_title, name_file, show_in_menu, is_active)
+                VALUES (:uri, :file_path, :layout_type, :menu_group, :menu_title, :name_file, :show_in_menu, :is_active)";
 
         $stmt = $db->prepare($sql);
         $stmt->bindValue(':uri',         $uri,        PDO::PARAM_STR);
@@ -82,13 +102,14 @@ class ViewsController
         $stmt->bindValue(':layout_type', $layoutType, PDO::PARAM_STR);
         $stmt->bindValue(':menu_group',  $menuGroup,  PDO::PARAM_STR);
         $stmt->bindValue(':menu_title',  $menuTitle,  PDO::PARAM_STR);
+        $stmt->bindValue(':name_file',   $nameFile !== '' ? $nameFile : null, $nameFile !== '' ? PDO::PARAM_STR : PDO::PARAM_NULL);
         $stmt->bindValue(':show_in_menu', $showInMenu, PDO::PARAM_INT);
         $stmt->bindValue(':is_active',   $isActive,   PDO::PARAM_INT);
         $stmt->execute();
 
         $newViewId = (int)$db->lastInsertId();
 
-        // 5. Registrar permiso en role_views para super_admin (role_id = 1)
+        // 6. Registrar permiso en role_views para super_admin (role_id = 1)
         $stmtRv = $db->prepare(
             'INSERT IGNORE INTO role_views (role_id, view_id) VALUES (:role_id, :view_id)'
         );
@@ -96,12 +117,14 @@ class ViewsController
         $stmtRv->bindValue(':view_id', $newViewId, PDO::PARAM_INT);
         $stmtRv->execute();
 
-        // 6. Invalidar caché de vistas para que el Router detecte la nueva ruta
+        // 7. Invalidar caché de vistas para que el Router detecte la nueva ruta
         ViewCache::refresh();
 
+        // Mostrar la URL pública real en el mensaje de éxito
+        $publicUri = \Core\ViewCache::buildPublicUri($uri, $layoutType);
         return [
             'error'   => null,
-            'success' => "Vista <strong>{$menuTitle}</strong> registrada exitosamente con la URI <strong>{$uri}</strong>."
+            'success' => "Vista <strong>{$menuTitle}</strong> registrada exitosamente. URL pública: <strong>{$publicUri}</strong>."
                        . " El caché de vistas ha sido actualizado.",
         ];
     }

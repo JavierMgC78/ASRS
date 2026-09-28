@@ -212,7 +212,7 @@ body {
     border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding: 0 30px;
     position: sticky;
     top: 0;
@@ -222,6 +222,37 @@ body {
 .welcome-text {
     font-size: 14px;
     color: #475569;
+}
+
+.topbar-portal-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px;
+    background-color: #f1f5f9;
+    color: #0f172a;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.topbar-portal-link:hover {
+    background-color: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.topbar-external-icon {
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.topbar-portal-link:hover .topbar-external-icon {
+    opacity: 1;
 }
 
 .asrs-content {

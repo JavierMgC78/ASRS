@@ -52,7 +52,7 @@
                     <?php if (!empty($dynamicMenu)): ?>
                         <?php foreach ($dynamicMenu as $groupItems): ?>
                             <?php foreach ($groupItems as $item): 
-                                $isActive = (isset($currentUri) && ($currentUri === $item['raw_uri'] || ($currentUri === '/' && $item['raw_uri'] === '/')));
+                                $isActive = (isset($currentUri) && (trim($currentUri, '/') === trim($item['raw_uri'], '/')));
                             ?>
                                 <li>
                                     <a href="<?= htmlspecialchars($item['uri']) ?>" class="<?= $isActive ? 'active' : '' ?>">
