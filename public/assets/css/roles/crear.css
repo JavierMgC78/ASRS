@@ -1,0 +1,309 @@
+/* ==========================================================
+   ASRS FRAMEWORK - VISTA ROLES CREAR CSS
+   Ruta: public/assets/css/roles/crear.css
+   ========================================================== */
+
+.roles-create-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px 0;
+}
+
+/* Breadcrumb ------------------------------------------------------------- */
+.roles-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.roles-breadcrumb__link {
+    color: #0284c7;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.15s ease;
+}
+
+.roles-breadcrumb__link:hover {
+    color: #0369a1;
+    text-decoration: underline;
+}
+
+.roles-breadcrumb__separator {
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.roles-breadcrumb__current {
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* Encabezado ------------------------------------------------------------- */
+.roles-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    padding: 20px 25px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.roles-page-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 4px 0;
+}
+
+.roles-page-subtitle {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Alertas de Feedback ---------------------------------------------------- */
+.roles-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    animation: fadeInAlert 0.3s ease-in-out;
+}
+
+@keyframes fadeInAlert {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.roles-alert--error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+}
+
+.roles-alert--error svg {
+    color: #dc2626;
+    flex-shrink: 0;
+}
+
+.roles-alert--success {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #166534;
+}
+
+.roles-alert--success svg {
+    color: #16a34a;
+    flex-shrink: 0;
+}
+
+/* Envoltorio del Formulario ---------------------------------------------- */
+.roles-form-wrapper {
+    background: #ffffff;
+    padding: 28px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.roles-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Grid del Formulario ---------------------------------------------------- */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 22px;
+    margin-bottom: 28px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.required {
+    color: #dc2626;
+    font-weight: 700;
+}
+
+/* Controles de Entrada (Inputs, Selects, Textareas) ---------------------- */
+.form-control {
+    padding: 10px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #1e293b;
+    background: #ffffff;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.form-control::placeholder {
+    color: #94a3b8;
+}
+
+.form-control:focus {
+    border-color: #0284c7;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+.form-control--textarea {
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.5;
+}
+
+/* Estados de Error y Validación ------------------------------------------ */
+.form-control.is-invalid {
+    border-color: #ef4444 !important;
+    background-color: #fffafb;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12) !important;
+}
+
+.invalid-feedback {
+    display: none;
+    font-size: 12px;
+    color: #dc2626;
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+.invalid-feedback.is-visible {
+    display: block;
+    animation: fadeInAlert 0.2s ease-in-out;
+}
+
+.form-text {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+/* Acciones del Formulario ------------------------------------------------ */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.btn-primary {
+    background: #0f172a;
+    color: #ffffff;
+    padding: 10px 24px;
+    border-radius: 6px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s ease, transform 0.1s ease, opacity 0.2s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #1e293b;
+}
+
+.btn-primary:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.btn-primary:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background: #f1f5f9;
+    color: #334155;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background: #e2e8f0;
+    border-color: #94a3b8;
+}
+
+/* Responsive ------------------------------------------------------------- */
+@media (max-width: 768px) {
+    .roles-page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .roles-page-header__actions {
+        width: 100%;
+    }
+
+    .roles-page-header__actions .btn-secondary {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .roles-form-wrapper {
+        padding: 18px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-primary, .btn-secondary {
+        width: 100%;
+        justify-content: center;
+    }
+}

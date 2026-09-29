@@ -14,6 +14,10 @@ use Core\Router;
 // ── Mensajes de feedback ───────────────────────────────────────────────────
 $rawUpdated = $_GET['updated'] ?? null;
 $updatedId  = filter_var($rawUpdated, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1]]);
+
+$rawCreated = $_GET['created'] ?? null;
+$createdId  = filter_var($rawCreated, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1]]);
+
 $roles      = [];
 $dbError    = null;
 
@@ -39,11 +43,31 @@ try {
             <p class="roles-page-subtitle">Listado completo de los roles registrados en la plataforma ASRS.</p>
         </div>
         <div class="roles-page-header__actions">
+            <a href="<?= Router::url('roles/crear') ?>" class="roles-btn-primary" id="btn-crear-rol">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Nuevo Rol</span>
+            </a>
             <span class="roles-badge roles-badge--total" id="roles-total-count">
                 <?= count($roles) ?> rol<?= count($roles) !== 1 ? 'es' : '' ?>
             </span>
         </div>
     </div>
+
+    <?php if ($createdId): ?>
+        <!-- Alerta de creación exitosa -->
+        <div class="roles-alert roles-alert--success" role="alert">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            <span>El nuevo rol #<?= (int)$createdId ?> ha sido creado y registrado exitosamente.</span>
+        </div>
+    <?php endif; ?>
 
     <?php if ($updatedId): ?>
         <!-- Alerta de actualización exitosa -->

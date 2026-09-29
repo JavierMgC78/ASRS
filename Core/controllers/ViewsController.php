@@ -130,6 +130,87 @@ class ViewsController
     }
 
     /**
+     * Procesa la actualización de una vista existente y regenera el caché de rutas.
+     *
+     * @param int $viewId Identificador de la vista.
+     * @return array ['error' => string|null, 'success' => string|null]
+     */
+    public static function processEdit(int $viewId): array
+    {
+        AuthMiddleware::requireRole(self::SUPER_ADMIN_ROLE);
+
+        $menuTitle   = trim($_POST['menu_title'] ?? '');
+        $menuGroup   = trim($_POST['menu_group'] ?? 'General');
+        $uri         = trim($_POST['uri'] ?? '');
+        $nameFile    = trim($_POST['name_file'] ?? '');
+        $filePath    = trim($_POST['file_path'] ?? '');
+        $layoutType  = in_array($_POST['layout_type'] ?? '', ['public', 'private'], true)
+                       ? $_POST['layout_type']
+                       : 'private';
+        $showInMenu  = isset($_POST['show_in_menu']) ? 1 : 0;
+        $isActive    = isset($_POST['is_active']) ? 1 : 0;
+
+        $adminPrefix = \Core\ViewCache::PRIVATE_PREFIX;
+        if (str_starts_with($uri, $adminPrefix . '/') || $uri === $adminPrefix) {
+            $uri = '/' . ltrim(substr($uri, strlen($adminPrefix)), '/');
+        }
+        if ($uri !== '' && $uri[0] !== '/') {
+            $uri = '/' . $uri;
+        }
+
+        if (empty($menuTitle)) {
+            return ['error' => 'El campo "Título en Menú" es obligatorio.', 'success' => null];
+        }
+        if (empty($uri)) {
+            return ['error' => 'La URI no puede estar vacía.', 'success' => null];
+        }
+        if ($uri !== '/' && !preg_match('#^/[a-z0-9/_-]+$#i', $uri)) {
+            return ['error' => 'La URI contiene caracteres inválidos. Usa solo minúsculas, números, guiones y barras.', 'success' => null];
+        }
+        if (empty($filePath)) {
+            return ['error' => 'La ruta física del archivo no puede estar vacía.', 'success' => null];
+        }
+
+        $db = Database::getInstance();
+
+        $stmtCheck = $db->prepare('SELECT id, menu_title FROM views WHERE uri = :uri AND id != :id LIMIT 1');
+        $stmtCheck->bindValue(':uri', $uri, PDO::PARAM_STR);
+        $stmtCheck->bindValue(':id',  $viewId, PDO::PARAM_INT);
+        $stmtCheck->execute();
+
+        if ($stmtCheck->fetch()) {
+            $publicUri = \Core\ViewCache::buildPublicUri($uri, $layoutType);
+            return ['error' => "La URL pública <strong>{$publicUri}</strong> ya existe en otra vista registrada.", 'success' => null];
+        }
+
+        $sql = "UPDATE views 
+                SET uri = :uri, file_path = :file_path, layout_type = :layout_type,
+                    menu_group = :menu_group, menu_title = :menu_title, name_file = :name_file,
+                    show_in_menu = :show_in_menu, is_active = :is_active
+                WHERE id = :id";
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':uri',         $uri,        PDO::PARAM_STR);
+        $stmt->bindValue(':file_path',   $filePath,   PDO::PARAM_STR);
+        $stmt->bindValue(':layout_type', $layoutType, PDO::PARAM_STR);
+        $stmt->bindValue(':menu_group',  $menuGroup,  PDO::PARAM_STR);
+        $stmt->bindValue(':menu_title',  $menuTitle,  PDO::PARAM_STR);
+        $stmt->bindValue(':name_file',   $nameFile !== '' ? $nameFile : null, $nameFile !== '' ? PDO::PARAM_STR : PDO::PARAM_NULL);
+        $stmt->bindValue(':show_in_menu', $showInMenu, PDO::PARAM_INT);
+        $stmt->bindValue(':is_active',   $isActive,   PDO::PARAM_INT);
+        $stmt->bindValue(':id',          $viewId,     PDO::PARAM_INT);
+        $stmt->execute();
+
+        ViewCache::refresh();
+
+        $publicUri = \Core\ViewCache::buildPublicUri($uri, $layoutType);
+        return [
+            'error'   => null,
+            'success' => "Vista <strong>{$menuTitle}</strong> actualizada exitosamente. URL pública: <strong>{$publicUri}</strong>. El caché de vistas ha sido regenerado.",
+        ];
+    }
+
+    /**
      * Normaliza un string al formato slug para URI y nombre de archivo.
      * (Usado internamente, la normalización principal la hace el JS del cliente.)
      */
@@ -140,3 +221,4 @@ class ViewsController
         return preg_replace('/[^a-z0-9_]/', '_', str_replace(' ', '_', $text));
     }
 }
+

@@ -34,6 +34,31 @@
     margin: 0;
 }
 
+.roles-page-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.roles-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #0f172a;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.roles-btn-primary:hover {
+    background: #1e293b;
+    transform: translateY(-1px);
+}
+
 .roles-badge {
     background: #e0f2fe;
     color: #0369a1;
