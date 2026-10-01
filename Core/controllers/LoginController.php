@@ -3,6 +3,7 @@
 namespace Core\controllers;
 
 use Core\AuthModel;
+use Core\Router;
 use Core\SessionManager;
 
 class LoginController
@@ -16,14 +17,23 @@ class LoginController
     {
         $errorMessage = null;
 
-        // Redirigir al dashboard si ya existe una sesión válida por Split Token
+        // Redirigir al panel autorizado si ya existe una sesión válida por Split Token
         if (isset($_COOKIE[SessionManager::COOKIE_NAME])) {
             $userId = SessionManager::validateSession();
             if ($userId !== null) {
-                if (!headers_sent()) {
-                    header('Location: /admin/dashboard');
+                $user = AuthModel::findById($userId);
+                if ($user) {
+                    $landingUrl = Router::getAuthorizedLandingUrl(
+                        (int)$user['id'],
+                        (int)$user['role_id'],
+                        $user['role_type'] ?? $user['type'] ?? 'standard'
+                    );
+                    $target = $landingUrl ?: Router::url('dashboard', 'private');
+                    if (!headers_sent()) {
+                        header('Location: ' . $target);
+                    }
+                    exit;
                 }
-                exit;
             }
         }
 
@@ -40,7 +50,7 @@ class LoginController
     /**
      * Autentica las credenciales con AuthModel y genera la sesión por Split Token con SessionManager.
      *
-     * @return string|null Retorna mensaje de error si falla la autenticación, o redirige a /admin/dashboard en éxito.
+     * @return string|null Retorna mensaje de error si falla la autenticación, o redirige al panel autorizado en éxito.
      */
     public static function processLogin(): ?string
     {
@@ -61,9 +71,16 @@ class LoginController
         // 2. Crear sesión mediante el patrón Split Token en SessionManager
         SessionManager::createSession((int)$user['id']);
 
-        // 3. Redirigir al panel de administración
+        // 3. Redirigir fluidamente al panel principal autorizado según sus permisos
+        $landingUrl = Router::getAuthorizedLandingUrl(
+            (int)$user['id'],
+            (int)$user['role_id'],
+            $user['role_type'] ?? $user['type'] ?? 'standard'
+        );
+
+        $target = $landingUrl ?: Router::url('dashboard', 'private');
         if (!headers_sent()) {
-            header('Location: /admin/dashboard');
+            header('Location: ' . $target);
         }
         exit;
     }

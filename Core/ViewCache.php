@@ -101,5 +101,6 @@ class ViewCache {
             unlink(self::$cacheFile);
         }
         self::generate();
+        PermissionCache::refresh();
     }
 }

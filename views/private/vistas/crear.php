@@ -62,11 +62,16 @@ $post = $_SERVER['REQUEST_METHOD'] === 'POST' ? $_POST : [];
                 <!-- Grupo de Menú -->
                 <div class="form-group">
                     <label for="menu_group">Grupo de Menú <span class="required">*</span></label>
-                    <input type="text" id="menu_group" name="menu_group"
+                    <input type="text" id="menu_group" name="menu_group" list="datalist-menu-groups"
                            placeholder="ej. Roles"
                            value="<?= htmlspecialchars($post['menu_group'] ?? '') ?>"
                            required class="form-control">
-                    <small class="form-text">Define la subcarpeta física (se normaliza a minúsculas).</small>
+                    <datalist id="datalist-menu-groups">
+                        <?php foreach (\Core\MenuGroupCache::getActiveGroups() as $cachedG): ?>
+                            <option value="<?= htmlspecialchars($cachedG['name']) ?>"><?= htmlspecialchars($cachedG['name']) ?></option>
+                        <?php endforeach; ?>
+                    </datalist>
+                    <small class="form-text">Define la subcarpeta física (se normaliza a minúsculas) y la agrupación en el sidebar.</small>
                 </div>
 
                 <!-- Identificador Técnico -->

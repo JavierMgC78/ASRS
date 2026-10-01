@@ -29,14 +29,20 @@
             <nav class="sidebar-nav">
                 <?php 
                 // $dynamicMenu es un array agrupado: ['NombreGrupo' => [items...]]
-                // Se detecta si el grupo contiene la vista activa para abrirlo por defecto.
+                // Ha sido filtrado dinámicamente según los permisos del rol del usuario activo
+                // mediante la caché estática de permisos RBAC en Router::generateDynamicMenu().
+                $hasVisibleModules = false;
+
                 if (isset($dynamicMenu) && is_array($dynamicMenu) && count($dynamicMenu) > 0) {
                     foreach ($dynamicMenu as $groupName => $groupItems) {
+                        // Ocultar automáticamente grupos que no tengan vistas autorizadas
                         if (!is_array($groupItems) || count($groupItems) === 0) continue;
+
+                        $hasVisibleModules = true;
 
                         // Detectar si algún ítem del grupo es la ruta activa
                         // Comparamos la URI pública completa (con baseUrl) del ítem
-                        // contra baseUrl + currentUri para coincidir correctamente.
+                        // contra baseUrl + currentUri para abrir el acordeón correspondiente.
                         $fullCurrentUri = ($baseUrl ?? '') . ($currentUri ?? '');
                         $groupHasActive = false;
                         foreach ($groupItems as $item) {
@@ -68,12 +74,19 @@
                         echo '</div>';
                     }
                 }
+
+                if (!$hasVisibleModules) {
+                    echo '<div class="sidebar-empty-notice">';
+                    echo '  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>';
+                    echo '  <span>Sin módulos asignados</span>';
+                    echo '</div>';
+                }
                 ?>
             </nav>
 
             <!-- PIE DEL SIDEBAR CON BOTÓN DE LOGOUT -->
             <div class="sidebar-footer">
-                <form action="/admin/logout" method="POST" class="logout-form">
+                <form action="<?= ($baseUrl ?? '') ?>/admin/logout" method="POST" class="logout-form">
                     <button type="submit" class="btn-logout">Cerrar Sesión</button>
                 </form>
             </div>

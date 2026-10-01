@@ -1,0 +1,1057 @@
+/**
+ * ==========================================================
+ * ASRS FRAMEWORK - CSS PRECIOS Y TARIFAS (index.css)
+ * Axe Secure Router System - Módulo Centralizado de Precios
+ * ==========================================================
+ */
+
+:root {
+    /* Paleta Institucional CEA General */
+    --caja-primary: #1d4ed8;
+    --caja-primary-hover: #1e40af;
+    --caja-primary-light: #eff6ff;
+    --caja-primary-border: #bfdbfe;
+    --caja-dark: #0f172a;
+    --caja-slate: #1e293b;
+    --caja-gray-text: #64748b;
+    --caja-gray-light: #94a3b8;
+    --caja-border-light: #e2e8f0;
+    --caja-bg-subtle: #f8fafc;
+    --caja-white: #ffffff;
+    --caja-success: #10b981;
+    --caja-success-dark: #059669;
+    --caja-success-light: #ecfdf5;
+    --caja-danger: #ef4444;
+
+    /* 1. Nivel Preescolar (Acentos Ámbar) */
+    --color-preescolar: #ffb300;
+    --color-preescolar-dark: #d97706;
+    --color-preescolar-deep: #b45309;
+    --color-preescolar-bg: #fffbeb;
+    --color-preescolar-border: #fde68a;
+    --color-preescolar-glow: rgba(255, 179, 0, 0.22);
+
+    /* 2. Nivel Primaria (Acentos Azul Royal) */
+    --color-primaria: #2962ff;
+    --color-primaria-dark: #1d4ed8;
+    --color-primaria-deep: #1e40af;
+    --color-primaria-bg: #eff6ff;
+    --color-primaria-border: #bfdbfe;
+    --color-primaria-glow: rgba(41, 98, 255, 0.22);
+
+    /* 3. Nivel Secundaria (Acentos Rojo Quemado) */
+    --color-secundaria: #b71c1c;
+    --color-secundaria-dark: #dc2626;
+    --color-secundaria-deep: #991b1b;
+    --color-secundaria-bg: #fef2f2;
+    --color-secundaria-border: #fecaca;
+    --color-secundaria-glow: rgba(183, 28, 28, 0.22);
+}
+
+/* =========================================================================
+   1. CONTENEDOR MAESTRO
+   ========================================================================= */
+.precios-modulo-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 24px 40px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--caja-dark);
+}
+
+/* =========================================================================
+   2. ENCABEZADO INSTITUCIONAL
+   ========================================================================= */
+.precios-header-card {
+    background: var(--caja-white);
+    border: 1px solid var(--caja-border-light);
+    border-radius: 12px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.precios-header__main {
+    flex: 1;
+}
+
+.precios-header__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--caja-primary-light);
+    color: var(--caja-primary);
+    border: 1px solid var(--caja-primary-border);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 8px;
+}
+
+.precios-header__title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--caja-dark);
+    margin: 0 0 6px 0;
+    letter-spacing: -0.3px;
+}
+
+.precios-header__desc {
+    font-size: 13px;
+    color: var(--caja-gray-text);
+    margin: 0;
+    line-height: 1.45;
+    max-width: 780px;
+}
+
+.precios-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.precios-header__stat-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 6px 12px;
+    background: var(--caja-bg-subtle);
+    border: 1px solid var(--caja-border-light);
+    border-radius: 8px;
+}
+
+.chip-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--caja-gray-text);
+    text-transform: uppercase;
+}
+
+.chip-value {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--caja-slate);
+}
+
+.btn-nuevo-concepto {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--caja-primary);
+    color: var(--caja-white);
+    border: none;
+    padding: 9px 15px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(29, 78, 216, 0.2);
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.btn-nuevo-concepto:hover {
+    background: var(--caja-primary-hover);
+    transform: translateY(-1px);
+}
+
+.btn-nuevo-concepto:active {
+    transform: translateY(0);
+}
+
+/* =========================================================================
+   3. BARRA SUPERIOR DE PESTAÑAS (TABS UI/UX)
+   ========================================================================= */
+.precios-tabs-nav {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 2px;
+}
+
+.precios-tab-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    background: var(--caja-white);
+    border: 1px solid var(--caja-border-light);
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    outline: none;
+}
+
+.precios-tab-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+    border-color: #cbd5e1;
+}
+
+.tab-btn__indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    border-radius: 10px 10px 0 0;
+    background: transparent;
+    transition: background 0.2s ease;
+}
+
+.tab-btn__icon-wrap {
+    width: 42px;
+    height: 42px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.tab-btn__text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.tab-btn__title {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+    color: var(--caja-slate);
+    transition: color 0.15s ease;
+}
+
+.tab-btn__sub {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11.5px;
+    color: var(--caja-gray-text);
+}
+
+.sub-colegiatura {
+    font-weight: 700;
+}
+
+.sub-dot {
+    opacity: 0.6;
+}
+
+.sub-count {
+    opacity: 0.85;
+}
+
+/* --- TEMA ÁMBAR: PREESCOLAR --- */
+.tab-theme--preescolar .tab-btn__icon-wrap {
+    background: var(--color-preescolar-bg);
+    color: var(--color-preescolar-dark);
+}
+
+.tab-theme--preescolar:hover {
+    border-color: var(--color-preescolar-border);
+}
+
+.tab-theme--preescolar.is-active {
+    border-color: var(--color-preescolar);
+    background: linear-gradient(180deg, #ffffff 0%, var(--color-preescolar-bg) 100%);
+    box-shadow: 0 4px 14px var(--color-preescolar-glow);
+}
+
+.tab-theme--preescolar.is-active .tab-btn__indicator {
+    background: var(--color-preescolar);
+}
+
+.tab-theme--preescolar.is-active .tab-btn__title {
+    color: var(--color-preescolar-deep);
+}
+
+.tab-theme--preescolar.is-active .tab-btn__icon-wrap {
+    background: var(--color-preescolar);
+    color: var(--caja-white);
+}
+
+/* --- TEMA AZUL ROYAL: PRIMARIA --- */
+.tab-theme--primaria .tab-btn__icon-wrap {
+    background: var(--color-primaria-bg);
+    color: var(--color-primaria-dark);
+}
+
+.tab-theme--primaria:hover {
+    border-color: var(--color-primaria-border);
+}
+
+.tab-theme--primaria.is-active {
+    border-color: var(--color-primaria);
+    background: linear-gradient(180deg, #ffffff 0%, var(--color-primaria-bg) 100%);
+    box-shadow: 0 4px 14px var(--color-primaria-glow);
+}
+
+.tab-theme--primaria.is-active .tab-btn__indicator {
+    background: var(--color-primaria);
+}
+
+.tab-theme--primaria.is-active .tab-btn__title {
+    color: var(--color-primaria-deep);
+}
+
+.tab-theme--primaria.is-active .tab-btn__icon-wrap {
+    background: var(--color-primaria);
+    color: var(--caja-white);
+}
+
+/* --- TEMA ROJO QUEMADO: SECUNDARIA --- */
+.tab-theme--secundaria .tab-btn__icon-wrap {
+    background: var(--color-secundaria-bg);
+    color: var(--color-secundaria-dark);
+}
+
+.tab-theme--secundaria:hover {
+    border-color: var(--color-secundaria-border);
+}
+
+.tab-theme--secundaria.is-active {
+    border-color: var(--color-secundaria);
+    background: linear-gradient(180deg, #ffffff 0%, var(--color-secundaria-bg) 100%);
+    box-shadow: 0 4px 14px var(--color-secundaria-glow);
+}
+
+.tab-theme--secundaria.is-active .tab-btn__indicator {
+    background: var(--color-secundaria);
+}
+
+.tab-theme--secundaria.is-active .tab-btn__title {
+    color: var(--color-secundaria-deep);
+}
+
+.tab-theme--secundaria.is-active .tab-btn__icon-wrap {
+    background: var(--color-secundaria);
+    color: var(--caja-white);
+}
+
+/* =========================================================================
+   4. PANELES DE CONTENIDO POR NIVEL
+   ========================================================================= */
+.precios-panels-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.precios-panel {
+    display: none;
+    flex-direction: column;
+    gap: 18px;
+    animation: fadeInTab 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.precios-panel.is-active {
+    display: flex;
+}
+
+@keyframes fadeInTab {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================================================
+   5. TARJETAS DE MÉTRICAS (KPIs) POR NIVEL
+   ========================================================================= */
+.nivel-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.kpi-card {
+    background: var(--caja-white);
+    border: 1px solid var(--caja-border-light);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.kpi-card__icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: var(--caja-bg-subtle);
+    color: var(--caja-slate);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.kpi-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.kpi-card__label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--caja-gray-text);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.kpi-card__val {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+}
+
+.kpi-currency {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--caja-slate);
+}
+
+.kpi-amount {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--caja-dark);
+}
+
+.kpi-amount.font-large {
+    font-size: 20px;
+}
+
+.kpi-freq {
+    font-size: 10.5px;
+    color: var(--caja-gray-light);
+    font-weight: 500;
+    margin-left: 2px;
+}
+
+/* Acentos KPI temáticos según nivel */
+.theme--preescolar .kpi-card--primary {
+    border-color: var(--color-preescolar-border);
+    background: linear-gradient(135deg, #ffffff 0%, var(--color-preescolar-bg) 100%);
+}
+.theme--preescolar .kpi-card--primary .kpi-card__icon {
+    background: var(--color-preescolar);
+    color: var(--caja-white);
+}
+.theme--preescolar .kpi-card--primary .kpi-amount {
+    color: var(--color-preescolar-deep);
+}
+
+.theme--primaria .kpi-card--primary {
+    border-color: var(--color-primaria-border);
+    background: linear-gradient(135deg, #ffffff 0%, var(--color-primaria-bg) 100%);
+}
+.theme--primaria .kpi-card--primary .kpi-card__icon {
+    background: var(--color-primaria);
+    color: var(--caja-white);
+}
+.theme--primaria .kpi-card--primary .kpi-amount {
+    color: var(--color-primaria-deep);
+}
+
+.theme--secundaria .kpi-card--primary {
+    border-color: var(--color-secundaria-border);
+    background: linear-gradient(135deg, #ffffff 0%, var(--color-secundaria-bg) 100%);
+}
+.theme--secundaria .kpi-card--primary .kpi-card__icon {
+    background: var(--color-secundaria);
+    color: var(--caja-white);
+}
+.theme--secundaria .kpi-card--primary .kpi-amount {
+    color: var(--color-secundaria-deep);
+}
+
+/* =========================================================================
+   6. TABLA DE TARIFAS Y PRECIOS
+   ========================================================================= */
+.tarifas-table-card {
+    background: var(--caja-white);
+    border: 1px solid var(--caja-border-light);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.tarifas-table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 20px;
+    background: #f8fafc;
+    border-bottom: 1px solid var(--caja-border-light);
+}
+
+.table-header__title {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--caja-dark);
+    margin: 0 0 2px 0;
+}
+
+.table-header__subtitle {
+    font-size: 11.5px;
+    color: var(--caja-gray-text);
+}
+
+.btn-guardar-todo {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--caja-slate);
+    color: var(--caja-white);
+    border: none;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.btn-guardar-todo:hover {
+    background: var(--caja-dark);
+}
+
+/* Acentos temáticos al botón guardar todo */
+.theme--preescolar .btn-guardar-todo:hover {
+    background: var(--color-preescolar-dark);
+}
+.theme--primaria .btn-guardar-todo:hover {
+    background: var(--color-primaria-dark);
+}
+.theme--secundaria .btn-guardar-todo:hover {
+    background: var(--color-secundaria-dark);
+}
+
+.tarifas-table-responsive {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.tarifas-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    text-align: left;
+}
+
+.tarifas-table thead tr {
+    background: #f1f5f9;
+    border-bottom: 1px solid var(--caja-border-light);
+}
+
+.tarifas-table th {
+    padding: 10px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--caja-gray-text);
+}
+
+.tarifas-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.tarifas-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.tarifas-table tbody tr:hover {
+    background: #fafcff;
+}
+
+.is-disabled-row {
+    opacity: 0.55;
+    background: #f8fafc !important;
+}
+
+.col-id {
+    font-family: monospace;
+    font-size: 11px;
+    color: var(--caja-gray-light);
+}
+
+.id-tag {
+    background: #f1f5f9;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.col-concepto {
+    min-width: 220px;
+}
+
+.concepto-title {
+    font-weight: 700;
+    color: var(--caja-dark);
+    font-size: 13.5px;
+    margin-bottom: 2px;
+}
+
+.concepto-updated {
+    font-size: 10.5px;
+    color: var(--caja-gray-light);
+}
+
+.col-desc {
+    font-size: 12px;
+    color: var(--caja-gray-text);
+    line-height: 1.35;
+    max-width: 320px;
+}
+
+/* =========================================================================
+   7. INPUT DE MONTO EDITABLE Y CONTROLES INTERACTIVOS
+   ========================================================================= */
+.monto-input-group {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--caja-border-light);
+    border-radius: 8px;
+    background: var(--caja-white);
+    padding: 2px 8px;
+    width: 180px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.monto-input-group:focus-within {
+    border-color: var(--caja-primary);
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+}
+
+.theme--preescolar .monto-input-group:focus-within {
+    border-color: var(--color-preescolar);
+    box-shadow: 0 0 0 3px var(--color-preescolar-glow);
+}
+
+.theme--primaria .monto-input-group:focus-within {
+    border-color: var(--color-primaria);
+    box-shadow: 0 0 0 3px var(--color-primaria-glow);
+}
+
+.theme--secundaria .monto-input-group:focus-within {
+    border-color: var(--color-secundaria);
+    box-shadow: 0 0 0 3px var(--color-secundaria-glow);
+}
+
+.monto-prefix {
+    font-weight: 700;
+    color: var(--caja-gray-text);
+    font-size: 13px;
+    margin-right: 4px;
+}
+
+.input-monto-editable {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--caja-dark);
+    text-align: right;
+    background: transparent;
+    padding: 6px 2px;
+}
+
+.input-monto-editable::-webkit-inner-spin-button,
+.input-monto-editable::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.monto-suffix {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--caja-gray-light);
+    margin-left: 5px;
+}
+
+/* =========================================================================
+   8. SWITCH TOGGLE ACTIVO / INACTIVO
+   ========================================================================= */
+.switch-toggle {
+    position: relative;
+    display: inline-block;
+    width: 36px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.switch-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cbd5e1;
+    transition: .2s;
+    border-radius: 20px;
+}
+
+.switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .2s;
+    border-radius: 50%;
+}
+
+.switch-toggle input:checked + .switch-slider {
+    background-color: var(--caja-success);
+}
+
+.switch-toggle input:checked + .switch-slider:before {
+    transform: translateX(16px);
+}
+
+/* =========================================================================
+   9. BOTÓN GUARDAR FILA CON ESTADOS DE CARGA
+   ========================================================================= */
+.btn-guardar-fila {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--caja-border-light);
+    background: #f8fafc;
+    color: var(--caja-slate);
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    min-width: 86px;
+}
+
+.btn-guardar-fila:hover {
+    background: var(--caja-white);
+    border-color: #cbd5e1;
+    color: var(--caja-dark);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.theme--preescolar .btn-guardar-fila:hover {
+    border-color: var(--color-preescolar);
+    color: var(--color-preescolar-dark);
+}
+
+.theme--primaria .btn-guardar-fila:hover {
+    border-color: var(--color-primaria);
+    color: var(--color-primaria-dark);
+}
+
+.theme--secundaria .btn-guardar-fila:hover {
+    border-color: var(--color-secundaria);
+    color: var(--color-secundaria-dark);
+}
+
+.btn-guardar-fila.is-success {
+    background: var(--caja-success-light);
+    border-color: var(--caja-success);
+    color: var(--caja-success-dark);
+}
+
+.btn-spinner {
+    animation: btnSpin 0.7s linear infinite;
+}
+
+@keyframes btnSpin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* =========================================================================
+   10. MODAL NUEVO CONCEPTO
+   ========================================================================= */
+.precios-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.precios-modal-card {
+    background: var(--caja-white);
+    border-radius: 12px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    animation: modalPop 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes modalPop {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal-card__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: #f8fafc;
+    border-bottom: 1px solid var(--caja-border-light);
+    position: relative;
+}
+
+.modal-card__header-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--caja-primary-light);
+    color: var(--caja-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.modal-card__title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--caja-dark);
+    margin: 0;
+}
+
+.modal-card__sub {
+    font-size: 11.5px;
+    color: var(--caja-gray-text);
+    margin: 2px 0 0 0;
+}
+
+.modal-card__close {
+    position: absolute;
+    right: 14px;
+    top: 14px;
+    background: transparent;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--caja-gray-light);
+    cursor: pointer;
+}
+
+.modal-card__close:hover {
+    color: var(--caja-dark);
+}
+
+.modal-card__body {
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--caja-slate);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--caja-border-light);
+    border-radius: 7px;
+    font-size: 13px;
+    color: var(--caja-dark);
+    outline: none;
+    box-sizing: border-box;
+    font-family: inherit;
+    transition: border-color 0.15s ease;
+}
+
+.form-control:focus {
+    border-color: var(--caja-primary);
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+}
+
+.modal-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 14px 20px;
+    background: #f8fafc;
+    border-top: 1px solid var(--caja-border-light);
+}
+
+.btn-cancelar {
+    background: transparent;
+    border: 1px solid var(--caja-border-light);
+    color: var(--caja-gray-text);
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-guardar-modal {
+    background: var(--caja-primary);
+    color: var(--caja-white);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.btn-guardar-modal:hover {
+    background: var(--caja-primary-hover);
+}
+
+/* =========================================================================
+   11. TOASTS FLOTANTES
+   ========================================================================= */
+.toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 2000;
+    pointer-events: none;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #1e293b;
+    color: #ffffff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+    font-size: 12.5px;
+    font-weight: 500;
+    animation: toastSlide 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: auto;
+}
+
+.toast--success {
+    background: #065f46;
+    border-left: 4px solid #34d399;
+}
+
+.toast--error {
+    background: #991b1b;
+    border-left: 4px solid #f87171;
+}
+
+@keyframes toastSlide {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================================================
+   12. ADAPTABILIDAD RESPONSIVA (MEDIA QUERIES)
+   ========================================================================= */
+@media (max-width: 960px) {
+    .precios-tabs-nav {
+        grid-template-columns: 1fr;
+    }
+    .nivel-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .precios-modulo-container {
+        padding: 12px;
+    }
+    .precios-header-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .precios-header__actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .nivel-kpi-grid {
+        grid-template-columns: 1fr;
+    }
+    .tarifas-table th:nth-child(3),
+    .tarifas-table td:nth-child(3) {
+        display: none; /* Ocultar columna descripción en móviles muy pequeños */
+    }
+}

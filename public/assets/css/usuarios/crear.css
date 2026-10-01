@@ -1,0 +1,770 @@
+/* ==========================================================
+   ASRS FRAMEWORK - VISTA CREAR USUARIO (crear.css)
+   Axe Secure Router System - Premium Admin Design
+   ========================================================== */
+
+:root {
+    --user-primary: #2563eb;
+    --user-primary-hover: #1d4ed8;
+    --user-dark: #0f172a;
+    --user-gray-text: #64748b;
+    --user-border: #e2e8f0;
+    --user-bg-subtle: #f8fafc;
+    --user-success: #10b981;
+    --user-success-bg: #ecfdf5;
+    --user-danger: #ef4444;
+    --user-danger-bg: #fef2f2;
+    --user-amber: #f59e0b;
+    --user-radius: 12px;
+    --user-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+    --user-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+    --user-shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.1);
+}
+
+.user-create-container {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    padding: 8px 0 35px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+/* --- 1. ENCABEZADO DE PÁGINA --- */
+.user-create-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    padding: 22px 28px;
+    border-radius: var(--user-radius);
+    border: 1px solid var(--user-border);
+    box-shadow: var(--user-shadow-sm);
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.user-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--user-gray-text);
+    margin-bottom: 6px;
+}
+
+.user-breadcrumb__link {
+    color: var(--user-gray-text);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.user-breadcrumb__link:hover {
+    color: var(--user-primary);
+}
+
+.user-breadcrumb__separator {
+    color: #cbd5e1;
+}
+
+.user-breadcrumb__active {
+    color: var(--user-primary);
+}
+
+.user-create-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--user-dark);
+    margin: 0 0 6px 0;
+}
+
+.user-create-subtitle {
+    font-size: 13.5px;
+    color: var(--user-gray-text);
+    margin: 0;
+}
+
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+.btn-secondary:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+    color: var(--user-dark);
+    transform: translateY(-1px);
+}
+
+/* --- 2. ALERTAS DEL SISTEMA --- */
+.user-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    animation: fadeInDown 0.25s ease;
+}
+
+.user-alert--success {
+    background: var(--user-success-bg);
+    border: 1px solid #a7f3d0;
+    color: #065f46;
+}
+
+.user-alert--danger {
+    background: var(--user-danger-bg);
+    border: 1px solid #fecaca;
+    color: #991b1b;
+}
+
+.user-alert__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.user-alert__message {
+    flex: 1;
+    line-height: 1.5;
+}
+
+.user-alert__actions {
+    margin-top: 8px;
+}
+
+.alert-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #065f46;
+    color: #ffffff;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s ease;
+}
+
+.alert-link-btn:hover {
+    background: #044e39;
+}
+
+.user-alert__close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    color: inherit;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.15s ease;
+}
+
+.user-alert__close:hover {
+    opacity: 1;
+}
+
+/* --- 3. LAYOUT GRID RESPONSIVO --- */
+.user-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 24px;
+    align-items: start;
+}
+
+@media (max-width: 1024px) {
+    .user-layout-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.user-main-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.user-side-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: sticky;
+    top: 20px;
+}
+
+/* --- 4. TARJETAS CORPORATIVAS ASRS --- */
+.user-card {
+    background: #ffffff;
+    border-radius: var(--user-radius);
+    border: 1px solid var(--user-border);
+    box-shadow: var(--user-shadow-sm);
+    overflow: hidden;
+    transition: box-shadow 0.2s ease;
+}
+
+.user-card:hover {
+    box-shadow: var(--user-shadow-md);
+}
+
+.user-card__header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 24px;
+    background: #fafbfc;
+    border-bottom: 1px solid var(--user-border);
+}
+
+.user-card__header-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    background: #eff6ff;
+    color: var(--user-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.user-card__header-icon--lock {
+    background: #fffbeb;
+    color: #d97706;
+}
+
+.user-card__header-icon--shield {
+    background: #f5f3ff;
+    color: #7c3aed;
+}
+
+.user-card__title {
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--user-dark);
+    margin: 0;
+}
+
+.user-card__subtitle {
+    font-size: 12px;
+    color: var(--user-gray-text);
+    margin: 2px 0 0 0;
+}
+
+.user-card__body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Form Groups & Grid */
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 680px) {
+    .form-grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.required-mark {
+    color: var(--user-danger);
+}
+
+.input-icon-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 12px;
+    color: #94a3b8;
+    pointer-events: none;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    color: var(--user-dark);
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.18s ease;
+    box-sizing: border-box;
+}
+
+.input-icon-wrap .form-control {
+    padding-left: 38px;
+}
+
+.form-control:focus {
+    border-color: var(--user-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.form-control.is-invalid {
+    border-color: var(--user-danger);
+    background-color: #fffafb;
+}
+
+.form-control.is-valid {
+    border-color: var(--user-success);
+}
+
+.form-feedback {
+    font-size: 11.5px;
+    margin-top: 3px;
+    min-height: 16px;
+    color: var(--user-gray-text);
+}
+
+.form-feedback.is-error {
+    color: var(--user-danger);
+    font-weight: 500;
+}
+
+.form-hint {
+    font-size: 11.5px;
+    color: var(--user-gray-text);
+}
+
+/* Password Wrap & Eye Toggle */
+.input-password-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-password-wrap .form-control {
+    padding-right: 40px;
+}
+
+.btn-toggle-eye {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s ease;
+}
+
+.btn-toggle-eye:hover {
+    color: var(--user-dark);
+}
+
+.password-strength-bar {
+    width: 100%;
+    height: 4px;
+    background: #e2e8f0;
+    border-radius: 2px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.strength-meter {
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strength-meter.weak   { width: 33%; background: #ef4444; }
+.strength-meter.medium { width: 66%; background: #f59e0b; }
+.strength-meter.strong { width: 100%; background: #10b981; }
+
+/* Switch Card para Estado */
+.toggle-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f8fafc;
+    border: 1px solid var(--user-border);
+    padding: 10px 14px;
+    border-radius: 8px;
+    height: 44px;
+    box-sizing: border-box;
+}
+
+.switch-control {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 22px;
+    flex-shrink: 0;
+}
+
+.switch-control input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cbd5e1;
+    transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 22px;
+}
+
+.switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 50%;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.switch-control input:checked + .switch-slider {
+    background-color: var(--user-success);
+}
+
+.switch-control input:checked + .switch-slider:before {
+    transform: translateX(18px);
+}
+
+.switch-text-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.switch-title {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--user-dark);
+}
+
+.switch-desc {
+    font-size: 11px;
+    color: var(--user-gray-text);
+}
+
+/* --- 5. TARJETA DE FICHA PREVIA (SIDEBAR) --- */
+.user-card--profile {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.profile-avatar-wrap {
+    position: relative;
+    margin-bottom: 14px;
+}
+
+.profile-avatar {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1e293b 0%, #2563eb 100%);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+}
+
+.profile-status-indicator {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2.5px solid #ffffff;
+}
+
+.profile-status-indicator.is-online {
+    background: #10b981;
+}
+
+.profile-status-indicator.is-offline {
+    background: #ef4444;
+}
+
+.profile-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--user-dark);
+    margin: 0 0 4px 0;
+}
+
+.profile-email {
+    font-size: 12.5px;
+    color: var(--user-gray-text);
+    margin: 0 0 12px 0;
+    word-break: break-all;
+}
+
+.profile-badges {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.badge-role {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+    padding: 3px 9px;
+    border-radius: 20px;
+}
+
+.badge-status {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 20px;
+}
+
+.badge-status--active {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.badge-status--inactive {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+.profile-divider {
+    width: 100%;
+    border: none;
+    border-top: 1px solid var(--user-border);
+    margin: 18px 0;
+}
+
+.profile-details-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 12.5px;
+}
+
+.profile-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.detail-label {
+    color: var(--user-gray-text);
+}
+
+.detail-val {
+    font-weight: 600;
+    color: var(--user-dark);
+}
+
+.profile-security-badge {
+    margin-top: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #0369a1;
+    background: #e0f2fe;
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid #bae6fd;
+}
+
+/* --- 6. TARJETA DE ACCIONES --- */
+.user-card--actions {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.actions-card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--user-dark);
+    margin: 0;
+}
+
+.actions-card-desc {
+    font-size: 12px;
+    color: var(--user-gray-text);
+    margin: 0;
+}
+
+.btn-create-user {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: #ffffff;
+    border: none;
+    padding: 11px 18px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.15);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-create-user:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+}
+
+.btn-reset-user {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #ffffff;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-reset-user:hover {
+    background: #f1f5f9;
+    color: var(--user-dark);
+}
+
+/* Spinner */
+.btn-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #ffffff;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 7. TOAST NOTIFICACIONES FLOTANTES --- */
+.user-toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.user-toast {
+    pointer-events: auto;
+    min-width: 280px;
+    max-width: 420px;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.user-toast--success {
+    background: #0f172a;
+    color: #ffffff;
+    border-left: 4px solid #10b981;
+}
+
+.user-toast--danger {
+    background: #991b1b;
+    color: #ffffff;
+    border-left: 4px solid #f87171;
+}
+
+@keyframes toastSlideIn {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
+}

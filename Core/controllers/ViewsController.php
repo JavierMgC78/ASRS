@@ -109,16 +109,17 @@ class ViewsController
 
         $newViewId = (int)$db->lastInsertId();
 
-        // 6. Registrar permiso en role_views para super_admin (role_id = 1)
+        // 6. Registrar permiso en role_view_permissions para super_admin (role_id = 1)
         $stmtRv = $db->prepare(
-            'INSERT IGNORE INTO role_views (role_id, view_id) VALUES (:role_id, :view_id)'
+            'INSERT IGNORE INTO role_view_permissions (role_id, view_id) VALUES (:role_id, :view_id)'
         );
         $stmtRv->bindValue(':role_id', self::SUPER_ADMIN_ROLE_ID, PDO::PARAM_INT);
         $stmtRv->bindValue(':view_id', $newViewId, PDO::PARAM_INT);
         $stmtRv->execute();
 
-        // 7. Invalidar caché de vistas para que el Router detecte la nueva ruta
-        ViewCache::refresh();
+        // 7. Invalidar cachés de vistas y permisos RBAC para sincronizar navegación
+        \Core\ViewCache::refresh();
+        \Core\PermissionCache::refresh();
 
         // Mostrar la URL pública real en el mensaje de éxito
         $publicUri = \Core\ViewCache::buildPublicUri($uri, $layoutType);

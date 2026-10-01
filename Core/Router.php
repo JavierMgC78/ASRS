@@ -150,6 +150,204 @@ class Router {
         return $baseUrl . $publicUri;
     }
 
+    /**
+     * Determina la URL de destino (landing page) autorizada para el usuario
+     * según su rol y permisos asignados en el sistema ASRS.
+     *
+     * Evita accesos denegados inmediatos dirigiendo al usuario a su área operativa principal:
+     *   - Super Admin: /admin/dashboard
+     *   - Caja: /admin/caja/capturar
+     *   - Inscripción: /admin/alumnos/crear
+     *   - Otros roles: Su primera vista autorizada en role_view_permissions
+     *
+     * @param  int|null    $userId    ID del usuario (opcional, se obtiene de sesión si es null).
+     * @param  int|null    $roleId    ID del rol del usuario (opcional, se obtiene de sesión si es null).
+     * @param  string|null $roleType  Tipo de rol ('special', 'standard', etc.).
+     * @return string URL pública completa de redirección autorizada.
+     */
+    public static function getAuthorizedLandingUrl(?int $userId = null, ?int $roleId = null, ?string $roleType = null): string {
+        // 1. Resolver datos de sesión activa si no se pasaron explícitamente
+        if ($userId === null && isset($_SESSION['user']['id'])) {
+            $userId = (int)$_SESSION['user']['id'];
+        }
+        if ($roleId === null && isset($_SESSION['user']['role_id'])) {
+            $roleId = (int)$_SESSION['user']['role_id'];
+        }
+        if ($roleType === null && isset($_SESSION['user'])) {
+            $roleType = $_SESSION['user']['role_type'] ?? $_SESSION['user']['type'] ?? null;
+        }
+
+        // 2. Obtener el nombre del rol si no está determinado en sesión
+        $roleName = $_SESSION['user']['role_name'] ?? $_SESSION['user']['role'] ?? '';
+        if (empty($roleName) && $roleId !== null && $roleId > 0) {
+            try {
+                $db = Database::getInstance();
+                $stmt = $db->prepare("SELECT name, type FROM roles WHERE id = :id LIMIT 1");
+                $stmt->execute([':id' => $roleId]);
+                $r = $stmt->fetch(PDO::FETCH_ASSOC);
+                if ($r) {
+                    $roleName = $r['name'] ?? '';
+                    if ($roleType === null) {
+                        $roleType = $r['type'] ?? 'standard';
+                    }
+                }
+            } catch (\Throwable $e) {
+                // Silencioso, continuar con el fallback
+            }
+        }
+
+        // Normalizar nombre de rol en minúsculas
+        $roleNameLower = strtolower(trim($roleName));
+
+        // 3. Roles Especiales / Super Admin -> Panel Principal Dashboard
+        if ($roleType === 'special' || $roleNameLower === 'super_admin' || $roleId === 1) {
+            return self::url('dashboard', 'private');
+        }
+
+        // 4. Rol de Caja -> Captura de Pagos
+        if ($roleNameLower === 'caja' || $roleId === 2) {
+            return self::url('caja/capturar', 'private');
+        }
+
+        // 5. Rol de Inscripción -> Alta de Alumno o Ver Alumnos
+        if ($roleNameLower === 'inscripcion' || $roleId === 3) {
+            return self::url('alumnos/crear', 'private');
+        }
+
+        // 6. Búsqueda dinámica en role_view_permissions para cualquier otro rol operativo
+        if ($roleId !== null && $roleId > 0) {
+            try {
+                $db = Database::getInstance();
+                $sql = "SELECT v.uri, v.layout_type
+                        FROM role_view_permissions rvp
+                        INNER JOIN views v ON rvp.view_id = v.id
+                        WHERE rvp.role_id = :role_id
+                          AND v.is_active = 1
+                          AND v.layout_type = 'private'
+                        ORDER BY 
+                          CASE 
+                            WHEN v.uri LIKE '%dashboard%' THEN 1 
+                            WHEN v.show_in_menu = 1 THEN 2 
+                            ELSE 3 
+                          END,
+                          v.id ASC
+                        LIMIT 1";
+                $stmt = $db->prepare($sql);
+                $stmt->execute([':role_id' => $roleId]);
+                $vista = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if ($vista && !empty($vista['uri'])) {
+                    return self::url($vista['uri'], $vista['layout_type'] ?? 'private');
+                }
+            } catch (\Throwable $e) {
+                // Fallback seguro en caso de error
+            }
+        }
+
+        // 7. Fallback por defecto seguro
+        return self::url('dashboard', 'private');
+    }
+
+    /**
+     * Muestra la página o mensaje de error 403 (Acceso Prohibido).
+     *
+     * @param  string $message Mensaje explicativo del motivo del bloqueo.
+     */
+    public static function renderError403(string $message = 'No cuentas con el rol requerido para operar este recurso.'): void {
+        http_response_code(403);
+        $dashboardUrl = self::url('dashboard', 'private');
+        echo "<!DOCTYPE html><html lang='es'><head><meta charset='utf-8'><title>403 - Acceso Denegado</title>";
+        echo "<style>body{font-family:sans-serif;background:#0f172a;color:#f8fafc;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;}";
+        echo ".card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:32px;max-width:480px;text-align:center;box-shadow:0 10px 25px rgba(0,0,0,0.3);}";
+        echo "h1{color:#ef4444;margin:0 0 12px 0;font-size:24px;}p{color:#94a3b8;font-size:14px;line-height:1.5;margin:0 0 20px 0;}";
+        echo "a{display:inline-block;background:#1d4ed8;color:#fff;text-decoration:none;padding:10px 20px;border-radius:6px;font-weight:600;font-size:13px;}</style></head><body>";
+        echo "<div class='card'><h1>403 - Acceso Prohibido</h1><p>" . htmlspecialchars($message) . "</p>";
+        echo "<a href='" . htmlspecialchars($dashboardUrl) . "'>Regresar al Inicio</a></div></body></html>";
+    }
+
+    /**
+     * Comprueba si el usuario autenticado tiene autorización para acceder a una vista o recurso.
+     *
+     * Permite evaluar el acceso mediante el ID numérico de la vista (ej. 14, 15) o su URI (ej. 'alumnos/ver').
+     * Consulta la caché de permisos en tiempo O(1) vía PermissionCache y otorga acceso total inmediato
+     * a roles especiales (super_admin).
+     *
+     * @param  int|string  $target   ID de la vista (int) o URI relativa/pública de la vista (string).
+     * @param  int|null    $userId   ID del usuario (opcional, se obtiene de la sesión si es null).
+     * @param  int|null    $roleId   ID del rol activo (opcional, se obtiene de la sesión si es null).
+     * @param  string|null $roleType Tipo de rol ('special' o 'standard', opcional).
+     * @return bool True si el usuario tiene acceso permitido, False en caso contrario.
+     */
+    public static function userCanAccess(int|string $target, ?int $userId = null, ?int $roleId = null, ?string $roleType = null): bool {
+        // 1. Resolver datos de la sesión activa si no se proporcionaron explícitamente
+        if ($userId === null && isset($_SESSION['user']['id'])) {
+            $userId = (int)$_SESSION['user']['id'];
+        }
+        if ($roleId === null && isset($_SESSION['user']['role_id'])) {
+            $roleId = (int)$_SESSION['user']['role_id'];
+        }
+        if ($roleType === null && isset($_SESSION['user'])) {
+            $roleType = $_SESSION['user']['role_type'] ?? $_SESSION['user']['type'] ?? 'standard';
+        }
+
+        // Si no hay usuario ni rol válido en sesión, denegar acceso
+        if ($userId === null || $roleId === null) {
+            return false;
+        }
+
+        // 2. Roles Especiales / Super Admin poseen autorización global a todos los módulos
+        $roleName = strtolower(trim((string)($_SESSION['user']['role_name'] ?? $_SESSION['user']['role'] ?? '')));
+        if ($roleType === 'special' || $roleId === 1 || $roleName === 'super_admin') {
+            return true;
+        }
+
+        // 3. Resolver el viewId a partir del target recibido (int o string URI)
+        $viewId = null;
+
+        if (is_int($target) || ctype_digit((string)$target)) {
+            $viewId = (int)$target;
+        } else {
+            // Es un string de URI: normalizar y buscar en ViewCache
+            $routes = ViewCache::getRoutes();
+            $cleanUri = '/' . ltrim((string)$target, '/');
+
+            foreach ($routes as $publicUri => $route) {
+                if ($publicUri === $cleanUri 
+                    || ($route['raw_uri'] ?? '') === $cleanUri 
+                    || ('/' . ltrim($route['raw_uri'] ?? '', '/')) === $cleanUri
+                    || ltrim($publicUri, '/') === ltrim($cleanUri, '/')) {
+                    $viewId = (int)($route['id'] ?? 0);
+                    break;
+                }
+            }
+
+            // Fallback: consultar en base de datos si no se resolvió por ViewCache
+            if (!$viewId) {
+                try {
+                    $db = Database::getInstance();
+                    $stmt = $db->prepare("SELECT id FROM views WHERE uri = :uri OR uri = :uri_slash LIMIT 1");
+                    $stmt->execute([
+                        ':uri'       => ltrim($cleanUri, '/'),
+                        ':uri_slash' => $cleanUri
+                    ]);
+                    $foundId = $stmt->fetchColumn();
+                    if ($foundId) {
+                        $viewId = (int)$foundId;
+                    }
+                } catch (\Throwable $e) {
+                    // Continuar al control de permiso
+                }
+            }
+        }
+
+        if (!$viewId || $viewId <= 0) {
+            return false;
+        }
+
+        // 4. Delegar la verificación en PermissionCache (O(1))
+        return PermissionCache::userCanAccessView($userId, $roleId, $roleType ?? 'standard', $viewId);
+    }
+
     // =========================================================================
     // MÉTODOS PRIVADOS
     // =========================================================================

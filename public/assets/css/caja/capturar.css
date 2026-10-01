@@ -1,0 +1,1537 @@
+/* ==========================================================
+   ASRS FRAMEWORK - VISTA CAPTURAR PAGO (capturar.css)
+   Axe Secure Router System - Módulo Financiero de Caja
+   Centro Educativo América (CEA) - Template Estándar Centralizado
+   ========================================================== */
+
+:root {
+    /* Paleta Institucional CEA */
+    --caja-primary: #1d4ed8;
+    --caja-primary-hover: #1e40af;
+    --caja-primary-active: #172554;
+    --caja-primary-light: #eff6ff;
+    --caja-primary-border: #bfdbfe;
+    
+    --caja-dark: #0f172a;
+    --caja-slate: #1e293b;
+    --caja-gray-text: #64748b;
+    --caja-gray-light: #94a3b8;
+    
+    --caja-border: #e2e8f0;
+    --caja-border-focus: #3b82f6;
+    --caja-bg-subtle: #f8fafc;
+    --caja-card-bg: #ffffff;
+    
+    --caja-success: #10b981;
+    --caja-success-bg: #ecfdf5;
+    --caja-success-border: #a7f3d0;
+    
+    --caja-danger: #ef4444;
+    --caja-danger-bg: #fef2f2;
+    --caja-danger-border: #fecaca;
+    
+    --caja-warning: #f59e0b;
+    --caja-warning-bg: #fffbeb;
+    --caja-warning-border: #fde68a;
+
+    --caja-bbva: #004481;
+    --caja-bbva-light: #e6f0fa;
+    --caja-bbva-border: #93c5fd;
+    
+    --caja-radius-sm: 6px;
+    --caja-radius: 12px;
+    --caja-radius-lg: 16px;
+    
+    --caja-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --caja-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+    --caja-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --caja-shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+}
+
+/* ==========================================================
+   1. CONTENEDOR GENERAL ESTÁNDAR (ANCHO FLUIDO Y CENTRADO)
+   ========================================================== */
+.caja-modulo-container {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    padding: 10px 0 40px;
+    width: 100%;
+    max-width: 1180px; /* Estándar fluido y centrado de ASRS */
+    margin: 0 auto;
+}
+
+/* ==========================================================
+   2. ENCABEZADO INSTITUCIONAL DEL MÓDULO
+   ========================================================== */
+.caja-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--caja-card-bg);
+    padding: 20px 26px;
+    border-radius: var(--caja-radius);
+    border: 1px solid var(--caja-border);
+    box-shadow: var(--caja-shadow-sm);
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.caja-header__info {
+    flex: 1;
+    min-width: 280px;
+}
+
+.caja-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--caja-gray-text);
+    margin-bottom: 6px;
+}
+
+.caja-breadcrumb__separator {
+    color: #cbd5e1;
+}
+
+.caja-breadcrumb__active {
+    color: var(--caja-primary);
+}
+
+.caja-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 21px;
+    font-weight: 700;
+    color: var(--caja-dark);
+    margin: 0 0 5px 0;
+    letter-spacing: -0.3px;
+}
+
+.caja-title__icon {
+    color: var(--caja-primary);
+    flex-shrink: 0;
+}
+
+.caja-subtitle {
+    font-size: 13px;
+    color: var(--caja-gray-text);
+    margin: 0;
+    line-height: 1.45;
+}
+
+.caja-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.cajero-badge {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: var(--caja-radius-sm);
+    padding: 6px 12px;
+}
+
+.cajero-badge__dot {
+    width: 8px;
+    height: 8px;
+    background: var(--caja-success);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    display: inline-block;
+}
+
+.cajero-badge__text {
+    display: flex;
+    flex-direction: column;
+}
+
+.cajero-badge__label {
+    font-size: 10px;
+    color: var(--caja-gray-text);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-weight: 600;
+}
+
+.cajero-badge__name {
+    font-size: 12.5px;
+    color: var(--caja-slate);
+}
+
+/* Botones secundarios generales */
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--caja-card-bg);
+    color: var(--caja-slate);
+    border: 1px solid var(--caja-border);
+    padding: 8px 14px;
+    border-radius: var(--caja-radius-sm);
+    font-size: 12.5px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+
+.btn-secondary:hover {
+    background: var(--caja-bg-subtle);
+    border-color: #cbd5e1;
+    color: var(--caja-dark);
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--caja-primary);
+    color: #ffffff;
+    border: 1px solid transparent;
+    padding: 9px 18px;
+    border-radius: var(--caja-radius-sm);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    box-shadow: var(--caja-shadow-xs);
+}
+
+.btn-primary:hover {
+    background: var(--caja-primary-hover);
+    box-shadow: var(--caja-shadow-sm);
+}
+
+.btn-primary--cta {
+    padding: 11px 26px;
+    font-size: 14.5px;
+    font-weight: 700;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    box-shadow: 0 4px 12px rgba(29, 78, 216, 0.25);
+}
+
+.btn-primary--cta:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(29, 78, 216, 0.35);
+}
+
+.btn-primary--cta:active {
+    transform: translateY(0);
+}
+
+.btn-success {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--caja-success);
+    color: #ffffff;
+    border: none;
+    padding: 9px 16px;
+    border-radius: var(--caja-radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+
+.btn-success:hover {
+    background: #059669;
+}
+
+/* ==========================================================
+   3. ALERTAS DEL SERVIDOR
+   ========================================================== */
+.caja-alert {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 18px;
+    border-radius: var(--caja-radius);
+    border: 1px solid;
+    margin-bottom: 8px;
+}
+
+.caja-alert--success {
+    background: var(--caja-success-bg);
+    border-color: var(--caja-success-border);
+    color: #065f46;
+}
+
+.caja-alert--danger {
+    background: var(--caja-danger-bg);
+    border-color: var(--caja-danger-border);
+    color: #991b1b;
+}
+
+.caja-alert__content {
+    flex: 1;
+}
+
+.caja-alert__title {
+    font-weight: 700;
+    font-size: 13.5px;
+    margin-bottom: 2px;
+}
+
+.caja-alert__msg {
+    font-size: 12.5px;
+    line-height: 1.4;
+}
+
+.caja-alert__close {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: currentColor;
+    opacity: 0.6;
+}
+
+.caja-alert__close:hover {
+    opacity: 1;
+}
+
+/* ==========================================================
+   4. FORMULARIO PRINCIPAL (CENTRALIZADO, COMPACTO Y LIMPIO)
+   ========================================================== */
+.caja-card {
+    background: var(--caja-card-bg);
+    border-radius: var(--caja-radius-lg);
+    border: 1px solid var(--caja-border);
+    box-shadow: var(--caja-shadow-card);
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .caja-card {
+        padding: 20px 16px;
+        gap: 18px;
+    }
+}
+
+.caja-section {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.caja-section:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.caja-section__header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.caja-section__badge {
+    width: 26px;
+    height: 26px;
+    background: var(--caja-primary-light);
+    color: var(--caja-primary);
+    border: 1px solid var(--caja-primary-border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.caja-section__title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--caja-dark);
+    margin: 0 0 2px 0;
+    letter-spacing: -0.2px;
+}
+
+.caja-section__desc {
+    font-size: 12px;
+    color: var(--caja-gray-text);
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* ==========================================================
+   5. SECCIÓN 1: BÚSQUEDA DE ALUMNO POR APELLIDO PATERNO
+   ========================================================== */
+.alumno-search-box {
+    position: relative;
+    width: 100%;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.search-input-icon {
+    position: absolute;
+    left: 14px;
+    color: var(--caja-gray-light);
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    width: 100%;
+    height: 44px;
+    padding: 8px 40px 8px 42px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--caja-dark);
+    background: #ffffff;
+    border: 1.5px solid var(--caja-border);
+    border-radius: 8px;
+    transition: all 0.15s ease-in-out;
+    outline: none;
+    box-shadow: var(--caja-shadow-xs);
+}
+
+.search-input:focus {
+    border-color: var(--caja-border-focus);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.search-clear-btn {
+    position: absolute;
+    right: 12px;
+    background: #e2e8f0;
+    border: none;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: var(--caja-slate);
+    cursor: pointer;
+    line-height: 1;
+}
+
+.search-clear-btn:hover {
+    background: #cbd5e1;
+    color: var(--caja-dark);
+}
+
+.search-spinner {
+    position: absolute;
+    right: 14px;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(29, 78, 216, 0.2);
+    border-top-color: var(--caja-primary);
+    border-radius: 50%;
+    animation: caja-spin 0.6s linear infinite;
+}
+
+@keyframes caja-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Dropdown Flotante de Resultados */
+.search-results-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid var(--caja-border);
+    border-radius: 8px;
+    box-shadow: var(--caja-shadow-md);
+    z-index: 100;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.search-results-list {
+    list-style: none;
+    margin: 0;
+    padding: 4px 0;
+}
+
+.search-result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    cursor: pointer;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background 0.12s ease-in-out;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item:hover,
+.search-result-item.is-highlighted {
+    background: var(--caja-primary-light);
+}
+
+.search-result-item__main {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.search-result-name {
+    font-size: 13.5px;
+    color: var(--caja-dark);
+}
+
+.search-result-name strong {
+    color: var(--caja-primary);
+    font-weight: 700;
+}
+
+.search-result-meta {
+    font-size: 11.5px;
+    color: var(--caja-gray-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-result-badge {
+    background: #e2e8f0;
+    color: var(--caja-slate);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.search-empty-notice {
+    padding: 16px 14px;
+    text-align: center;
+    color: var(--caja-gray-text);
+    font-size: 12.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-empty-notice svg {
+    color: var(--caja-gray-light);
+    flex-shrink: 0;
+}
+
+/* Tarjeta de Alumno Seleccionado */
+.alumno-selected-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
+    border: 1px solid var(--caja-primary-border);
+    border-radius: 10px;
+    padding: 12px 18px;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-3px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.alumno-selected-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--caja-primary);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    flex-shrink: 0;
+    box-shadow: var(--caja-shadow-xs);
+}
+
+.alumno-selected-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.alumno-selected-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
+}
+
+.alumno-selected-id {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--caja-gray-text);
+}
+
+.alumno-selected-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--caja-dark);
+    margin: 0 0 4px 0;
+    line-height: 1.25;
+}
+
+.alumno-selected-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--caja-slate);
+}
+
+.meta-dot {
+    color: #cbd5e1;
+}
+
+.btn-change-alumno {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #ffffff;
+    border: 1px solid var(--caja-primary-border);
+    color: var(--caja-primary);
+    padding: 6px 12px;
+    border-radius: var(--caja-radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    flex-shrink: 0;
+}
+
+.btn-change-alumno:hover {
+    background: var(--caja-primary);
+    color: #ffffff;
+    border-color: var(--caja-primary);
+}
+
+/* Badges comunes */
+.badge-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 10.5px;
+    font-weight: 600;
+}
+
+.badge-tag--success {
+    background: var(--caja-success-bg);
+    color: var(--caja-success);
+    border: 1px solid var(--caja-success-border);
+}
+
+.field-error {
+    font-size: 12px;
+    color: var(--caja-danger);
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+/* ==========================================================
+   6. FICHA INSTITUCIONAL INTEGRADA (EXPEDIENTE, TUTORES, CFDI)
+      - Reintegrada en el flujo vertical continuo
+      - Estado inicial compacto y discreto
+      - Despliegue en cuadrícula horizontal limpia sin nulos
+   ========================================================== */
+.panel-inteligente {
+    background: #fafcff;
+    border: 1px solid var(--caja-primary-border);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    transition: all 0.2s ease-in-out;
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    background: linear-gradient(180deg, #f8fafc 0%, #eff6ff 100%);
+    border-bottom: 1px solid var(--caja-primary-border);
+    flex-shrink: 0;
+}
+
+.panel-header__icon {
+    width: 28px;
+    height: 28px;
+    background: var(--caja-primary-light);
+    color: var(--caja-primary);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.panel-header__text {
+    flex: 1;
+}
+
+.panel-header__title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--caja-dark);
+    margin: 0;
+}
+
+.panel-header__desc {
+    font-size: 11px;
+    color: var(--caja-gray-text);
+    margin: 1px 0 0 0;
+}
+
+/* Estado Vacío Compacto (Informativo, sin robar espacio vertical) */
+.panel-empty {
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f8fafc;
+    text-align: left;
+}
+
+.panel-empty__graphic {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #edf2f7;
+    color: var(--caja-gray-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.panel-empty__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.panel-empty__heading {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--caja-slate);
+    margin: 0;
+}
+
+.panel-empty__text {
+    font-size: 11.5px;
+    color: var(--caja-gray-text);
+    margin: 0;
+    line-height: 1.35;
+}
+
+/* Estado Cargando */
+.panel-loading {
+    padding: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--caja-gray-text);
+    font-size: 12.5px;
+}
+
+.panel-spinner {
+    width: 22px;
+    height: 22px;
+    border: 2px solid rgba(29, 78, 216, 0.2);
+    border-top-color: var(--caja-primary);
+    border-radius: 50%;
+    animation: caja-spin 0.6s linear infinite;
+}
+
+/* Estado Activo: Apilamiento Vertical en Columna Única (Ancho Completo 100%) */
+.panel-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.panel-card {
+    width: 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    box-sizing: border-box;
+}
+
+.panel-card__title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 12px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: var(--caja-slate);
+}
+
+/* =========================================================================
+   COMPONENTE ACORDEÓN DESPLEGABLE (EXCLUSIVO: DATOS DEL ALUMNO)
+   ========================================================================= */
+.panel-card--collapsible {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.panel-card--collapsible:hover {
+    border-color: #cbd5e1;
+}
+
+.panel-card__header-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #f8fafc;
+    border: none;
+    border-bottom: 1px solid transparent;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+    user-select: none;
+}
+
+.panel-card--collapsible.is-expanded .panel-card__header-btn {
+    border-bottom-color: #e2e8f0;
+}
+
+.panel-card__header-btn:hover {
+    background: #f1f5f9;
+}
+
+.panel-card__header-btn:focus-visible {
+    outline: 2px solid var(--caja-blue, #1d4ed8);
+    outline-offset: -2px;
+}
+
+.panel-card__title-content {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: var(--caja-slate, #1e293b);
+}
+
+.panel-card__title-content svg {
+    color: var(--caja-blue, #1d4ed8);
+    flex-shrink: 0;
+}
+
+.panel-card__chevron-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--caja-gray-text, #64748b);
+    transition: color 0.15s ease;
+}
+
+.panel-card__header-btn:hover .panel-card__chevron-wrap {
+    color: var(--caja-blue, #1d4ed8);
+}
+
+.panel-card__chevron {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: rotate(0deg);
+}
+
+.panel-card--collapsible.is-expanded .panel-card__chevron {
+    transform: rotate(180deg);
+}
+
+/* Contenedor colapsable con animación Grid fluida */
+.panel-card__collapse {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.panel-card--collapsible.is-expanded .panel-card__collapse {
+    grid-template-rows: 1fr;
+}
+
+.panel-card__collapse > .panel-card__body {
+    min-height: 0;
+    overflow: hidden;
+    transition: padding 0.2s ease, opacity 0.2s ease;
+}
+
+.panel-card--collapsible:not(.is-expanded) .panel-card__collapse > .panel-card__body {
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+}
+
+.panel-card__body {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 12px;
+}
+
+.panel-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    border-bottom: 1px dashed #f1f5f9;
+    padding-bottom: 5px;
+}
+
+.panel-line:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.panel-label {
+    color: var(--caja-gray-text);
+    font-weight: 500;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.panel-value {
+    color: var(--caja-dark);
+    text-align: right;
+    word-break: break-word;
+    min-width: 0;
+}
+
+.panel-value.font-medium {
+    font-weight: 600;
+}
+
+.panel-value.font-bold {
+    font-weight: 700;
+}
+
+.panel-badge {
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+/* Sub-bloques de tutores individuales */
+.tutor-block {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    margin-bottom: 6px;
+}
+
+.tutor-block:last-child {
+    margin-bottom: 0;
+}
+
+.tutor-block__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 4px;
+}
+
+.tutor-block__name {
+    font-weight: 700;
+    color: var(--caja-dark);
+    font-size: 12.5px;
+}
+
+.tutor-block__rel {
+    background: #e2e8f0;
+    color: var(--caja-slate);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.badge-responsable {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.facturacion-no-requiere {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 6px;
+    color: var(--caja-gray-text);
+    font-size: 11.5px;
+}
+
+.historial-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.historial-item:last-child {
+    border-bottom: none;
+}
+
+.historial-item__left {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.historial-folio {
+    font-weight: 700;
+    font-size: 11.5px;
+    color: var(--caja-primary);
+}
+
+.historial-concepto {
+    font-size: 10.5px;
+    color: var(--caja-gray-text);
+}
+
+.historial-monto {
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--caja-slate);
+}
+
+.panel-empty-text {
+    color: var(--caja-gray-text);
+    font-size: 11.5px;
+    text-align: center;
+    padding: 8px;
+}
+
+/* ==========================================================
+   7. CAMPOS DE FORMULARIO COMPACTOS Y ORDENADOS
+   ========================================================== */
+.form-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 680px) {
+    .form-row-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.form-label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--caja-slate);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.required-star {
+    color: var(--caja-danger);
+    font-weight: bold;
+}
+
+.optional-tag {
+    font-size: 11px;
+    font-weight: normal;
+    color: var(--caja-gray-light);
+}
+
+.form-control {
+    width: 100%;
+    height: 40px;
+    padding: 7px 12px;
+    font-size: 13.5px;
+    font-family: inherit;
+    color: var(--caja-dark);
+    background: #ffffff;
+    border: 1px solid var(--caja-border);
+    border-radius: var(--caja-radius-sm);
+    outline: none;
+    transition: all 0.15s ease-in-out;
+}
+
+.form-control:focus {
+    border-color: var(--caja-border-focus);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+.form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px;
+    padding-right: 36px;
+    cursor: pointer;
+}
+
+.form-textarea {
+    height: auto;
+    resize: vertical;
+    min-height: 54px;
+    line-height: 1.45;
+}
+
+.form-hint {
+    font-size: 11px;
+    color: var(--caja-gray-text);
+}
+
+/* Input de Moneda Destacado Compacto */
+.input-money-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-money-symbol {
+    position: absolute;
+    left: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--caja-slate);
+    pointer-events: none;
+}
+
+.form-control--amount {
+    padding-left: 28px;
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--caja-primary);
+}
+
+/* Animación de feedback cuando se autocompleta el monto sugerido */
+@keyframes amountPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+        background-color: #ecfdf5;
+        border-color: #10b981;
+    }
+    60% {
+        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+        background-color: #ecfdf5;
+        border-color: #10b981;
+    }
+    100% {
+        box-shadow: none;
+        background-color: #ffffff;
+        border-color: var(--caja-border);
+    }
+}
+
+.amount-updated {
+    animation: amountPulse 0.9s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Dinámica de campo bancario y campo concepto personalizado */
+.form-control--bancario {
+    border-color: var(--caja-bbva-border);
+    background: #f0f7ff;
+}
+
+.form-control--bancario:focus {
+    border-color: #2563eb;
+    background: #ffffff;
+}
+
+.bancario-badge-icon {
+    color: var(--caja-bbva);
+    display: inline-flex;
+    align-items: center;
+}
+
+#container-referencia-bancaria,
+#container-concepto-personalizado {
+    animation: slideDown 0.25s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Acciones finales del formulario */
+.caja-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 8px;
+}
+
+.btn-spinner {
+    width: 15px;
+    height: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: caja-spin 0.6s linear infinite;
+}
+
+/* ==========================================================
+   8. MODAL Y VOUCHER DE COMPROBANTE OFICIAL
+   ========================================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.modal-dialog {
+    background: #ffffff;
+    border-radius: var(--caja-radius);
+    box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.25);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.voucher-receipt {
+    padding: 26px;
+    background: #ffffff;
+    overflow-y: auto;
+}
+
+.voucher-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.voucher-logo-badge {
+    width: 46px;
+    height: 46px;
+    background: var(--caja-primary);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 17px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 1px;
+}
+
+.voucher-inst-title {
+    font-size: 16.5px;
+    font-weight: 800;
+    color: var(--caja-dark);
+    margin: 0;
+}
+
+.voucher-inst-sub {
+    font-size: 12px;
+    color: var(--caja-gray-text);
+    margin: 2px 0 4px 0;
+}
+
+.voucher-badge-official {
+    display: inline-block;
+    background: #e0f2fe;
+    color: #0369a1;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.voucher-divider {
+    height: 1px;
+    background: #e2e8f0;
+    margin: 14px 0;
+}
+
+.voucher-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 16px;
+    font-size: 12px;
+}
+
+.voucher-folio {
+    color: var(--caja-primary);
+    font-size: 13.5px;
+    letter-spacing: 0.5px;
+}
+
+.voucher-badge-status {
+    background: #ecfdf5;
+    color: #065f46;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 10.5px;
+    font-weight: 700;
+}
+
+.voucher-alumno-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+}
+
+.voucher-alumno-line {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 3px;
+}
+
+.voucher-alumno-name {
+    font-size: 14px;
+    color: var(--caja-dark);
+}
+
+.voucher-alumno-sub {
+    font-size: 11.5px;
+    color: var(--caja-gray-text);
+    display: flex;
+    gap: 12px;
+}
+
+.voucher-table-wrapper {
+    margin-bottom: 12px;
+}
+
+.voucher-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.voucher-table th {
+    background: #f1f5f9;
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--caja-slate);
+    text-transform: uppercase;
+}
+
+.voucher-table td {
+    padding: 9px 10px;
+    border-bottom: 1px solid #e2e8f0;
+    color: var(--caja-slate);
+}
+
+.text-right {
+    text-align: right;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.voucher-total-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f0f7ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    padding: 11px 16px;
+    margin-bottom: 12px;
+}
+
+.voucher-total-label {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--caja-dark);
+}
+
+.voucher-total-amount {
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--caja-primary);
+}
+
+.voucher-notes {
+    font-size: 11.5px;
+    color: var(--caja-gray-text);
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    padding: 7px 12px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.voucher-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    text-align: center;
+    padding-top: 8px;
+}
+
+.voucher-barcode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-family: monospace;
+    font-size: 10.5px;
+    letter-spacing: 2px;
+    color: var(--caja-slate);
+}
+
+.barcode-lines {
+    width: 150px;
+    height: 22px;
+    background: repeating-linear-gradient(90deg, #1e293b, #1e293b 2px, transparent 2px, transparent 4px, #1e293b 4px, #1e293b 7px, transparent 7px, transparent 9px);
+}
+
+.voucher-disclaimer {
+    font-size: 10px;
+    color: var(--caja-gray-light);
+    line-height: 1.4;
+    margin: 0;
+    max-width: 460px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: #f8fafc;
+    border-top: 1px solid var(--caja-border);
+}
+
+/* ==========================================================
+   9. ESTILOS DE IMPRESIÓN OFICIAL (@media print)
+   ========================================================== */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #voucher-printable, #voucher-printable * {
+        visibility: visible;
+    }
+    #modal-comprobante {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        backdrop-filter: none;
+        padding: 0;
+    }
+    .modal-dialog {
+        box-shadow: none;
+        max-width: 100%;
+        width: 100%;
+        border-radius: 0;
+    }
+    .modal-actions {
+        display: none !important;
+    }
+    .voucher-receipt {
+        padding: 0;
+        margin: 0 auto;
+        max-width: 650px;
+    }
+}

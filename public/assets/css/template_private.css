@@ -268,3 +268,20 @@ body {
     color: #94a3b8;
     font-size: 12px;
 }
+
+/* Aviso cuando un rol no tiene módulos asignados en el sidebar */
+.sidebar-empty-notice {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 30px 20px;
+    color: #64748b;
+    font-size: 12px;
+    text-align: center;
+}
+
+.sidebar-empty-notice svg {
+    opacity: 0.5;
+}

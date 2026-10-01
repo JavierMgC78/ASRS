@@ -90,31 +90,58 @@ class AuthMiddleware
         }
 
         if (!headers_sent()) {
-            header('Location: /admin/login');
+            header('Location: ' . Router::url('admin/login', 'public'));
         }
         exit;
     }
 
     /**
      * Verifica que el usuario en sesión posea el rol requerido.
-     * Si no lo tiene, redirige al dashboard con un código 403.
+     * Si no lo tiene, redirige a su panel autorizado o muestra 403.
      *
      * @param string $roleName Nombre del rol requerido (ej. 'super_admin')
      * @return void
      */
     public static function requireRole(string $roleName): void
     {
+        self::requireAnyRole([$roleName]);
+    }
+
+    /**
+     * Verifica que el usuario en sesión posea al menos uno de los roles autorizados
+     * o pertenezca a un rol de tipo 'special'.
+     *
+     * @param array<string> $allowedRoles Lista de nombres de rol autorizados.
+     * @return void
+     */
+    public static function requireAnyRole(array $allowedRoles): void
+    {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
         $currentRole = $_SESSION['user']['role'] ?? $_SESSION['user']['role_name'] ?? '';
+        $roleType    = $_SESSION['user']['role_type'] ?? $_SESSION['user']['type'] ?? '';
 
-        if ($currentRole !== $roleName) {
-            http_response_code(403);
-            if (!headers_sent()) {
-                header('Location: /admin/dashboard');
+        // Roles especiales (ej. super_admin) tienen acceso bypass
+        if ($roleType === 'special' || $currentRole === 'super_admin') {
+            return;
+        }
+
+        if (!in_array($currentRole, $allowedRoles, true)) {
+            $userId     = (int)($_SESSION['user']['id'] ?? 0);
+            $roleId     = (int)($_SESSION['user']['role_id'] ?? 0);
+            $landingUrl = Router::getAuthorizedLandingUrl($userId, $roleId, $roleType);
+
+            if ($landingUrl !== null) {
+                http_response_code(302);
+                if (!headers_sent()) {
+                    header('Location: ' . $landingUrl);
+                }
+                exit;
             }
+
+            Router::renderError403('No cuentas con el rol requerido para operar este recurso.');
             exit;
         }
     }

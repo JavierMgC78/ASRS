@@ -2,6 +2,7 @@
 
 namespace Core\controllers;
 
+use Core\Router;
 use Core\SessionManager;
 
 class LogoutController
@@ -45,7 +46,7 @@ class LogoutController
 
         // 5. Redirigir limpiamente hacia la ruta pública principal (/)
         if (!headers_sent()) {
-            header('Location: /');
+            header('Location: ' . Router::url('/', 'public'));
         }
         exit;
     }
