@@ -51,7 +51,7 @@ class MenuGroupCache
             );
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            // Indexar por nombre de grupo preservando el orden de ordenamiento
+            // Indexar por nombre de grupo
             $cachedGroups = [];
             foreach ($rows as $row) {
                 // Castear tipos de datos para mayor consistencia
@@ -61,6 +61,9 @@ class MenuGroupCache
 
                 $cachedGroups[$row['name']] = $row;
             }
+
+            // Ordenar alfabéticamente por clave (nombre del grupo de la A a la Z)
+            ksort($cachedGroups);
 
             $cacheContent = "<?php\n/**\n * Archivo de caché estático de Grupos de Menú - ASRS Framework\n * Generado automáticamente. No editar manualmente.\n */\nreturn " . var_export($cachedGroups, true) . ";\n";
 

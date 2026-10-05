@@ -183,32 +183,26 @@
     opacity: 1;
 }
 
-/* --- 3. LAYOUT GRID RESPONSIVO --- */
+/* --- 3. LAYOUT VERTICAL DE ANCHO COMPLETO (100%) --- */
 .user-layout-grid {
-    display: grid;
-    grid-template-columns: 1fr 340px;
+    display: flex;
+    flex-direction: column;
     gap: 24px;
-    align-items: start;
-}
-
-@media (max-width: 1024px) {
-    .user-layout-grid {
-        grid-template-columns: 1fr;
-    }
+    width: 100%;
 }
 
 .user-main-col {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 24px;
+    width: 100%;
 }
 
 .user-side-col {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    position: sticky;
-    top: 20px;
+    gap: 24px;
+    width: 100%;
 }
 
 /* --- 4. TARJETAS CORPORATIVAS ASRS --- */
@@ -254,6 +248,11 @@
 .user-card__header-icon--shield {
     background: #f5f3ff;
     color: #7c3aed;
+}
+
+.user-card__header-icon--preview {
+    background: #e0f2fe;
+    color: #0284c7;
 }
 
 .user-card__title {
@@ -493,18 +492,30 @@
     color: var(--user-gray-text);
 }
 
-/* --- 5. TARJETA DE FICHA PREVIA (SIDEBAR) --- */
+/* --- 5. TARJETA DE FICHA PREVIA (REUBICADA AL 100%) --- */
 .user-card--profile {
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
+    overflow: hidden;
+}
+
+.profile-card-horizontal {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 28px;
     align-items: center;
-    text-align: center;
+    padding: 24px 28px;
+}
+
+.profile-card-horizontal__main {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    text-align: left;
 }
 
 .profile-avatar-wrap {
     position: relative;
-    margin-bottom: 14px;
+    margin-bottom: 0;
+    flex-shrink: 0;
 }
 
 .profile-avatar {
@@ -541,23 +552,23 @@
 }
 
 .profile-name {
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 700;
     color: var(--user-dark);
     margin: 0 0 4px 0;
 }
 
 .profile-email {
-    font-size: 12.5px;
+    font-size: 13px;
     color: var(--user-gray-text);
-    margin: 0 0 12px 0;
+    margin: 0 0 10px 0;
     word-break: break-all;
 }
 
 .profile-badges {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 8px;
     flex-wrap: wrap;
 }
@@ -594,10 +605,17 @@
 }
 
 .profile-divider {
-    width: 100%;
-    border: none;
-    border-top: 1px solid var(--user-border);
-    margin: 18px 0;
+    display: none;
+}
+
+.profile-card-horizontal__details {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: #f8fafc;
+    border: 1px solid var(--user-border);
+    border-radius: 10px;
+    padding: 16px 20px;
 }
 
 .profile-details-list {
@@ -624,7 +642,6 @@
 }
 
 .profile-security-badge {
-    margin-top: 16px;
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -637,29 +654,51 @@
     border: 1px solid #bae6fd;
 }
 
-/* --- 6. TARJETA DE ACCIONES --- */
+/* --- 6. TARJETA DE ACCIONES (100% ANCHO) --- */
 .user-card--actions {
-    padding: 20px;
+    padding: 20px 24px;
+    background: #ffffff;
+    border-radius: var(--user-radius);
+    border: 1px solid var(--user-border);
+    box-shadow: var(--user-shadow-sm);
+}
+
+.actions-card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.actions-card-info {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 4px;
 }
 
 .actions-card-title {
-    font-size: 14px;
+    font-size: 14.5px;
     font-weight: 700;
     color: var(--user-dark);
     margin: 0;
 }
 
 .actions-card-desc {
-    font-size: 12px;
+    font-size: 12.5px;
     color: var(--user-gray-text);
     margin: 0;
 }
 
+.actions-card-buttons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 .btn-create-user {
-    width: 100%;
+    width: auto;
+    min-width: 175px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -667,7 +706,7 @@
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
     color: #ffffff;
     border: none;
-    padding: 11px 18px;
+    padding: 11px 22px;
     border-radius: 8px;
     font-size: 13.5px;
     font-weight: 600;
@@ -683,7 +722,8 @@
 }
 
 .btn-reset-user {
-    width: 100%;
+    width: auto;
+    min-width: 150px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -691,7 +731,7 @@
     background: #ffffff;
     color: #475569;
     border: 1px solid #cbd5e1;
-    padding: 9px 18px;
+    padding: 10px 20px;
     border-radius: 8px;
     font-size: 13px;
     font-weight: 600;
@@ -702,6 +742,49 @@
 .btn-reset-user:hover {
     background: #f1f5f9;
     color: var(--user-dark);
+}
+
+@media (max-width: 860px) {
+    .profile-card-horizontal {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .actions-card-content {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+    
+    .actions-card-buttons {
+        flex-direction: column-reverse;
+        width: 100%;
+    }
+    
+    .btn-create-user,
+    .btn-reset-user {
+        width: 100%;
+        min-width: 100%;
+    }
+}
+
+@media (max-width: 560px) {
+    .profile-card-horizontal__main {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+    
+    .profile-meta {
+        align-items: center;
+    }
+    
+    .profile-badges {
+        justify-content: center;
+    }
 }
 
 /* Spinner */

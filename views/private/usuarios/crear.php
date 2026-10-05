@@ -92,12 +92,12 @@ $editUrl    = Router::url('usuarios/editar');
         <?php endif; ?>
     </div>
 
-    <!-- 3. Formulario de Alta con Layout Grid de 2 Columnas -->
+    <!-- 3. Formulario de Alta con Layout Vertical de Ancho Completo (100%) -->
     <form id="form-create-user" action="" method="POST" class="user-create-form" novalidate>
 
         <div class="user-layout-grid">
 
-            <!-- Columna Izquierda: Formulario Principal -->
+            <!-- Bloque de Secciones del Formulario Principal (100% de Ancho) -->
             <div class="user-main-col">
 
                 <!-- Tarjeta 1: Información Personal -->
@@ -273,74 +273,92 @@ $editUrl    = Router::url('usuarios/editar');
 
             </div>
 
-            <!-- Columna Derecha: Tarjeta de Vista Previa & Acciones -->
-            <div class="user-side-col">
-
-                <!-- Tarjeta de Ficha de Usuario en Vivo -->
-                <div class="user-card user-card--profile">
-                    <div class="profile-avatar-wrap">
-                        <div class="profile-avatar">
-                            <span id="profile-initials">NU</span>
-                        </div>
-                        <span class="profile-status-indicator is-online" id="profile-status-dot"></span>
-                    </div>
-
-                    <div class="profile-meta">
-                        <h3 class="profile-name" id="profile-name-preview">Nuevo Usuario</h3>
-                        <p class="profile-email" id="profile-email-preview">correo@dominio.com</p>
-
-                        <div class="profile-badges">
-                            <span class="badge-role" id="profile-role-badge">Sin Rol</span>
-                            <span class="badge-status badge-status--active" id="profile-status-badge">Activo</span>
-                        </div>
-                    </div>
-
-                    <hr class="profile-divider">
-
-                    <div class="profile-details-list">
-                        <div class="profile-detail-row">
-                            <span class="detail-label">Tipo de Cuenta</span>
-                            <span class="detail-val" id="profile-role-type">Por Definir</span>
-                        </div>
-                        <div class="profile-detail-row">
-                            <span class="detail-label">Fecha de Alta</span>
-                            <span class="detail-val"><?= date('d/m/Y') ?> (Hoy)</span>
-                        </div>
-                    </div>
-
-                    <div class="profile-security-badge">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <!-- Ficha de Vista Previa del Nuevo Usuario (Reubicada debajo verticalmente) -->
+            <div class="user-card user-card--profile">
+                <div class="user-card__header">
+                    <div class="user-card__header-icon user-card__header-icon--preview">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
                         </svg>
-                        <span>Cifrado Bcrypt Seguro (PDO)</span>
+                    </div>
+                    <div>
+                        <h2 class="user-card__title">Vista Previa de la Ficha de Usuario</h2>
+                        <p class="user-card__subtitle">Previsualización dinámica del perfil conforme completas la información del formulario.</p>
                     </div>
                 </div>
 
-                <!-- Tarjeta de Acciones -->
-                <div class="user-card user-card--actions">
-                    <h4 class="actions-card-title">Acciones de Registro</h4>
-                    <p class="actions-card-desc">El usuario será insertado de forma segura en la base de datos.</p>
+                <div class="user-card__body profile-card-horizontal">
+                    <div class="profile-card-horizontal__main">
+                        <div class="profile-avatar-wrap">
+                            <div class="profile-avatar">
+                                <span id="profile-initials">NU</span>
+                            </div>
+                            <span class="profile-status-indicator is-online" id="profile-status-dot"></span>
+                        </div>
 
-                    <button type="submit" class="btn-create-user" id="btn-submit-user">
-                        <span class="btn-spinner" style="display: none;" id="create-spinner"></span>
-                        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                            <line x1="19" y1="8" x2="19" y2="14"></line>
-                            <line x1="22" y1="11" x2="16" y2="11"></line>
-                        </svg>
-                        <span id="btn-submit-text">Registrar Usuario</span>
-                    </button>
+                        <div class="profile-meta">
+                            <h3 class="profile-name" id="profile-name-preview">Nuevo Usuario</h3>
+                            <p class="profile-email" id="profile-email-preview">correo@dominio.com</p>
 
-                    <button type="button" class="btn-reset-user" id="btn-clear-form">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="1 4 1 10 7 10"></polyline>
-                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
-                        </svg>
-                        <span>Limpiar Campos</span>
-                    </button>
+                            <div class="profile-badges">
+                                <span class="badge-role" id="profile-role-badge">Sin Rol</span>
+                                <span class="badge-status badge-status--active" id="profile-status-badge">Activo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-card-horizontal__details">
+                        <div class="profile-details-list">
+                            <div class="profile-detail-row">
+                                <span class="detail-label">Tipo de Cuenta</span>
+                                <span class="detail-val" id="profile-role-type">Por Definir</span>
+                            </div>
+                            <div class="profile-detail-row">
+                                <span class="detail-label">Fecha de Alta</span>
+                                <span class="detail-val"><?= date('d/m/Y') ?> (Hoy)</span>
+                            </div>
+                        </div>
+
+                        <div class="profile-security-badge">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                            <span>Cifrado Bcrypt Seguro (PDO)</span>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
+            <!-- Tarjeta de Acciones de Registro -->
+            <div class="user-card user-card--actions">
+                <div class="actions-card-content">
+                    <div class="actions-card-info">
+                        <h4 class="actions-card-title">Acciones de Registro</h4>
+                        <p class="actions-card-desc">El usuario será insertado de forma segura en la base de datos.</p>
+                    </div>
+
+                    <div class="actions-card-buttons">
+                        <button type="button" class="btn-reset-user" id="btn-clear-form">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="1 4 1 10 7 10"></polyline>
+                                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                            </svg>
+                            <span>Limpiar Campos</span>
+                        </button>
+
+                        <button type="submit" class="btn-create-user" id="btn-submit-user">
+                            <span class="btn-spinner" style="display: none;" id="create-spinner"></span>
+                            <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <line x1="19" y1="8" x2="19" y2="14"></line>
+                                <line x1="22" y1="11" x2="16" y2="11"></line>
+                            </svg>
+                            <span id="btn-submit-text">Registrar Usuario</span>
+                        </button>
+                    </div>
+                </div>
             </div>
 
         </div>

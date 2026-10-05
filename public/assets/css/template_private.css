@@ -73,6 +73,63 @@ body {
     font-weight: 600;
 }
 
+/* --- ENLACE A PORTAL PÚBLICO EN SIDEBAR --- */
+.sidebar-portal {
+    padding: 12px 18px;
+    border-bottom: 1px solid #263248;
+    background-color: rgba(15, 23, 42, 0.35);
+}
+
+.sidebar-portal-link {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 14px;
+    background-color: rgba(255, 255, 255, 0.04);
+    color: #e2e8f0;
+    border: 1px solid #334155;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-portal-link svg:first-child {
+    color: #60a5fa;
+    flex-shrink: 0;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.sidebar-portal-link span {
+    flex: 1;
+    letter-spacing: 0.2px;
+}
+
+.sidebar-external-icon {
+    opacity: 0.5;
+    flex-shrink: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.sidebar-portal-link:hover {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    transform: translateY(-1px);
+}
+
+.sidebar-portal-link:hover svg:first-child {
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+.sidebar-portal-link:hover .sidebar-external-icon {
+    opacity: 1;
+    transform: translate(2px, -2px);
+}
+
 .sidebar-nav {
     flex: 1;
     overflow-y: auto;
@@ -222,37 +279,6 @@ body {
 .welcome-text {
     font-size: 14px;
     color: #475569;
-}
-
-.topbar-portal-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 7px 14px;
-    background-color: #f1f5f9;
-    color: #0f172a;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.2s ease;
-}
-
-.topbar-portal-link:hover {
-    background-color: #2563eb;
-    color: #ffffff;
-    border-color: #2563eb;
-    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
-}
-
-.topbar-external-icon {
-    opacity: 0.6;
-    transition: opacity 0.2s ease;
-}
-
-.topbar-portal-link:hover .topbar-external-icon {
-    opacity: 1;
 }
 
 .asrs-content {
