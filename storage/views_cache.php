@@ -224,4 +224,18 @@ return array (
     'created_at' => '2026-09-30 22:18:58',
     'raw_uri' => '/precios',
   ),
+  '/admin/cargos/registrar' => 
+  array (
+    'id' => 18,
+    'uri' => '/admin/cargos/registrar',
+    'file_path' => 'views/private/cargos/registrar_cargo.php',
+    'layout_type' => 'private',
+    'menu_group' => 'cargos',
+    'menu_title' => 'registrar cargo',
+    'name_file' => 'registrar_cargo',
+    'show_in_menu' => 1,
+    'is_active' => 1,
+    'created_at' => '2026-10-04 19:56:56',
+    'raw_uri' => '/cargos/registrar',
+  ),
 );
