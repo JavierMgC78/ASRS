@@ -48,11 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const selAlumnoNivel         = document.getElementById('sel-alumno-nivel');
     const selAlumnoGradoGrupo    = document.getElementById('sel-alumno-grado-grupo');
 
-    // Conceptos de Cobro (Selector Desplegable)
-    const selectConcepto                 = document.getElementById('select_concepto');
-    const containerConceptoPersonalizado = document.getElementById('container-concepto-personalizado');
-    const inputConceptoPersonalizado     = document.getElementById('input_concepto_personalizado');
-    const montoHint                      = document.getElementById('monto-hint');
+    // Renglones Dinámicos de Cobro (Sección 2)
+    const rowsContainer          = document.getElementById('caja-conceptos-rows');
+    const btnAddRow              = document.getElementById('btn-add-row');
+    const totalAmountEl          = document.getElementById('caja-total-amount');
+    const totalCountEl           = document.getElementById('caja-total-count');
+    const inputDesglose          = document.getElementById('input_desglose_conceptos');
+    const catalogoConceptos      = config.conceptosCatalogo || window.ASRS_CONCEPTOS_CATALOGO || [];
 
     // Panel Lateral Inteligente
     const panelEmptyState        = document.getElementById('panel-empty-state');
@@ -171,64 +173,292 @@ document.addEventListener('DOMContentLoaded', () => {
     actualizarDinamicaFormaPago(); // Ejecutar al cargar la vista
 
     // -------------------------------------------------------------------------
-    // 2. AUTOMATIZACIÓN DE CONCEPTO Y MONTO SUGERIDO (SELECTOR DESPLEGABLE)
+    // 2. GESTIÓN DE RENGLONES DINÁMICOS DE COBRO (CONCEPTOS Y MONTOS ALINEADOS)
     // -------------------------------------------------------------------------
-    selectConcepto.addEventListener('change', () => {
-        const selectedOption = selectConcepto.options[selectConcepto.selectedIndex];
-        if (!selectedOption) return;
+    function crearRenglonConcepto({ concepto = '', monto = '', conceptoId = '', careId = null, isCustom = false, focus = false } = {}) {
+        if (!rowsContainer) return null;
 
-        const val = selectedOption.value;
-
-        if (val === 'OTRO') {
-            // Desplegar campo de concepto personalizado
-            containerConceptoPersonalizado.style.display = 'block';
-            inputConceptoPersonalizado.required = true;
-            inputConceptoPersonalizado.focus();
-            inputConcepto.value = inputConceptoPersonalizado.value.trim();
-            inputConceptoId.value = '';
-            if (montoHint) {
-                montoHint.textContent = 'Ingrese el monto correspondiente para este concepto.';
-            }
-        } else if (val !== '') {
-            // Ocultar campo de concepto personalizado
-            containerConceptoPersonalizado.style.display = 'none';
-            inputConceptoPersonalizado.required = false;
-            inputConcepto.value = val;
-
-            const id = selectedOption.getAttribute('data-id');
-            inputConceptoId.value = id || '';
-
-            // Automatizar el monto oficial sugerido si está configurado
-            const montoSugerido = parseFloat(selectedOption.getAttribute('data-monto'));
-            if (!isNaN(montoSugerido) && montoSugerido > 0) {
-                inputMonto.value = montoSugerido.toFixed(2);
-                
-                // Feedback visual sutil (pulso) para confirmar la carga automática
-                inputMonto.classList.add('amount-updated');
-                setTimeout(() => {
-                    inputMonto.classList.remove('amount-updated');
-                }, 450);
-
-                if (montoHint) {
-                    montoHint.textContent = `Precio oficial sugerido ($${montoSugerido.toFixed(2)} MXN). Editable libremente.`;
-                }
-            } else {
-                inputMonto.value = '';
-                if (montoHint) {
-                    montoHint.textContent = 'Ingrese el importe a cobrar en ventanilla.';
-                }
-            }
-        } else {
-            containerConceptoPersonalizado.style.display = 'none';
-            inputConcepto.value = '';
-            inputConceptoId.value = '';
+        const row = document.createElement('div');
+        row.className = `caja-concepto-row ${careId ? 'is-care-row' : ''}`;
+        if (careId) {
+            row.setAttribute('data-care-id', String(careId));
         }
-    });
 
-    // Sincronizar texto si se usa concepto personalizado
-    inputConceptoPersonalizado.addEventListener('input', () => {
-        inputConcepto.value = inputConceptoPersonalizado.value.trim();
-    });
+        const rowId = 'row_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
+        row.setAttribute('data-row-id', rowId);
+
+        // Opciones del select del catálogo institucional
+        let optionsHtml = '';
+        let matchesCatalogo = false;
+        catalogoConceptos.forEach(c => {
+            const selected = (concepto && c.nombre === concepto) || (conceptoId && String(c.id) === String(conceptoId));
+            if (selected) matchesCatalogo = true;
+            const montoAttr = Number(c.monto_sugerido || 0);
+            const montoTexto = montoAttr > 0 ? ` — $${montoAttr.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '';
+            optionsHtml += `<option value="${escapeHtml(c.nombre)}" data-id="${c.id}" data-monto="${montoAttr}" ${selected ? 'selected' : ''}>${escapeHtml(c.nombre)}${montoTexto}</option>`;
+        });
+
+        const isCustomMode = isCustom || Boolean(careId) || (concepto !== '' && !matchesCatalogo);
+
+        row.innerHTML = `
+            <div class="row-cell row-cell--num">
+                <span class="row-num-badge">1</span>
+            </div>
+            <div class="row-cell row-cell--concepto">
+                <div class="row-concepto-wrapper">
+                    <select class="form-control form-select row-select-concepto" aria-label="Concepto de cobro">
+                        <option value="" data-id="" data-monto="" ${(!concepto && !isCustomMode) ? 'selected' : ''} disabled>-- Seleccione un concepto escolar --</option>
+                        ${optionsHtml}
+                        <option value="OTRO" data-id="" data-monto="" ${isCustomMode ? 'selected' : ''}>Otro concepto personalizado...</option>
+                    </select>
+                    <div class="row-custom-wrapper" style="${isCustomMode ? 'display: flex;' : 'display: none;'}">
+                        <input type="text" class="form-control row-input-custom" placeholder="Especifique el concepto de cobro..." value="${escapeHtml(concepto)}">
+                        ${careId ? '<span class="row-care-badge" title="Cargo CARE de servicios eventuales">CARE</span>' : ''}
+                    </div>
+                </div>
+            </div>
+            <div class="row-cell row-cell--monto">
+                <div class="input-money-wrapper">
+                    <span class="input-money-symbol">$</span>
+                    <input type="number" step="0.01" min="0.01" class="form-control form-control--amount row-input-monto" placeholder="0.00" value="${monto ? Number(monto).toFixed(2) : ''}" required>
+                </div>
+            </div>
+            <div class="row-cell row-cell--actions">
+                <button type="button" class="btn-remove-row" title="Eliminar este concepto" aria-label="Eliminar renglón">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                    </svg>
+                </button>
+            </div>
+        `;
+
+        rowsContainer.appendChild(row);
+
+        // Referencias del renglón
+        const select = row.querySelector('.row-select-concepto');
+        const customWrapper = row.querySelector('.row-custom-wrapper');
+        const customInput = row.querySelector('.row-input-custom');
+        const montoInput = row.querySelector('.row-input-monto');
+        const btnRemove = row.querySelector('.btn-remove-row');
+
+        select.addEventListener('change', () => {
+            const val = select.value;
+            if (val === 'OTRO') {
+                customWrapper.style.display = 'flex';
+                customInput.required = true;
+                customInput.focus();
+            } else {
+                customWrapper.style.display = 'none';
+                customInput.required = false;
+
+                // Si tenía etiqueta CARE y se cambia a un concepto regular, desmarcar
+                if (row.classList.contains('is-care-row')) {
+                    row.classList.remove('is-care-row');
+                    const careIdOld = row.getAttribute('data-care-id');
+                    row.removeAttribute('data-care-id');
+                    const badge = row.querySelector('.row-care-badge');
+                    if (badge) badge.remove();
+                    if (careIdOld) {
+                        document.dispatchEvent(new CustomEvent('caja:care_row_removed', { detail: { careId: careIdOld } }));
+                    }
+                }
+
+                const opt = select.options[select.selectedIndex];
+                const sugerido = opt ? parseFloat(opt.getAttribute('data-monto')) : 0;
+                if (!isNaN(sugerido) && sugerido > 0) {
+                    montoInput.value = sugerido.toFixed(2);
+                    montoInput.classList.add('amount-updated');
+                    setTimeout(() => montoInput.classList.remove('amount-updated'), 450);
+                }
+            }
+            recalcularTotales();
+        });
+
+        customInput.addEventListener('input', recalcularTotales);
+        montoInput.addEventListener('input', recalcularTotales);
+
+        btnRemove.addEventListener('click', () => {
+            const totalRows = rowsContainer.querySelectorAll('.caja-concepto-row').length;
+            const careIdOld = row.getAttribute('data-care-id');
+
+            if (totalRows > 1) {
+                row.remove();
+            } else {
+                // Si es la única fila, limpiar campos en lugar de borrar la estructura
+                select.selectedIndex = 0;
+                customWrapper.style.display = 'none';
+                customInput.value = '';
+                montoInput.value = '';
+                row.classList.remove('is-care-row');
+                row.removeAttribute('data-care-id');
+                const badge = row.querySelector('.row-care-badge');
+                if (badge) badge.remove();
+            }
+
+            if (careIdOld) {
+                document.dispatchEvent(new CustomEvent('caja:care_row_removed', { detail: { careId: careIdOld } }));
+            }
+
+            renumerarFilas();
+            recalcularTotales();
+        });
+
+        renumerarFilas();
+
+        if (focus) {
+            select.focus();
+        }
+
+        return row;
+    }
+
+    function renumerarFilas() {
+        if (!rowsContainer) return;
+        const rows = rowsContainer.querySelectorAll('.caja-concepto-row');
+        rows.forEach((r, idx) => {
+            const badge = r.querySelector('.row-num-badge');
+            if (badge) badge.textContent = idx + 1;
+        });
+    }
+
+    function obtenerDatosRenglones() {
+        if (!rowsContainer) return [];
+        const rows = rowsContainer.querySelectorAll('.caja-concepto-row');
+        const items = [];
+
+        rows.forEach(r => {
+            const select = r.querySelector('.row-select-concepto');
+            const customInput = r.querySelector('.row-input-custom');
+            const montoInput = r.querySelector('.row-input-monto');
+            const careId = r.getAttribute('data-care-id');
+
+            const opt = select ? select.options[select.selectedIndex] : null;
+            let nombre = '';
+            let conceptoId = opt ? opt.getAttribute('data-id') : null;
+
+            if (select && select.value === 'OTRO') {
+                nombre = customInput ? customInput.value.trim() : '';
+                conceptoId = null;
+            } else if (opt && opt.value !== '') {
+                nombre = opt.value;
+            } else if (customInput && customInput.value.trim() !== '') {
+                nombre = customInput.value.trim();
+            }
+
+            const monto = montoInput ? parseFloat(montoInput.value) : 0;
+            const montoValido = !isNaN(monto) && monto > 0;
+
+            items.push({
+                concepto: nombre,
+                conceptoId: conceptoId || null,
+                monto: montoValido ? monto : 0,
+                careId: careId || null,
+                hasData: Boolean(nombre || montoValido)
+            });
+        });
+
+        return items;
+    }
+
+    function recalcularTotales() {
+        const items = obtenerDatosRenglones();
+        const activos = items.filter(it => it.hasData && it.monto > 0);
+
+        const totalSum = activos.reduce((acc, it) => acc + it.monto, 0);
+        const totalCount = activos.length;
+
+        // Actualizar UI del total general
+        if (totalAmountEl) {
+            totalAmountEl.textContent = totalSum.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+        if (totalCountEl) {
+            totalCountEl.textContent = `${totalCount} concepto${totalCount === 1 ? '' : 's'} activo${totalCount === 1 ? '' : 's'}`;
+        }
+
+        // Sincronizar inputs ocultos principales para backend
+        if (inputMonto) {
+            inputMonto.value = totalSum > 0 ? totalSum.toFixed(2) : '';
+        }
+
+        const nombresUnicos = activos.map(it => it.concepto).filter(Boolean);
+        const conceptoConsolidado = nombresUnicos.length > 0 ? nombresUnicos.join(' + ') : '';
+
+        if (inputConcepto) {
+            inputConcepto.value = conceptoConsolidado.slice(0, 150);
+        }
+        if (inputConceptoId) {
+            const primerId = activos.find(it => it.conceptoId)?.conceptoId;
+            inputConceptoId.value = primerId || '';
+        }
+
+        // Desglose de renglones para observaciones y auditoría
+        const lineasDesglose = activos.map(it => `• ${it.concepto}: $${it.monto.toFixed(2)} MXN`);
+        if (inputDesglose) {
+            inputDesglose.value = lineasDesglose.length > 0 ? `Desglose de cobro:\n${lineasDesglose.join('\n')}` : '';
+        }
+
+        // Sincronizar IDs de CARE activos en las filas
+        const careIdsActivos = items.map(it => it.careId).filter(Boolean);
+        let ceaHidden = document.getElementById('cea_cargos_ids');
+        if (!ceaHidden && formPago) {
+            ceaHidden = document.createElement('input');
+            ceaHidden.type = 'hidden';
+            ceaHidden.name = 'cea_cargos_ids';
+            ceaHidden.id = 'cea_cargos_ids';
+            formPago.appendChild(ceaHidden);
+        }
+        if (ceaHidden) {
+            ceaHidden.value = careIdsActivos.join(',');
+        }
+
+        // Notificar a módulos externos (como el modal de cargos CARE)
+        document.dispatchEvent(new CustomEvent('caja:care_rows_changed', {
+            detail: {
+                activeCareIds: careIdsActivos,
+                totalSum: totalSum,
+                totalCount: totalCount
+            }
+        }));
+    }
+
+    // Botón para añadir nuevo renglón (+)
+    if (btnAddRow) {
+        btnAddRow.addEventListener('click', () => {
+            crearRenglonConcepto({ focus: true });
+            recalcularTotales();
+        });
+    }
+
+    // Exponer API en window.ASRS_CAJA para integración con módulos como CARE
+    window.ASRS_CAJA = window.ASRS_CAJA || {};
+    window.ASRS_CAJA.agregarRenglon = function(datos) {
+        if (!rowsContainer) return null;
+        const filas = rowsContainer.querySelectorAll('.caja-concepto-row');
+        if (filas.length === 1) {
+            const primera = filas[0];
+            const sel = primera.querySelector('.row-select-concepto');
+            const m = primera.querySelector('.row-input-monto');
+            const cust = primera.querySelector('.row-input-custom');
+            if ((!sel || !sel.value) && (!m || !m.value) && (!cust || !cust.value)) {
+                primera.remove();
+            }
+        }
+        const r = crearRenglonConcepto(datos);
+        recalcularTotales();
+        return r;
+    };
+
+    window.ASRS_CAJA.obtenerRenglones = obtenerDatosRenglones;
+    window.ASRS_CAJA.recalcularTotales = recalcularTotales;
+
+    // Inicializar con un renglón por defecto
+    if (rowsContainer && rowsContainer.children.length === 0) {
+        crearRenglonConcepto({ focus: false });
+        recalcularTotales();
+    }
 
     // -------------------------------------------------------------------------
     // 3. BÚSQUEDA DE ALUMNO POR APELLIDO PATERNO EN TIEMPO REAL (DEBOUNCE FLUIDO)
@@ -828,31 +1058,26 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // 2. Validar y sincronizar concepto de cobro
-        let concepto = inputConcepto.value.trim();
-        if (selectConcepto && selectConcepto.value === 'OTRO') {
-            concepto = inputConceptoPersonalizado ? inputConceptoPersonalizado.value.trim() : '';
-            inputConcepto.value = concepto;
-        } else if (selectConcepto && selectConcepto.value && selectConcepto.value !== '') {
-            concepto = selectConcepto.value;
-            inputConcepto.value = concepto;
-        }
+        // 2. Validar que haya al menos un renglón con concepto y monto válido
+        const renglones = obtenerDatosRenglones();
+        const renglonesValidos = renglones.filter(r => r.concepto && r.monto > 0);
 
-        if (!concepto) {
-            mostrarAlertaError('Debe seleccionar o especificar un concepto de cobro escolar.');
-            if (selectConcepto && selectConcepto.value === 'OTRO' && inputConceptoPersonalizado) {
-                inputConceptoPersonalizado.focus();
-            } else if (selectConcepto) {
-                selectConcepto.focus();
+        if (renglonesValidos.length === 0) {
+            mostrarAlertaError('Debe ingresar al menos un concepto de cobro con un monto válido mayor a $0.00.');
+            const primeraFila = rowsContainer ? rowsContainer.querySelector('.caja-concepto-row') : null;
+            if (primeraFila) {
+                const sel = primeraFila.querySelector('.row-select-concepto');
+                if (sel) sel.focus();
             }
             return;
         }
 
-        // 3. Validar monto
+        recalcularTotales();
+
+        // 3. Validar monto consolidado
         const monto = parseFloat(inputMonto.value);
         if (isNaN(monto) || monto <= 0) {
-            mostrarAlertaError('Ingrese un monto válido mayor a $0.00.');
-            inputMonto.focus();
+            mostrarAlertaError('El monto total consolidado a cobrar debe ser mayor a $0.00.');
             return;
         }
 
@@ -895,6 +1120,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (alumnoId) {
                     cargarFichaCompletaAlumno(alumnoId);
                 }
+
+                // [Módulo CARE] Notificar éxito del pago para actualizar cargos y badges
+                document.dispatchEvent(new CustomEvent('caja:pago_exitoso', {
+                    detail: {
+                        pago: body.data,
+                        alumnoId: alumnoId
+                    }
+                }));
             } else {
                 mostrarAlertaError(body.message || 'Error al registrar el pago en la base de datos.');
             }
@@ -927,10 +1160,29 @@ document.addEventListener('DOMContentLoaded', () => {
         const gradoGrupo = (currentSelectedAlumno ? `${currentSelectedAlumno.grado || ''} ${currentSelectedAlumno.grupo || ''}` : '--');
         vouchGradoGrupo.textContent  = gradoGrupo;
 
-        vouchConcepto.textContent    = pago.concepto || '--';
-        vouchFormaPago.textContent   = pago.forma_pago || '--';
-        vouchReferencia.textContent  = pago.referencia || 'N/A';
-        vouchMonto.textContent       = pago.monto_formateado || `$ ${pago.monto}`;
+        const tbody = document.getElementById('vouch-tbody');
+        const renglones = obtenerDatosRenglones().filter(r => r.concepto && r.monto > 0);
+
+        if (tbody && renglones.length > 1) {
+            tbody.innerHTML = renglones.map((r, i) => `
+                <tr>
+                    <td>${escapeHtml(r.concepto)}</td>
+                    <td>${i === 0 ? escapeHtml(pago.forma_pago || '--') : '—'}</td>
+                    <td>${i === 0 ? escapeHtml(pago.referencia || 'N/A') : '—'}</td>
+                    <td class="text-right font-bold">$ ${r.monto.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                </tr>
+            `).join('');
+        } else if (tbody) {
+            tbody.innerHTML = `
+                <tr>
+                    <td id="vouch-concepto">${escapeHtml(pago.concepto || '--')}</td>
+                    <td id="vouch-forma-pago">${escapeHtml(pago.forma_pago || '--')}</td>
+                    <td id="vouch-referencia">${escapeHtml(pago.referencia || 'N/A')}</td>
+                    <td class="text-right font-bold" id="vouch-monto">${pago.monto_formateado || ('$ ' + pago.monto)}</td>
+                </tr>
+            `;
+        }
+
         vouchTotal.textContent       = `${pago.monto_formateado || '$ ' + pago.monto} MXN`;
         vouchBarcodeText.textContent = `CEA-${pago.folio || '0000'}`;
 
@@ -965,13 +1217,17 @@ document.addEventListener('DOMContentLoaded', () => {
     function limpiarFormularioCompleto() {
         formPago.reset();
         resetSeleccionAlumno();
-        if (selectConcepto) selectConcepto.selectedIndex = 0;
-        if (containerConceptoPersonalizado) containerConceptoPersonalizado.style.display = 'none';
-        if (inputConceptoPersonalizado) inputConceptoPersonalizado.value = '';
+        if (rowsContainer) {
+            rowsContainer.innerHTML = '';
+            crearRenglonConcepto({ focus: false });
+        }
         if (inputConcepto) inputConcepto.value = '';
         if (inputConceptoId) inputConceptoId.value = '';
         if (inputMonto) inputMonto.value = '';
-        if (montoHint) montoHint.textContent = 'Importe oficial sugerido (editable libremente).';
+        if (inputDesglose) inputDesglose.value = '';
+        recalcularTotales();
+        const ceaHidden = document.getElementById('cea_cargos_ids');
+        if (ceaHidden) ceaHidden.value = '';
         inputFechaPago.value = config.fechaActual || '';
         inputHoraPago.value = config.horaActual || '';
         actualizarDinamicaFormaPago();

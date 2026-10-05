@@ -117,6 +117,172 @@ class Cea_CargosController
     }
 
     /**
+     * Consulta los cargos CARE en estatus 'pendiente' de un alumno específico.
+     * Solo lectura: no altera el estatus de ningún cargo.
+     *
+     * @param PDO $db
+     * @param int $alumnoId
+     * @return array<int, array<string, mixed>>
+     */
+    public static function obtenerCargosPendientesPorAlumno(PDO $db, int $alumnoId): array
+    {
+        if ($alumnoId <= 0) {
+            return [];
+        }
+
+        $stmt = $db->prepare(
+            "SELECT id, alumno_id, concepto, monto, fecha_solicitud, fecha_servicio, estatus
+             FROM cargos_alumnos_cea
+             WHERE alumno_id = :alumno_id AND estatus = 'pendiente'
+             ORDER BY fecha_servicio ASC, id ASC"
+        );
+        $stmt->bindValue(':alumno_id', $alumnoId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $cargos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($cargos as &$c) {
+            $c['id']        = (int)$c['id'];
+            $c['alumno_id'] = (int)$c['alumno_id'];
+            $c['monto']     = (float)$c['monto'];
+        }
+        unset($c);
+
+        return $cargos;
+    }
+
+    /**
+     * Actualiza el estatus de los cargos CARE especificados a 'pagado'
+     * y asocia el ID del recibo de pago correspondiente si se proporciona.
+     *
+     * @param PDO          $db        Instancia PDO de base de datos
+     * @param array|string $cargosIds ID único, array de IDs o string de IDs separados por coma
+     * @param int          $alumnoId  ID del alumno titular de los cargos (validación estricta)
+     * @param int|null     $pagoId    ID del registro generado en pagos_cea (opcional para recibo_id)
+     * @return int                    Cantidad de registros efectivamente actualizados
+     */
+    public static function marcarCargosComoPagados(PDO $db, $cargosIds, int $alumnoId, ?int $pagoId = null): int
+    {
+        if (empty($cargosIds) || $alumnoId <= 0) {
+            return 0;
+        }
+
+        // Normalizar entrada a array de identificadores enteros válidos
+        if (is_string($cargosIds)) {
+            $cargosIds = explode(',', $cargosIds);
+        }
+
+        if (!is_array($cargosIds)) {
+            $cargosIds = [$cargosIds];
+        }
+
+        $cleanIds = [];
+        foreach ($cargosIds as $id) {
+            $val = filter_var(trim((string)$id), FILTER_VALIDATE_INT);
+            if ($val && $val > 0) {
+                $cleanIds[] = (int)$val;
+            }
+        }
+        $cleanIds = array_values(array_unique($cleanIds));
+
+        if (empty($cleanIds)) {
+            return 0;
+        }
+
+        // Construir placeholders dinámicos para la cláusula IN (?, ?, ...)
+        $placeholders = implode(',', array_fill(0, count($cleanIds), '?'));
+
+        $sql = "UPDATE cargos_alumnos_cea 
+                SET estatus = 'pagado', 
+                    recibo_id = ? 
+                WHERE id IN ({$placeholders}) 
+                  AND alumno_id = ? 
+                  AND estatus = 'pendiente'";
+
+        $stmt = $db->prepare($sql);
+
+        // Los parámetros son: [recibo_id, id_1, id_2, ..., alumno_id]
+        $params = array_merge([$pagoId], $cleanIds, [$alumnoId]);
+        $stmt->execute($params);
+
+        return $stmt->rowCount();
+    }
+
+    /**
+     * Endpoint AJAX consumido por la Caja institucional:
+     * - action=get_cargos_pendientes: Retorna el listado de cargos CARE pendientes del alumno.
+     * - action=marcar_cargos_pagados: Actualiza manualmente cargos a estatus 'pagado' si se requiere.
+     * Responde JSON y termina la ejecución únicamente si la petición corresponde a estas acciones.
+     */
+    public static function handleCajaAjax(): void
+    {
+        $action = $_REQUEST['action'] ?? null;
+        if ($action !== 'get_cargos_pendientes' && $action !== 'marcar_cargos_pagados') {
+            return;
+        }
+
+        // Solo roles autorizados de Caja y Administración
+        AuthMiddleware::requireAnyRole(['caja', 'super_admin']);
+
+        if (!headers_sent()) {
+            header('Content-Type: application/json; charset=utf-8');
+        }
+
+        $db = Database::getInstance();
+
+        // 1. Consulta de cargos pendientes
+        if ($action === 'get_cargos_pendientes') {
+            $alumnoId = filter_var($_GET['alumno_id'] ?? 0, FILTER_VALIDATE_INT);
+            if (!$alumnoId || $alumnoId <= 0) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'message' => 'ID de alumno no válido.', 'data' => []]);
+                exit;
+            }
+
+            try {
+                $cargos = self::obtenerCargosPendientesPorAlumno($db, $alumnoId);
+                $total = array_sum(array_column($cargos, 'monto'));
+
+                echo json_encode([
+                    'success' => true,
+                    'count'   => count($cargos),
+                    'total'   => round($total, 2),
+                    'data'    => $cargos
+                ]);
+            } catch (Throwable $e) {
+                http_response_code(500);
+                echo json_encode(['success' => false, 'message' => 'Error al consultar cargos: ' . $e->getMessage(), 'data' => []]);
+            }
+            exit;
+        }
+
+        // 2. Actualización a estatus pagado (soporte AJAX directo si se invoca)
+        if ($action === 'marcar_cargos_pagados') {
+            $alumnoId = filter_var($_REQUEST['alumno_id'] ?? 0, FILTER_VALIDATE_INT);
+            $cargosIds = $_REQUEST['cargos_ids'] ?? [];
+            $pagoId   = filter_var($_REQUEST['pago_id'] ?? 0, FILTER_VALIDATE_INT) ?: null;
+
+            if (!$alumnoId || $alumnoId <= 0 || empty($cargosIds)) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'message' => 'Parámetros insuficientes para marcar cargos como pagados.']);
+                exit;
+            }
+
+            try {
+                $afectados = self::marcarCargosComoPagados($db, $cargosIds, $alumnoId, $pagoId);
+                echo json_encode([
+                    'success'    => true,
+                    'message'    => "Se actualizaron {$afectados} cargos a estatus pagado.",
+                    'afectados'  => $afectados
+                ]);
+            } catch (Throwable $e) {
+                http_response_code(500);
+                echo json_encode(['success' => false, 'message' => 'Error al actualizar cargos: ' . $e->getMessage()]);
+            }
+            exit;
+        }
+    }
+
+    /**
      * Búsqueda en vivo de alumnos por nombre, apellidos o CURP.
      */
     private static function handleSearchAlumnos(PDO $db): void

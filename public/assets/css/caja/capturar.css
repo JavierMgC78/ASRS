@@ -1535,3 +1535,339 @@
         max-width: 650px;
     }
 }
+
+/* ==========================================================
+   10. RENGLONES DINÁMICOS DE CONCEPTOS Y MONTOS DE COBRO
+   ========================================================== */
+.caja-section--conceptos {
+    overflow: visible;
+}
+
+.caja-conceptos-wrapper {
+    margin-top: 6px;
+}
+
+/* Encabezado de columnas alineado */
+.caja-conceptos-header {
+    display: grid;
+    grid-template-columns: 36px 1fr 200px 48px;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 14px;
+    background: #f8fafc;
+    border: 1px solid var(--caja-border);
+    border-bottom: 2px solid #e2e8f0;
+    border-radius: 8px 8px 0 0;
+}
+
+.col-header {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--caja-slate);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.col-header--num {
+    text-align: center;
+}
+
+.col-header--monto {
+    text-align: right;
+    padding-right: 6px;
+}
+
+.col-header--actions {
+    text-align: center;
+}
+
+/* Lista de Renglones */
+.caja-conceptos-rows {
+    display: flex;
+    flex-direction: column;
+}
+
+.caja-concepto-row {
+    display: grid;
+    grid-template-columns: 36px 1fr 200px 48px;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 14px;
+    background: #ffffff;
+    border: 1px solid var(--caja-border);
+    border-top: none;
+    transition: all 0.18s ease;
+    animation: rowFadeIn 0.22s ease-out;
+}
+
+@keyframes rowFadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.caja-concepto-row:last-child {
+    border-bottom: 1px solid var(--caja-border);
+    border-radius: 0 0 8px 8px;
+}
+
+.caja-concepto-row:hover {
+    background: #fafbfc;
+}
+
+/* Renglón proveniente de Cargo CARE */
+.caja-concepto-row.is-care-row {
+    background: #fffdf8;
+    border-left: 3.5px solid #f59e0b;
+}
+
+.caja-concepto-row.is-care-row:hover {
+    background: #fffbeb;
+}
+
+.row-cell--num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 6px;
+}
+
+.row-num-badge {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.caja-concepto-row.is-care-row .row-num-badge {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.row-cell--concepto {
+    display: flex;
+    flex-direction: column;
+}
+
+.row-concepto-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.row-custom-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.row-care-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    background: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fde68a;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+
+.row-cell--monto {
+    display: flex;
+    flex-direction: column;
+}
+
+.row-cell--actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 1px;
+}
+
+/* Botón de Borrar Renglón */
+.btn-remove-row {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--caja-radius-sm);
+    border: 1px solid var(--caja-border);
+    background: #ffffff;
+    color: #94a3b8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.16s ease-in-out;
+}
+
+.btn-remove-row:hover {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #ef4444;
+    transform: scale(1.06);
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.15);
+}
+
+.btn-remove-row:focus-visible {
+    outline: 2px solid #ef4444;
+    outline-offset: 2px;
+}
+
+/* Barra de Botón (+) */
+.caja-conceptos-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 2px 6px;
+    flex-wrap: wrap;
+}
+
+.btn-add-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: rgba(37, 99, 235, 0.05);
+    color: var(--caja-primary);
+    border: 1.5px dashed var(--caja-primary);
+    border-radius: var(--caja-radius-sm);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-add-row:hover {
+    background: var(--caja-primary);
+    color: #ffffff;
+    border-style: solid;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    transform: translateY(-1.5px);
+}
+
+.btn-add-row:active {
+    transform: translateY(0);
+}
+
+.btn-add-row:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.4);
+    outline-offset: 2px;
+}
+
+.caja-toolbar-hint {
+    font-size: 11.5px;
+    color: var(--caja-gray-text);
+}
+
+/* Barra de Total General Consolidado */
+.caja-total-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #ffffff;
+    border-radius: 10px;
+    margin-top: 14px;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.16);
+    border: 1px solid #334155;
+    animation: totalBarPulse 0.3s ease-out;
+}
+
+.caja-total-bar__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.caja-total-bar__title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #cbd5e1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.caja-total-bar__count {
+    font-size: 11px;
+    font-weight: 500;
+    color: #94a3b8;
+}
+
+.caja-total-bar__value {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+}
+
+.caja-total-bar__symbol {
+    font-size: 18px;
+    font-weight: 700;
+    color: #38bdf8;
+}
+
+.caja-total-bar__amount {
+    font-size: 24px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    font-variant-numeric: tabular-nums;
+}
+
+.caja-total-bar__currency {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #94a3b8;
+    margin-left: 4px;
+}
+
+/* Responsividad para móviles */
+@media (max-width: 680px) {
+    .caja-conceptos-header {
+        display: none;
+    }
+
+    .caja-concepto-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        position: relative;
+        padding-top: 36px;
+    }
+
+    .row-cell--num {
+        position: absolute;
+        top: 10px;
+        left: 12px;
+    }
+
+    .row-cell--actions {
+        position: absolute;
+        top: 6px;
+        right: 12px;
+    }
+
+    .caja-conceptos-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-add-row {
+        justify-content: center;
+    }
+
+    .caja-total-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
+

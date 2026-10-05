@@ -11,6 +11,11 @@
 use Core\controllers\CajaController;
 use Core\Router;
 
+// [Módulo CARE] Endpoint aislado de cargos pendientes (solo responde si action=get_cargos_pendientes)
+require_once __DIR__ . '/../../../Core/controllers/Cea_CargosController.php';
+require_once __DIR__ . '/../../../controllers/Cea_CargosController.php';
+\controllers\Cea_CargosController::handleCajaAjax();
+
 // Ejecutar lógica de procesamiento del controlador y validación RBAC
 $data = CajaController::handleCapture();
 
@@ -178,6 +183,26 @@ $baseUrl         = $baseUrl ?? rtrim(Router::url('', 'public'), '/');
                         <span><strong>Grado y Grupo:</strong> <span id="sel-alumno-grado-grupo">--</span></span>
                     </div>
                 </div>
+                <!-- [Módulo CARE] Botón / Insignia Persistente de Adeudos Eventuales -->
+                <button type="button" id="btn-reabrir-cargos-care" class="cea-badge-cargos-pendientes" style="display: none;" title="Ver y gestionar cargos CARE pendientes de cobro">
+                    <span class="cea-badge-cargos-pendientes__pulse" aria-hidden="true"></span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="cea-badge-cargos-pendientes__icon">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <span class="cea-badge-cargos-pendientes__content">
+                        <span class="cea-badge-cargos-pendientes__title" id="cea-badge-cargos-title">Adeudos CARE (0)</span>
+                        <span class="cea-badge-cargos-pendientes__amount" id="cea-badge-cargos-amount">$0.00 MXN</span>
+                    </span>
+                    <span class="cea-badge-cargos-pendientes__action">
+                        <span>Ver cargos</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </span>
+                </button>
+
                 <button type="button" id="btn-change-alumno" class="btn-change-alumno" title="Buscar otro alumno">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
@@ -389,69 +414,60 @@ $baseUrl         = $baseUrl ?? rtrim(Router::url('', 'public'), '/');
         </div>
 
         <!-- ======================================================== -->
-        <!-- SECCIÓN 2: DETALLES DEL COBRO / CONCEPTOS                -->
+        <!-- SECCIÓN 2: DETALLES DEL COBRO / RENGLONES DINÁMICOS       -->
         <!-- ======================================================== -->
-        <div class="caja-section">
+        <div class="caja-section caja-section--conceptos">
             <div class="caja-section__header">
                 <div class="caja-section__badge">2</div>
                 <div>
-                    <h2 class="caja-section__title">Concepto de Cobro e Importe</h2>
-                    <p class="caja-section__desc">Seleccione el servicio o cuota escolar del catálogo para cargar su precio sugerido.</p>
+                    <h2 class="caja-section__title">Conceptos de Cobro y Desglose de Importes</h2>
+                    <p class="caja-section__desc">Añada o edite los conceptos a liquidar. Cada renglón cuenta con su caja de concepto y monto alineada.</p>
                 </div>
             </div>
 
-            <div class="form-row-2">
-                <!-- Selector Desplegable de Concepto de Cobro -->
-                <div class="form-group">
-                    <label for="select_concepto" class="form-label">
-                        Concepto de Cobro <span class="required-star">*</span>
-                    </label>
-                    <input type="hidden" name="concepto" id="input_concepto" value="">
-                    <select id="select_concepto" class="form-control form-select" required>
-                        <option value="" data-id="" data-monto="" selected disabled>-- Seleccione un concepto escolar --</option>
-                        <?php foreach ($conceptos as $c): ?>
-                            <option 
-                                value="<?= htmlspecialchars($c['nombre']) ?>"
-                                data-id="<?= (int)$c['id'] ?>"
-                                data-monto="<?= (float)$c['monto_sugerido'] ?>"
-                            >
-                                <?= htmlspecialchars($c['nombre']) ?><?= ((float)$c['monto_sugerido'] > 0) ? ' — $' . number_format((float)$c['monto_sugerido'], 2) : '' ?>
-                            </option>
-                        <?php endforeach; ?>
-                        <option value="OTRO" data-id="" data-monto="">Otro concepto personalizado...</option>
-                    </select>
+            <!-- Campos ocultos de consolidación para backend -->
+            <input type="hidden" name="concepto" id="input_concepto" value="">
+            <input type="hidden" name="concepto_id" id="input_concepto_id" value="">
+            <input type="hidden" name="monto" id="input_monto" value="">
+            <input type="hidden" name="desglose_conceptos" id="input_desglose_conceptos" value="">
 
-                    <!-- Campo desplegable para especificar concepto personalizado si se selecciona 'OTRO' -->
-                    <div id="container-concepto-personalizado" style="display: none; margin-top: 8px;">
-                        <input 
-                            type="text" 
-                            id="input_concepto_personalizado" 
-                            class="form-control" 
-                            placeholder="Especifique el concepto de cobro personalizado..."
-                        >
-                    </div>
-                    <small class="form-hint" id="concepto-hint">Catálogo oficial con importes base precargados.</small>
+            <div class="caja-conceptos-wrapper">
+                <!-- Encabezado de Columnas Alineadas -->
+                <div class="caja-conceptos-header">
+                    <span class="col-header col-header--num">#</span>
+                    <span class="col-header col-header--concepto">Concepto / Servicio <span class="required-star">*</span></span>
+                    <span class="col-header col-header--monto">Monto a Cobrar ($ MXN) <span class="required-star">*</span></span>
+                    <span class="col-header col-header--actions">Acción</span>
                 </div>
 
-                <!-- Campo Monto a Cobrar -->
-                <div class="form-group">
-                    <label for="input_monto" class="form-label">
-                        Monto a Cobrar ($ MXN) <span class="required-star">*</span>
-                    </label>
-                    <div class="input-money-wrapper">
-                        <span class="input-money-symbol">$</span>
-                        <input 
-                            type="number" 
-                            name="monto" 
-                            id="input_monto" 
-                            class="form-control form-control--amount" 
-                            placeholder="0.00" 
-                            step="0.01" 
-                            min="0.01" 
-                            required
-                        >
+                <!-- Lista de Renglones Dinámicos -->
+                <div id="caja-conceptos-rows" class="caja-conceptos-rows">
+                    <!-- Renglones inyectados dinámicamente por capturar.js -->
+                </div>
+
+                <!-- Barra de Acciones: Botón Agregar (+) -->
+                <div class="caja-conceptos-toolbar">
+                    <button type="button" id="btn-add-row" class="btn-add-row" title="Añadir una nueva línea de cobro">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        <span>Añadir concepto (+)</span>
+                    </button>
+                    <span class="caja-toolbar-hint">Puede añadir colegiaturas, cuotas escolares o adeudos CARE en un mismo ticket.</span>
+                </div>
+
+                <!-- Barra de Total General Consolidado -->
+                <div class="caja-total-bar" id="caja-total-bar">
+                    <div class="caja-total-bar__info">
+                        <span class="caja-total-bar__title">Total General a Cobrar:</span>
+                        <span class="caja-total-bar__count" id="caja-total-count">0 conceptos</span>
                     </div>
-                    <small class="form-hint" id="monto-hint">Importe oficial sugerido (editable libremente).</small>
+                    <div class="caja-total-bar__value">
+                        <span class="caja-total-bar__symbol">$</span>
+                        <span class="caja-total-bar__amount" id="caja-total-amount">0.00</span>
+                        <span class="caja-total-bar__currency">MXN</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -643,7 +659,7 @@ $baseUrl         = $baseUrl ?? rtrim(Router::url('', 'public'), '/');
                                 <th class="text-right">Monto</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="vouch-tbody">
                             <tr>
                                 <td id="vouch-concepto">--</td>
                                 <td id="vouch-forma-pago">--</td>
@@ -710,6 +726,11 @@ $baseUrl         = $baseUrl ?? rtrim(Router::url('', 'public'), '/');
         endpointUrl: <?= json_encode(Router::url('caja/capturar', 'private')) ?>,
         cajeroNombre: <?= json_encode($cajero['name'] ?? 'Cajero CEA') ?>,
         fechaActual: <?= json_encode($fechaActual) ?>,
-        horaActual: <?= json_encode($horaActual) ?>
+        horaActual: <?= json_encode($horaActual) ?>,
+        conceptosCatalogo: <?= json_encode($conceptos) ?>
     };
 </script>
+
+<!-- [Módulo CARE] Modal bloqueante de cargos pendientes (assets dedicados) -->
+<link rel="stylesheet" href="<?= htmlspecialchars($baseUrl) ?>/assets/css/caja/cea_cargos_modal.css">
+<script src="<?= htmlspecialchars($baseUrl) ?>/assets/js/caja/cea_cargos_modal.js"></script>

@@ -399,6 +399,10 @@ class CajaController
         $fechaPago  = trim($data['fecha_pago'] ?? date('Y-m-d'));
         $horaPago   = trim($data['hora_pago'] ?? date('H:i'));
         $observaciones = trim($data['observaciones'] ?? '');
+        $desglose      = trim($data['desglose_conceptos'] ?? '');
+        if ($desglose !== '') {
+            $observaciones = $observaciones !== '' ? ($observaciones . "\n\n" . $desglose) : $desglose;
+        }
         $cajeroId   = (int)($_SESSION['user']['id'] ?? 0) ?: null;
 
         // Validaciones de negocio
@@ -521,18 +525,38 @@ class CajaController
             $stmtInsert->execute();
             $pagoId = (int)$db->lastInsertId();
 
+            // [Módulo CARE] Si la transacción incluye adeudos CARE, actualizar estatus a 'pagado'
+            $cargosCareIds = $data['cea_cargos_ids'] ?? null;
+            $cargosActualizados = 0;
+            if (!empty($cargosCareIds)) {
+                if (!class_exists('controllers\Cea_CargosController')) {
+                    if (file_exists(__DIR__ . '/../../controllers/Cea_CargosController.php')) {
+                        require_once __DIR__ . '/../../controllers/Cea_CargosController.php';
+                    } elseif (file_exists(__DIR__ . '/Cea_CargosController.php')) {
+                        require_once __DIR__ . '/Cea_CargosController.php';
+                    }
+                }
+
+                if (class_exists('controllers\Cea_CargosController') && method_exists('controllers\Cea_CargosController', 'marcarCargosComoPagados')) {
+                    $cargosActualizados = \controllers\Cea_CargosController::marcarCargosComoPagados($db, $cargosCareIds, $alumnoId, $pagoId);
+                } elseif (class_exists('Core\controllers\Cea_CargosController') && method_exists('Core\controllers\Cea_CargosController', 'marcarCargosComoPagados')) {
+                    $cargosActualizados = \Core\controllers\Cea_CargosController::marcarCargosComoPagados($db, $cargosCareIds, $alumnoId, $pagoId);
+                }
+            }
+
             $db->commit();
 
             return [
                 'success' => true,
-                'message' => "Pago registrado exitosamente con folio {$folioNuevo}.",
+                'message' => "Pago registrado exitosamente con folio {$folioNuevo}." . ($cargosActualizados > 0 ? " (Se liquidaron {$cargosActualizados} cargos CARE asociados)" : ""),
                 'data'    => [
-                    'pago_id'         => $pagoId,
-                    'folio'           => $folioNuevo,
-                    'alumno_id'       => $alumnoId,
-                    'alumno_nombre'   => $alumnoInfo['nombre_completo'],
-                    'alumno_curp'     => $alumnoInfo['curp'],
-                    'concepto'        => $conceptoTxt,
+                    'pago_id'              => $pagoId,
+                    'folio'                => $folioNuevo,
+                    'alumno_id'            => $alumnoId,
+                    'alumno_nombre'        => $alumnoInfo['nombre_completo'],
+                    'alumno_curp'          => $alumnoInfo['curp'],
+                    'concepto'             => $conceptoTxt,
+                    'cargos_care_pagados'  => $cargosActualizados,
                     'monto'           => number_format($monto, 2, '.', ''),
                     'monto_formateado'=> '$ ' . number_format($monto, 2, '.', ','),
                     'forma_pago'      => $formaPago,
