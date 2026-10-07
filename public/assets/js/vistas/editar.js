@@ -258,6 +258,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (activeCheckbox && activeCheckbox.checked) {
             formData.append('is_active', '1');
         }
+        // Roles (solo existen en el DOM para super_admin; el backend lo valida igualmente)
+        const roleChecks = row.querySelectorAll('.input-role');
+        if (row.querySelector('.cell-roles-edit')) {
+            formData.append('roles_submitted', '1');
+            roleChecks.forEach(cb => { if (cb.checked && !cb.disabled) formData.append('role_ids[]', cb.value); });
+        }
         formData.append('ajax', '1');
 
         // Estado visual de guardando
@@ -317,6 +323,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     statusView.textContent = isActive ? 'Activa' : 'Inactiva';
                     statusView.className   = `status-pill ${isActive ? 'status-pill--active' : 'status-pill--inactive'}`;
                     row.dataset.status     = isActive ? 'active' : 'inactive';
+                }
+
+                // Refrescar badges de roles asignados
+                const rolesView = row.querySelector('.cell-roles-view');
+                if (rolesView && Array.isArray(result.data.roles)) {
+                    rolesView.innerHTML = '';
+                    row.querySelectorAll('.input-role').forEach(cb => {
+                        if (!result.data.roles.includes(parseInt(cb.value, 10))) return;
+                        const b = document.createElement('span');
+                        b.className = 'group-badge';
+                        b.textContent = cb.closest('label').textContent.trim();
+                        rolesView.appendChild(b);
+                    });
+                    if (!rolesView.children.length) {
+                        rolesView.innerHTML = '<span class="filepath-subtext">Sin roles</span>';
+                    }
                 }
 
                 // Salir de modo edición

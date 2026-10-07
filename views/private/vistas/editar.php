@@ -15,11 +15,17 @@
 use Core\Database;
 use Core\Router;
 use Core\ViewCache;
+use Core\controllers\ViewsController;
 
 $errorMsg   = null;
 $successMsg = null;
 $updatedId  = null;
 $db         = null;
+
+// Control de acceso estricto por rol de sesión (solo 'super_admin' gestiona roles de vista)
+$isSuperAdmin = ViewsController::isSuperAdmin();
+$allRoles     = [];
+$viewRolesMap = [];
 
 // Conexión PDO
 try {
@@ -34,6 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $db) {
     $isAjax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')
               || isset($_POST['ajax'])
               || (isset($_SERVER['HTTP_ACCEPT']) && str_contains($_SERVER['HTTP_ACCEPT'], 'application/json'));
+
+    // Seguridad backend: cualquier intento de modificar roles exige super_admin (HTTP 403)
+    $rolesSubmitted = isset($_POST['roles_submitted']) || isset($_POST['role_ids']);
+    if ($rolesSubmitted) {
+        ViewsController::denyUnlessSuperAdmin($isAjax);
+    }
 
     $viewId     = filter_var($_POST['id'] ?? null, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1]]);
     $menuTitle  = trim($_POST['menu_title'] ?? '');
@@ -129,6 +141,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $db) {
                 $updateStmt->bindValue(':id',           $viewId,     PDO::PARAM_INT);
                 $updateStmt->execute();
 
+                // Sincronizar roles en la tabla pivote role_view_permissions (solo super_admin)
+                if ($rolesSubmitted) {
+                    $rawRoleIds = $_POST['role_ids'] ?? [];
+                    ViewsController::syncViewRoles($viewId, is_array($rawRoleIds) ? $rawRoleIds : []);
+                }
+
                 // Regenerar automáticamente el archivo de caché de enrutamiento
                 ViewCache::refresh();
 
@@ -152,6 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $db) {
                             'layout_type'  => $layoutType,
                             'show_in_menu' => $showInMenu,
                             'is_active'    => $isActive,
+                            'roles'        => $rolesSubmitted ? ViewsController::getRoleIdsByView()[$viewId] ?? [] : null,
                         ]
                     ]);
                     exit;
@@ -201,10 +220,16 @@ if ($db) {
             ksort($groups, SORT_NATURAL | SORT_FLAG_CASE);
         }
         unset($groups);
+
+        if ($isSuperAdmin) {
+            $allRoles     = ViewsController::getAllRoles();
+            $viewRolesMap = ViewsController::getRoleIdsByView();
+        }
     } catch (\Throwable $e) {
         $errorMsg = 'Error al obtener la lista de vistas: ' . $e->getMessage();
     }
 }
+$tableCols = $isSuperAdmin ? 10 : 9;
 
 $dashboardUrl   = Router::url('dashboard');
 $createViewUrl  = Router::url('vistas/crear');
@@ -362,7 +387,13 @@ $totalViews     = count($viewsList);
                         <th scope="col" class="th-file">Identificador / Archivo</th>
                         <th scope="col" class="th-menu text-center">En Menú</th>
                         <th scope="col" class="th-status text-center">Estado</th>
-                        <th scope="col" class                <tbody>
+                        <?php if ($isSuperAdmin): ?>
+                        <th scope="col" class="th-roles">Roles con Acceso</th>
+                        <?php endif; ?>
+                        <th scope="col" class="th-actions text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
                     <?php foreach ($groupedViews as $layoutKey => $groups): 
                         $isPrivate = ($layoutKey === 'private');
                         $layoutTitle = $isPrivate ? 'Zona Privada (Panel Administrativo)' : 'Zona Pública (Portal General)';
@@ -371,7 +402,7 @@ $totalViews     = count($viewsList);
                     ?>
                         <!-- Cabecera de Zona / Layout -->
                         <tr class="vistas-layout-header-row" data-layout="<?= htmlspecialchars($layoutKey) ?>">
-                            <td colspan="9">
+                            <td colspan="<?= $tableCols ?>">
                                 <div class="layout-header-banner <?= $isPrivate ? 'banner-private' : 'banner-public' ?>">
                                     <div class="layout-header-left">
                                         <span class="layout-header-icon">
@@ -404,7 +435,7 @@ $totalViews     = count($viewsList);
                         ?>
                             <!-- Cabecera de Separación de Módulo / Grupo -->
                             <tr class="vistas-group-header-row" data-group-key="<?= htmlspecialchars($groupKey) ?>" data-layout="<?= htmlspecialchars($layoutKey) ?>">
-                                <td colspan="9">
+                                <td colspan="<?= $tableCols ?>">
                                     <div class="group-header-bar">
                                         <div class="group-header-left">
                                             <span class="group-folder-icon">
@@ -569,7 +600,36 @@ $totalViews     = count($viewsList);
                                         </div>
                                     </td>
 
-                                    <!-- Columna 9: Acciones Inline -->
+                                    <?php if ($isSuperAdmin):
+                                        $assignedRoleIds = $viewRolesMap[$vId] ?? [];
+                                    ?>
+                                    <!-- Columna Roles: visible y editable únicamente para super_admin -->
+                                    <td class="td-roles">
+                                        <div class="cell-view cell-roles-view">
+                                            <?php $hasRole = false; foreach ($allRoles as $role):
+                                                if (!in_array((int)$role['id'], $assignedRoleIds, true)) continue; $hasRole = true; ?>
+                                                <span class="group-badge" data-role-id="<?= (int)$role['id'] ?>"><?= htmlspecialchars($role['name']) ?></span>
+                                            <?php endforeach; ?>
+                                            <?php if (!$hasRole): ?><span class="filepath-subtext">Sin roles</span><?php endif; ?>
+                                        </div>
+                                        <div class="cell-edit cell-roles-edit" style="display: none;">
+                                            <input type="hidden" name="roles_submitted" value="1" form="form-row-<?= $vId ?>">
+                                            <?php foreach ($allRoles as $role):
+                                                $isSA = ((int)$role['id'] === 1); ?>
+                                                <label class="role-check" style="display:block;font-size:12px;white-space:nowrap;">
+                                                    <input type="checkbox" name="role_ids[]" class="input-role"
+                                                           value="<?= (int)$role['id'] ?>"
+                                                           <?= in_array((int)$role['id'], $assignedRoleIds, true) || $isSA ? 'checked' : '' ?>
+                                                           <?= $isSA ? 'disabled title="super_admin siempre conserva acceso"' : '' ?>
+                                                           form="form-row-<?= $vId ?>">
+                                                    <?= htmlspecialchars($role['name']) ?>
+                                                </label>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </td>
+                                    <?php endif; ?>
+
+                                    <!-- Columna Acciones Inline -->
                                     <td class="td-actions text-center">
                                         <!-- Formulario independiente asociado a la fila para soporte nativo sin JS -->
                                         <form id="form-row-<?= $vId ?>" action="<?= htmlspecialchars($currentEditUrl) ?>" method="POST" style="display: inline;">
