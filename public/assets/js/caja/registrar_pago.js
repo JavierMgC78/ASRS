@@ -697,7 +697,13 @@ document.addEventListener('DOMContentLoaded', () => {
             panelContentState.style.display = 'flex';
         }
 
-        // Asegurar que todos los acordeones del panel estén expandidos al seleccionar
+        // La Ficha Institucional se mantiene colapsada al seleccionar alumno
+        const fichaPanel = document.getElementById('panel-inteligente');
+        const fichaToggle = document.getElementById('panel-inteligente-toggle');
+        if (fichaPanel) fichaPanel.classList.remove('is-expanded');
+        if (fichaToggle) fichaToggle.setAttribute('aria-expanded', 'false');
+
+        // Asegurar que todos los acordeones internos estén expandidos al seleccionar
         document.querySelectorAll('.panel-card--collapsible').forEach(card => {
             card.classList.add('is-expanded');
             const btn = card.querySelector('.panel-card__header-btn');
@@ -1026,6 +1032,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------------------------
     // 5.1 COMPONENTE ACORDEÓN: ALTERNAR VISIBILIDAD DE TODAS LAS CAJAS
     // -------------------------------------------------------------------------
+    const panelInteligente = document.getElementById('panel-inteligente');
+    const panelInteligenteToggle = document.getElementById('panel-inteligente-toggle');
+    if (panelInteligente && panelInteligenteToggle) {
+        const alternarFicha = () => {
+            const abierto = panelInteligente.classList.toggle('is-expanded');
+            panelInteligenteToggle.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+        };
+        panelInteligenteToggle.addEventListener('click', alternarFicha);
+        panelInteligenteToggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                alternarFicha();
+            }
+        });
+    }
+
     document.querySelectorAll('.panel-card--collapsible').forEach(card => {
         const btn = card.querySelector('.panel-card__header-btn');
         if (btn) {

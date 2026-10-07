@@ -57,13 +57,23 @@ class Router {
         //    Las claves ya incluyen el prefijo correcto (ej. '/admin/roles/ver')
         $routes = ViewCache::getRoutes();
 
-        // 4. Verificar si la ruta existe en el caché
-        if (!isset($routes[$uri])) {
+        // 4. Verificar si la ruta existe en el caché.
+        //    Si no existe, intentar resolverla como alias basado en el slug actual
+        //    del grupo de menú (ej. /admin/cobros/capturar -> /admin/caja/capturar).
+        $resolvedUri = $uri;
+        if (!isset($routes[$resolvedUri])) {
+            $aliasMap = self::buildSlugAliasMap($routes);
+            if (isset($aliasMap[$uri])) {
+                $resolvedUri = $aliasMap[$uri];
+            }
+        }
+
+        if (!isset($routes[$resolvedUri])) {
             self::renderError404();
             return;
         }
 
-        $viewData = $routes[$uri];
+        $viewData = $routes[$resolvedUri];
 
         // 5. Validar si la vista está activa
         if (!$viewData['is_active']) {
@@ -529,16 +539,21 @@ class Router {
      */
     private static function generateDynamicMenu(array $routes, string $currentLayoutType, string $baseUrl = ''): array {
         $menu = [];
+        $aliasByTarget = ($currentLayoutType === 'private')
+            ? array_flip(self::buildSlugAliasMap($routes))
+            : [];
         foreach ($routes as $publicUri => $route) {
             if (
                 $route['layout_type'] === $currentLayoutType
                 && $route['show_in_menu'] == 1
                 && $route['is_active']   == 1
             ) {
-                // La URI pública ya es correcta (con o sin prefijo /admin/)
-                $fullUri = ($baseUrl !== '' && $publicUri === '/')
+                // La URI pública ya es correcta (con o sin prefijo /admin/).
+                // Para zona privada se usa el slug vigente del grupo como segmento de ruta.
+                $menuUri = $aliasByTarget[$publicUri] ?? $publicUri;
+                $fullUri = ($baseUrl !== '' && $menuUri === '/')
                     ? $baseUrl . '/'
-                    : $baseUrl . $publicUri;
+                    : $baseUrl . $menuUri;
 
                 $group = !empty($route['menu_group']) ? $route['menu_group'] : 'General';
 
@@ -550,6 +565,50 @@ class Router {
             }
         }
         return $menu;
+    }
+
+    /**
+     * Construye el mapa de alias de rutas privadas basado en el slug vigente
+     * del grupo de menú (tabla menu_groups, vía MenuGroupCache).
+     *
+     * Para cada vista privada con raw_uri del tipo '{segmento}/{resto}', el alias
+     * reemplaza el primer segmento por el slug del grupo: '/admin/{slug}/{resto}'.
+     * Solo se registran alias que difieren de la ruta real y que no colisionan con
+     * rutas existentes ni con otros alias.
+     *
+     * @param  array $routes Mapa del caché de vistas.
+     * @return array<string,string> [aliasPublicUri => publicUriReal]
+     */
+    private static function buildSlugAliasMap(array $routes): array {
+        static $cache = [];
+        $key = md5(serialize(array_keys($routes)));
+        if (isset($cache[$key])) {
+            return $cache[$key];
+        }
+
+        $map = [];
+        try {
+            $groups = MenuGroupCache::getGroups();
+        } catch (\Throwable $e) {
+            return $cache[$key] = [];
+        }
+
+        foreach ($routes as $publicUri => $route) {
+            if (($route['layout_type'] ?? '') !== 'private') continue;
+
+            $groupName = $route['menu_group'] ?? '';
+            $slug      = $groups[$groupName]['slug'] ?? '';
+            $rawUri    = trim((string)($route['raw_uri'] ?? ''), '/');
+            if ($slug === '' || strpos($rawUri, '/') === false) continue;
+
+            $rest  = substr($rawUri, strpos($rawUri, '/') + 1);
+            $alias = ViewCache::buildPublicUri($slug . '/' . $rest, 'private');
+
+            if ($alias === $publicUri || isset($routes[$alias]) || isset($map[$alias])) continue;
+            $map[$alias] = $publicUri;
+        }
+
+        return $cache[$key] = $map;
     }
 
     /**

@@ -342,40 +342,45 @@
 
 .caja-section__header {
     display: flex;
-    align-items: flex-start;
-    gap: 10px;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    border-radius: 8px;
+    border-left: 4px solid var(--caja-primary);
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.18);
 }
 
 .caja-section__badge {
-    width: 26px;
-    height: 26px;
-    background: var(--caja-primary-light);
-    color: var(--caja-primary);
-    border: 1px solid var(--caja-primary-border);
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.35);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
     flex-shrink: 0;
-    margin-top: 1px;
 }
 
 .caja-section__title {
     font-size: 15px;
     font-weight: 700;
-    color: var(--caja-dark);
+    color: #ffffff;
     margin: 0 0 2px 0;
     letter-spacing: -0.2px;
 }
 
 .caja-section__desc {
     font-size: 12px;
-    color: var(--caja-gray-text);
+    color: #cbd5e1;
     margin: 0;
     line-height: 1.4;
 }
+
 
 /* ==========================================================
    5. SECCIÓN 1: BÚSQUEDA DE ALUMNO POR APELLIDO PATERNO
@@ -716,6 +721,34 @@
     font-size: 11px;
     color: var(--caja-gray-text);
     margin: 1px 0 0 0;
+}
+
+/* Acordeón principal de la Ficha Institucional (colapsada por defecto) */
+.panel-header--toggle {
+    cursor: pointer;
+    user-select: none;
+}
+
+.panel-header--toggle:hover {
+    background: linear-gradient(180deg, #f1f5f9 0%, #e0ecff 100%);
+}
+
+.panel-header__chevron {
+    flex-shrink: 0;
+    color: var(--caja-gray-text);
+    transition: transform 0.2s ease-in-out;
+}
+
+.panel-inteligente.is-expanded .panel-header__chevron {
+    transform: rotate(180deg);
+}
+
+.panel-inteligente:not(.is-expanded) > .panel-header {
+    border-bottom: none;
+}
+
+.panel-inteligente:not(.is-expanded) > :not(.panel-header) {
+    display: none !important;
 }
 
 /* Estado Vacío Compacto (Informativo, sin robar espacio vertical) */
@@ -1541,6 +1574,7 @@
    ========================================================== */
 .caja-section--conceptos {
     overflow: visible;
+    border-bottom: none;
 }
 
 .caja-conceptos-wrapper {
@@ -1773,13 +1807,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 20px;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    color: #ffffff;
-    border-radius: 10px;
+    padding: 12px 4px;
+    background: transparent;
+    color: #1e293b;
+    border: none;
+    border-top: 3px solid #1e293b;
+    border-bottom: none;
+    border-radius: 0;
     margin-top: 14px;
-    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.16);
-    border: 1px solid #334155;
+    box-shadow: none;
     animation: totalBarPulse 0.3s ease-out;
 }
 
@@ -1790,17 +1826,17 @@
 }
 
 .caja-total-bar__title {
-    font-size: 13px;
-    font-weight: 700;
-    color: #cbd5e1;
+    font-size: 14px;
+    font-weight: 800;
+    color: #1e293b;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .caja-total-bar__count {
     font-size: 11px;
-    font-weight: 500;
-    color: #94a3b8;
+    font-weight: 700;
+    color: #475569;
 }
 
 .caja-total-bar__value {
@@ -1811,14 +1847,14 @@
 
 .caja-total-bar__symbol {
     font-size: 18px;
-    font-weight: 700;
-    color: #38bdf8;
+    font-weight: 800;
+    color: #1e293b;
 }
 
 .caja-total-bar__amount {
     font-size: 24px;
     font-weight: 800;
-    color: #ffffff;
+    color: #0f172a;
     letter-spacing: -0.5px;
     font-variant-numeric: tabular-nums;
 }
@@ -1826,9 +1862,10 @@
 .caja-total-bar__currency {
     font-size: 11.5px;
     font-weight: 700;
-    color: #94a3b8;
+    color: #475569;
     margin-left: 4px;
 }
+
 
 /* Responsividad para móviles */
 @media (max-width: 680px) {
