@@ -13,6 +13,118 @@ class ViewsController
     private const SUPER_ADMIN_ROLE_ID = 1;
 
     /**
+     * Verificación estricta: la sesión activa pertenece al rol 'super_admin'
+     * (por nombre; no se acepta el bypass genérico por role_type 'special').
+     */
+    public static function isSuperAdmin(): bool
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        $role = $_SESSION['user']['role'] ?? $_SESSION['user']['role_name'] ?? '';
+        return $role === self::SUPER_ADMIN_ROLE;
+    }
+
+    /**
+     * Rechaza la operación con HTTP 403 si el usuario no es super_admin.
+     *
+     * @param bool $json Responder en JSON (peticiones AJAX) en lugar de página de error.
+     */
+    public static function denyUnlessSuperAdmin(bool $json = false): void
+    {
+        if (self::isSuperAdmin()) {
+            return;
+        }
+        http_response_code(403);
+        if ($json) {
+            if (!headers_sent()) {
+                header('Content-Type: application/json; charset=utf-8');
+            }
+            echo json_encode([
+                'success' => false,
+                'error'   => 'Solo el super_admin puede modificar los roles con acceso a una vista.',
+            ]);
+        } else {
+            \Core\Router::renderError403('Solo el super_admin puede modificar los roles con acceso a una vista.');
+        }
+        exit;
+    }
+
+    /**
+     * Lista todos los roles disponibles.
+     *
+     * @return array<int, array{id:int,name:string,type:string}>
+     */
+    public static function getAllRoles(): array
+    {
+        $db = Database::getInstance();
+        return $db->query('SELECT id, name, type FROM roles ORDER BY id ASC')->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Mapa view_id => [role_id, ...] desde la tabla pivote role_view_permissions.
+     *
+     * @return array<int, int[]>
+     */
+    public static function getRoleIdsByView(): array
+    {
+        $db  = Database::getInstance();
+        $map = [];
+        foreach ($db->query('SELECT view_id, role_id FROM role_view_permissions')->fetchAll(PDO::FETCH_ASSOC) as $r) {
+            $map[(int)$r['view_id']][] = (int)$r['role_id'];
+        }
+        return $map;
+    }
+
+    /**
+     * Sincroniza en la tabla pivote los roles asignados a una vista (transaccional).
+     * Solo super_admin; el rol super_admin siempre se conserva para no bloquear la gestión.
+     *
+     * @param int   $viewId  ID de la vista.
+     * @param int[] $roleIds Roles seleccionados.
+     */
+    public static function syncViewRoles(int $viewId, array $roleIds): void
+    {
+        self::denyUnlessSuperAdmin(true);
+
+        $db = Database::getInstance();
+
+        // Solo IDs de roles realmente existentes
+        $valid   = array_map('intval', array_column(self::getAllRoles(), 'id'));
+        $roleIds = array_values(array_unique(array_intersect(array_map('intval', $roleIds), $valid)));
+        if (!in_array(self::SUPER_ADMIN_ROLE_ID, $roleIds, true)) {
+            $roleIds[] = self::SUPER_ADMIN_ROLE_ID;
+        }
+
+        $ownTx = !$db->inTransaction();
+        if ($ownTx) {
+            $db->beginTransaction();
+        }
+        try {
+            $del = $db->prepare('DELETE FROM role_view_permissions WHERE view_id = :view_id');
+            $del->bindValue(':view_id', $viewId, PDO::PARAM_INT);
+            $del->execute();
+
+            $ins = $db->prepare('INSERT INTO role_view_permissions (role_id, view_id) VALUES (:role_id, :view_id)');
+            foreach ($roleIds as $rid) {
+                $ins->bindValue(':role_id', $rid, PDO::PARAM_INT);
+                $ins->bindValue(':view_id', $viewId, PDO::PARAM_INT);
+                $ins->execute();
+            }
+            if ($ownTx) {
+                $db->commit();
+            }
+        } catch (\Throwable $e) {
+            if ($ownTx && $db->inTransaction()) {
+                $db->rollBack();
+            }
+            throw $e;
+        }
+
+        \Core\PermissionCache::refresh();
+    }
+
+    /**
      * Punto de entrada principal. Verifica rol, detecta método HTTP y delega.
      *
      * @return array ['error' => string|null, 'success' => string|null]
@@ -140,6 +252,12 @@ class ViewsController
     {
         AuthMiddleware::requireRole(self::SUPER_ADMIN_ROLE);
 
+        // Si se intenta modificar roles, exigir super_admin estricto (HTTP 403)
+        $rolesSubmitted = isset($_POST['roles_submitted']) || isset($_POST['role_ids']);
+        if ($rolesSubmitted) {
+            self::denyUnlessSuperAdmin();
+        }
+
         $menuTitle   = trim($_POST['menu_title'] ?? '');
         $menuGroup   = trim($_POST['menu_group'] ?? 'General');
         $uri         = trim($_POST['uri'] ?? '');
@@ -201,6 +319,11 @@ class ViewsController
         $stmt->bindValue(':is_active',   $isActive,   PDO::PARAM_INT);
         $stmt->bindValue(':id',          $viewId,     PDO::PARAM_INT);
         $stmt->execute();
+
+        if ($rolesSubmitted) {
+            $rawRoles = $_POST['role_ids'] ?? [];
+            self::syncViewRoles($viewId, is_array($rawRoles) ? $rawRoles : []);
+        }
 
         ViewCache::refresh();
 
