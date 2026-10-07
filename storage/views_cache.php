@@ -196,19 +196,19 @@ return array (
     'created_at' => '2026-09-30 13:24:13',
     'raw_uri' => '/alumnos/ver',
   ),
-  '/admin/caja/capturar' => 
+  '/admin/caja/registrar_pago' => 
   array (
     'id' => 16,
-    'uri' => '/admin/caja/capturar',
-    'file_path' => 'views/private/caja/capturar.php',
+    'uri' => '/admin/caja/registrar_pago',
+    'file_path' => 'views/private/caja/registrar_pago.php',
     'layout_type' => 'private',
     'menu_group' => 'Caja',
-    'menu_title' => 'Capturar Pago',
-    'name_file' => 'capturar',
+    'menu_title' => 'Registrar un Pago',
+    'name_file' => 'registrar_pago',
     'show_in_menu' => 1,
     'is_active' => 1,
     'created_at' => '2026-09-30 14:54:19',
-    'raw_uri' => '/caja/capturar',
+    'raw_uri' => '/caja/registrar_pago',
   ),
   '/admin/precios' => 
   array (
@@ -223,5 +223,19 @@ return array (
     'is_active' => 1,
     'created_at' => '2026-09-30 22:18:58',
     'raw_uri' => '/precios',
+  ),
+  '/admin/cargos/registrar_adeudo' => 
+  array (
+    'id' => 18,
+    'uri' => '/admin/cargos/registrar_adeudo',
+    'file_path' => 'views/private/cargos/registrar_adeudo.php',
+    'layout_type' => 'private',
+    'menu_group' => 'Caja',
+    'menu_title' => 'Registrar Adeudo',
+    'name_file' => 'registrar_adeudo',
+    'show_in_menu' => 1,
+    'is_active' => 1,
+    'created_at' => '2026-10-04 19:56:56',
+    'raw_uri' => '/cargos/registrar_adeudo',
   ),
 );
