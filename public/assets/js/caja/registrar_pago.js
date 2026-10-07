@@ -8,10 +8,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     'use strict';
 
-    const config = window.ASRS_CAJA || {
-        endpointUrl: window.location.href,
-        cajeroNombre: 'Cajero en Turno'
-    };
+    const config = window.ASRS_CAJA || {};
+    if (!config.endpointUrl || config.endpointUrl.includes('caja/capturar')) {
+        config.endpointUrl = window.location.pathname;
+    }
+    if (!config.cajeroNombre) {
+        config.cajeroNombre = 'Cajero en Turno';
+    }
 
     // -------------------------------------------------------------------------
     // ELEMENTOS DEL DOM
@@ -206,13 +209,13 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div class="row-cell row-cell--concepto">
                 <div class="row-concepto-wrapper">
-                    <select class="form-control form-select row-select-concepto" aria-label="Concepto de cobro">
+                    <select class="asrs-form-control form-select row-select-concepto" aria-label="Concepto de cobro">
                         <option value="" data-id="" data-monto="" ${(!concepto && !isCustomMode) ? 'selected' : ''} disabled>-- Seleccione un concepto escolar --</option>
                         ${optionsHtml}
                         <option value="OTRO" data-id="" data-monto="" ${isCustomMode ? 'selected' : ''}>Otro concepto personalizado...</option>
                     </select>
                     <div class="row-custom-wrapper" style="${isCustomMode ? 'display: flex;' : 'display: none;'}">
-                        <input type="text" class="form-control row-input-custom" placeholder="Especifique el concepto de cobro..." value="${escapeHtml(concepto)}">
+                        <input type="text" class="asrs-form-control row-input-custom" placeholder="Especifique el concepto de cobro..." value="${escapeHtml(concepto)}">
                         ${careId ? '<span class="row-care-badge" title="Cargo CARE de servicios eventuales">CARE</span>' : ''}
                     </div>
                 </div>
@@ -220,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="row-cell row-cell--monto">
                 <div class="input-money-wrapper">
                     <span class="input-money-symbol">$</span>
-                    <input type="number" step="0.01" min="0.01" class="form-control form-control--amount row-input-monto" placeholder="0.00" value="${monto ? Number(monto).toFixed(2) : ''}" required>
+                    <input type="number" step="0.01" min="0.01" class="asrs-form-control form-control--amount row-input-monto" placeholder="0.00" value="${monto ? Number(monto).toFixed(2) : ''}" required>
                 </div>
             </div>
             <div class="row-cell row-cell--actions">
@@ -1296,4 +1299,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function escapeRegExp(string) {
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
+
+    // -------------------------------------------------------------------------
+    // SECCIONES COLAPSABLES DEL FORMULARIO (.asrs-section-header)
+    // -------------------------------------------------------------------------
+    document.querySelectorAll('.asrs-section-header').forEach(header => {
+        header.addEventListener('click', (e) => {
+            if (e.target.closest('button, a, input, select, textarea') && !e.target.closest('.asrs-section-toggle-icon')) {
+                return;
+            }
+            const container = header.closest('.asrs-form-container');
+            if (container) {
+                container.classList.toggle('is-collapsed');
+            }
+        });
+    });
 });

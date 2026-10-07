@@ -1,14 +1,13 @@
 /* ==========================================================
-   ASRS FRAMEWORK - VISTA CAPTURAR PAGO (capturar.css)
+   ASRS FRAMEWORK - VISTA CAPTURAR PAGO (registrar_pago.css)
    Axe Secure Router System - Módulo Financiero de Caja
-   Centro Educativo América (CEA) - Template Estándar Centralizado
+   Centro Educativo América (CEA)
+   Estilos específicos del componente (Alineado con ASRS)
    ========================================================== */
 
 :root {
-    /* Paleta Institucional CEA */
     --caja-primary: #1d4ed8;
     --caja-primary-hover: #1e40af;
-    --caja-primary-active: #172554;
     --caja-primary-light: #eff6ff;
     --caja-primary-border: #bfdbfe;
     
@@ -16,11 +15,8 @@
     --caja-slate: #1e293b;
     --caja-gray-text: #64748b;
     --caja-gray-light: #94a3b8;
-    
-    --caja-border: #e2e8f0;
-    --caja-border-focus: #3b82f6;
-    --caja-bg-subtle: #f8fafc;
-    --caja-card-bg: #ffffff;
+    --caja-border: #cbd5e1;
+    --caja-border-light: #e2e8f0;
     
     --caja-success: #10b981;
     --caja-success-bg: #ecfdf5;
@@ -30,49 +26,40 @@
     --caja-danger-bg: #fef2f2;
     --caja-danger-border: #fecaca;
     
-    --caja-warning: #f59e0b;
-    --caja-warning-bg: #fffbeb;
-    --caja-warning-border: #fde68a;
-
     --caja-bbva: #004481;
     --caja-bbva-light: #e6f0fa;
     --caja-bbva-border: #93c5fd;
     
     --caja-radius-sm: 6px;
-    --caja-radius: 12px;
-    --caja-radius-lg: 16px;
-    
-    --caja-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
-    --caja-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
-    --caja-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    --caja-shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+    --caja-radius: 10px;
+    --caja-radius-lg: 14px;
 }
 
 /* ==========================================================
-   1. CONTENEDOR GENERAL ESTÁNDAR (ANCHO FLUIDO Y CENTRADO)
+   1. CONTENEDOR GENERAL DEL MÓDULO
    ========================================================== */
 .caja-modulo-container {
     display: flex;
     flex-direction: column;
-    gap: 22px;
-    padding: 10px 0 40px;
+    gap: 20px;
+    padding: 0 0 40px;
     width: 100%;
-    max-width: 1180px; /* Estándar fluido y centrado de ASRS */
+    max-width: 1180px;
     margin: 0 auto;
 }
 
 /* ==========================================================
-   2. ENCABEZADO INSTITUCIONAL DEL MÓDULO
+   2. ENCABEZADO INSTITUCIONAL DE LA VISTA
    ========================================================== */
 .caja-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: var(--caja-card-bg);
-    padding: 20px 26px;
+    background: #ffffff;
+    padding: 18px 24px;
     border-radius: var(--caja-radius);
-    border: 1px solid var(--caja-border);
-    box-shadow: var(--caja-shadow-sm);
+    border: 1px solid var(--caja-border-light);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     flex-wrap: wrap;
     gap: 16px;
 }
@@ -106,10 +93,10 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 21px;
+    font-size: 20px;
     font-weight: 700;
     color: var(--caja-dark);
-    margin: 0 0 5px 0;
+    margin: 0 0 4px 0;
     letter-spacing: -0.3px;
 }
 
@@ -169,14 +156,16 @@
     color: var(--caja-slate);
 }
 
-/* Botones secundarios generales */
+/* ==========================================================
+   3. BOTONES COMPLEMENTARIOS
+   ========================================================== */
 .btn-secondary {
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    background: var(--caja-card-bg);
+    background: #ffffff;
     color: var(--caja-slate);
-    border: 1px solid var(--caja-border);
+    border: 1px solid var(--caja-border-light);
     padding: 8px 14px;
     border-radius: var(--caja-radius-sm);
     font-size: 12.5px;
@@ -187,7 +176,7 @@
 }
 
 .btn-secondary:hover {
-    background: var(--caja-bg-subtle);
+    background: #f8fafc;
     border-color: #cbd5e1;
     color: var(--caja-dark);
 }
@@ -206,27 +195,25 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.15s ease-in-out;
-    box-shadow: var(--caja-shadow-xs);
 }
 
 .btn-primary:hover {
     background: var(--caja-primary-hover);
-    box-shadow: var(--caja-shadow-sm);
 }
 
 .btn-primary--cta {
-    padding: 11px 26px;
-    font-size: 14.5px;
+    padding: 10px 24px;
+    font-size: 14px;
     font-weight: 700;
-    border-radius: 8px;
+    border-radius: 6px;
     background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
-    box-shadow: 0 4px 12px rgba(29, 78, 216, 0.25);
+    box-shadow: 0 4px 12px rgba(29, 78, 216, 0.22);
 }
 
 .btn-primary--cta:hover {
     background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(29, 78, 216, 0.35);
+    box-shadow: 0 6px 16px rgba(29, 78, 216, 0.32);
 }
 
 .btn-primary--cta:active {
@@ -253,14 +240,14 @@
 }
 
 /* ==========================================================
-   3. ALERTAS DEL SERVIDOR
+   4. ALERTAS DEL SERVIDOR
    ========================================================== */
 .caja-alert {
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 13px 18px;
-    border-radius: var(--caja-radius);
+    padding: 12px 18px;
+    border-radius: var(--caja-radius-sm);
     border: 1px solid;
     margin-bottom: 8px;
 }
@@ -306,84 +293,152 @@
 }
 
 /* ==========================================================
-   4. FORMULARIO PRINCIPAL (CENTRALIZADO, COMPACTO Y LIMPIO)
+   5. ESTRUCTURA DE FORMULARIOS POR SECCIONES (ASRS)
    ========================================================== */
-.caja-card {
-    background: var(--caja-card-bg);
-    border-radius: var(--caja-radius-lg);
-    border: 1px solid var(--caja-border);
-    box-shadow: var(--caja-shadow-card);
-    padding: 28px 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-    width: 100%;
+.asrs-form-container {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
 }
 
-@media (max-width: 768px) {
-    .caja-card {
-        padding: 20px 16px;
-        gap: 18px;
+.asrs-section-header {
+    background-color: #2b3e50;
+    color: #ffffff;
+    padding: 0.85rem 1.25rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s ease;
+}
+
+.asrs-section-header:hover {
+    background-color: #1e293b;
+}
+
+.asrs-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.asrs-section-toggle-icon {
+    font-size: 0.85rem;
+    transition: transform 0.3s ease;
+}
+
+.asrs-form-container.is-collapsed .asrs-section-body {
+    display: none;
+}
+
+.asrs-form-container.is-collapsed .asrs-section-toggle-icon {
+    transform: rotate(-90deg);
+}
+
+.asrs-section-body {
+    padding: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+    background-color: #ffffff;
+}
+
+.asrs-collapsible-info {
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.375rem;
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+    display: none;
+}
+
+.asrs-collapsible-info.is-open,
+.asrs-collapsible-info.is-expanded {
+    display: block;
+}
+
+.asrs-form-row-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+@media (max-width: 640px) {
+    .asrs-form-row-2 {
+        grid-template-columns: 1fr;
     }
 }
 
-.caja-section {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #f1f5f9;
+.asrs-form-group {
+    margin-bottom: 1.25rem;
 }
 
-.caja-section:last-of-type {
-    border-bottom: none;
-    padding-bottom: 0;
+.asrs-form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 0.5rem;
 }
 
-.caja-section__header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-    border-radius: 8px;
-    border-left: 4px solid var(--caja-primary);
-    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.18);
+.asrs-form-label .required {
+    color: #ef4444;
+    margin-left: 0.2rem;
 }
 
-.caja-section__badge {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.12);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    font-weight: 700;
-    flex-shrink: 0;
+.asrs-form-control {
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.95rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.375rem;
+    background-color: #f8fafc;
+    color: #0f172a;
+    transition: all 0.2s ease-in-out;
+    box-sizing: border-box;
+    font-family: inherit;
 }
 
-.caja-section__title {
-    font-size: 15px;
-    font-weight: 700;
-    color: #ffffff;
-    margin: 0 0 2px 0;
-    letter-spacing: -0.2px;
+.asrs-form-control:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
-.caja-section__desc {
-    font-size: 12px;
-    color: #cbd5e1;
-    margin: 0;
-    line-height: 1.4;
+/* FORMATO ESTÉTICO UNIFICADO Y LIMPIO PARA TODOS LOS SELECTS */
+select.asrs-form-control,
+.asrs-form-control.form-select,
+select.form-select,
+select.row-select-concepto {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #f8fafc;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.85rem center;
+    background-size: 14px 14px;
+    padding-right: 2.25rem;
+    cursor: pointer;
+    line-height: 1.45;
 }
 
+select.asrs-form-control:focus,
+.asrs-form-control.form-select:focus,
+select.form-select:focus,
+select.row-select-concepto:focus {
+    background-color: #ffffff;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
 
 /* ==========================================================
-   5. SECCIÓN 1: BÚSQUEDA DE ALUMNO POR APELLIDO PATERNO
+   6. BÚSQUEDA EN TIEMPO REAL DE ALUMNOS (SECCIÓN 1)
    ========================================================== */
 .alumno-search-box {
     position: relative;
@@ -408,21 +463,21 @@
 
 .search-input {
     width: 100%;
-    height: 44px;
+    height: 42px;
     padding: 8px 40px 8px 42px;
     font-size: 14px;
     font-family: inherit;
     color: var(--caja-dark);
     background: #ffffff;
-    border: 1.5px solid var(--caja-border);
-    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
     transition: all 0.15s ease-in-out;
     outline: none;
-    box-shadow: var(--caja-shadow-xs);
+    box-sizing: border-box;
 }
 
 .search-input:focus {
-    border-color: var(--caja-border-focus);
+    border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
@@ -463,16 +518,15 @@
     to { transform: rotate(360deg); }
 }
 
-/* Dropdown Flotante de Resultados */
 .search-results-dropdown {
     position: absolute;
     top: calc(100% + 4px);
     left: 0;
     right: 0;
     background: #ffffff;
-    border: 1px solid var(--caja-border);
-    border-radius: 8px;
-    box-shadow: var(--caja-shadow-md);
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
     z-index: 100;
     max-height: 300px;
     overflow-y: auto;
@@ -546,11 +600,6 @@
     justify-content: center;
 }
 
-.search-empty-notice svg {
-    color: var(--caja-gray-light);
-    flex-shrink: 0;
-}
-
 /* Tarjeta de Alumno Seleccionado */
 .alumno-selected-card {
     display: flex;
@@ -558,7 +607,7 @@
     gap: 16px;
     background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
     border: 1px solid var(--caja-primary-border);
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 12px 18px;
     animation: fadeIn 0.2s ease-in-out;
 }
@@ -569,8 +618,8 @@
 }
 
 .alumno-selected-avatar {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     background: var(--caja-primary);
     color: #ffffff;
@@ -580,7 +629,6 @@
     font-weight: 700;
     font-size: 15px;
     flex-shrink: 0;
-    box-shadow: var(--caja-shadow-xs);
 }
 
 .alumno-selected-info {
@@ -605,7 +653,7 @@
     font-size: 15px;
     font-weight: 700;
     color: var(--caja-dark);
-    margin: 0 0 4px 0;
+    margin: 0 0 3px 0;
     line-height: 1.25;
 }
 
@@ -641,10 +689,8 @@
 .btn-change-alumno:hover {
     background: var(--caja-primary);
     color: #ffffff;
-    border-color: var(--caja-primary);
 }
 
-/* Badges comunes */
 .badge-tag {
     display: inline-flex;
     align-items: center;
@@ -663,24 +709,43 @@
 .field-error {
     font-size: 12px;
     color: var(--caja-danger);
-    margin-top: 4px;
+    margin-top: 6px;
     font-weight: 500;
 }
 
+/* Insignia CARE de cargos pendientes */
+.cea-badge-cargos-pendientes {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: #b45309;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+
+.cea-badge-cargos-pendientes:hover {
+    background: #fef3c7;
+    border-color: #f59e0b;
+}
+
 /* ==========================================================
-   6. FICHA INSTITUCIONAL INTEGRADA (EXPEDIENTE, TUTORES, CFDI)
-      - Reintegrada en el flujo vertical continuo
-      - Estado inicial compacto y discreto
-      - Despliegue en cuadrícula horizontal limpia sin nulos
+   7. FICHA INSTITUCIONAL INTEGRADA (BLOQUE CONTEXTUAL COLAPSABLE)
    ========================================================== */
-.panel-inteligente {
-    background: #fafcff;
-    border: 1px solid var(--caja-primary-border);
-    border-radius: 10px;
+.asrs-collapsible-info.panel-inteligente {
+    display: block;
+    padding: 0;
+    margin-top: 16px;
+    margin-bottom: 0;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
     transition: all 0.2s ease-in-out;
 }
 
@@ -689,9 +754,15 @@
     align-items: center;
     gap: 10px;
     padding: 10px 16px;
-    background: linear-gradient(180deg, #f8fafc 0%, #eff6ff 100%);
-    border-bottom: 1px solid var(--caja-primary-border);
-    flex-shrink: 0;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s ease-in-out;
+}
+
+.panel-header:hover {
+    background: #f1f5f9;
 }
 
 .panel-header__icon {
@@ -723,16 +794,6 @@
     margin: 1px 0 0 0;
 }
 
-/* Acordeón principal de la Ficha Institucional (colapsada por defecto) */
-.panel-header--toggle {
-    cursor: pointer;
-    user-select: none;
-}
-
-.panel-header--toggle:hover {
-    background: linear-gradient(180deg, #f1f5f9 0%, #e0ecff 100%);
-}
-
 .panel-header__chevron {
     flex-shrink: 0;
     color: var(--caja-gray-text);
@@ -751,7 +812,7 @@
     display: none !important;
 }
 
-/* Estado Vacío Compacto (Informativo, sin robar espacio vertical) */
+/* Estado Vacío de la Ficha */
 .panel-empty {
     padding: 14px 18px;
     display: flex;
@@ -762,8 +823,8 @@
 }
 
 .panel-empty__graphic {
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     background: #edf2f7;
     color: var(--caja-gray-light);
@@ -793,7 +854,6 @@
     line-height: 1.35;
 }
 
-/* Estado Cargando */
 .panel-loading {
     padding: 22px;
     display: flex;
@@ -805,60 +865,30 @@
 }
 
 .panel-spinner {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
     border: 2px solid rgba(29, 78, 216, 0.2);
     border-top-color: var(--caja-primary);
     border-radius: 50%;
     animation: caja-spin 0.6s linear infinite;
 }
 
-/* Estado Activo: Apilamiento Vertical en Columna Única (Ancho Completo 100%) */
 .panel-content {
     padding: 16px;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    gap: 14px;
+    gap: 12px;
     width: 100%;
     box-sizing: border-box;
 }
 
 .panel-card {
     width: 100%;
-    flex: 0 0 100%;
-    max-width: 100%;
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    border-radius: 8px;
+    border-radius: 6px;
     overflow: hidden;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
     box-sizing: border-box;
-}
-
-.panel-card__title {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 8px 12px;
-    background: #f8fafc;
-    border-bottom: 1px solid #e2e8f0;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    color: var(--caja-slate);
-}
-
-/* =========================================================================
-   COMPONENTE ACORDEÓN DESPLEGABLE (EXCLUSIVO: DATOS DEL ALUMNO)
-   ========================================================================= */
-.panel-card--collapsible {
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.panel-card--collapsible:hover {
-    border-color: #cbd5e1;
 }
 
 .panel-card__header-btn {
@@ -872,7 +902,7 @@
     border-bottom: 1px solid transparent;
     cursor: pointer;
     text-align: left;
-    transition: background-color 0.15s ease, border-color 0.15s ease;
+    transition: background-color 0.15s ease;
     user-select: none;
 }
 
@@ -884,11 +914,6 @@
     background: #f1f5f9;
 }
 
-.panel-card__header-btn:focus-visible {
-    outline: 2px solid var(--caja-blue, #1d4ed8);
-    outline-offset: -2px;
-}
-
 .panel-card__title-content {
     display: flex;
     align-items: center;
@@ -897,57 +922,34 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.3px;
-    color: var(--caja-slate, #1e293b);
+    color: var(--caja-slate);
 }
 
 .panel-card__title-content svg {
-    color: var(--caja-blue, #1d4ed8);
+    color: var(--caja-primary);
     flex-shrink: 0;
 }
 
 .panel-card__chevron-wrap {
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: var(--caja-gray-text, #64748b);
-    transition: color 0.15s ease;
-}
-
-.panel-card__header-btn:hover .panel-card__chevron-wrap {
-    color: var(--caja-blue, #1d4ed8);
+    color: var(--caja-gray-text);
 }
 
 .panel-card__chevron {
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: rotate(0deg);
+    transition: transform 0.2s ease;
 }
 
 .panel-card--collapsible.is-expanded .panel-card__chevron {
     transform: rotate(180deg);
 }
 
-/* Contenedor colapsable con animación Grid fluida */
 .panel-card__collapse {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow: hidden;
+    display: none;
 }
 
 .panel-card--collapsible.is-expanded .panel-card__collapse {
-    grid-template-rows: 1fr;
-}
-
-.panel-card__collapse > .panel-card__body {
-    min-height: 0;
-    overflow: hidden;
-    transition: padding 0.2s ease, opacity 0.2s ease;
-}
-
-.panel-card--collapsible:not(.is-expanded) .panel-card__collapse > .panel-card__body {
-    padding-top: 0;
-    padding-bottom: 0;
-    opacity: 0;
+    display: block;
 }
 
 .panel-card__body {
@@ -976,14 +978,12 @@
     color: var(--caja-gray-text);
     font-weight: 500;
     flex-shrink: 0;
-    white-space: nowrap;
 }
 
 .panel-value {
     color: var(--caja-dark);
     text-align: right;
     word-break: break-word;
-    min-width: 0;
 }
 
 .panel-value.font-medium {
@@ -1001,7 +1001,6 @@
     font-weight: 600;
 }
 
-/* Sub-bloques de tutores individuales */
 .tutor-block {
     display: flex;
     flex-direction: column;
@@ -1028,7 +1027,7 @@
 .tutor-block__name {
     font-weight: 700;
     color: var(--caja-dark);
-    font-size: 12.5px;
+    font-size: 12px;
 }
 
 .tutor-block__rel {
@@ -1108,490 +1107,22 @@
 }
 
 /* ==========================================================
-   7. CAMPOS DE FORMULARIO COMPACTOS Y ORDENADOS
+   8. RENGLONES DINÁMICOS DE CONCEPTOS Y MONTOS (SECCIÓN 2)
    ========================================================== */
-.form-row-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-
-@media (max-width: 680px) {
-    .form-row-2 {
-        grid-template-columns: 1fr;
-    }
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.form-label {
-    font-size: 12.5px;
-    font-weight: 600;
-    color: var(--caja-slate);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.required-star {
-    color: var(--caja-danger);
-    font-weight: bold;
-}
-
-.optional-tag {
-    font-size: 11px;
-    font-weight: normal;
-    color: var(--caja-gray-light);
-}
-
-.form-control {
-    width: 100%;
-    height: 40px;
-    padding: 7px 12px;
-    font-size: 13.5px;
-    font-family: inherit;
-    color: var(--caja-dark);
-    background: #ffffff;
-    border: 1px solid var(--caja-border);
-    border-radius: var(--caja-radius-sm);
-    outline: none;
-    transition: all 0.15s ease-in-out;
-}
-
-.form-control:focus {
-    border-color: var(--caja-border-focus);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
-}
-
-.form-select {
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 14px;
-    padding-right: 36px;
-    cursor: pointer;
-}
-
-.form-textarea {
-    height: auto;
-    resize: vertical;
-    min-height: 54px;
-    line-height: 1.45;
-}
-
-.form-hint {
-    font-size: 11px;
-    color: var(--caja-gray-text);
-}
-
-/* Input de Moneda Destacado Compacto */
-.input-money-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.input-money-symbol {
-    position: absolute;
-    left: 12px;
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--caja-slate);
-    pointer-events: none;
-}
-
-.form-control--amount {
-    padding-left: 28px;
-    font-size: 15.5px;
-    font-weight: 700;
-    color: var(--caja-primary);
-}
-
-/* Animación de feedback cuando se autocompleta el monto sugerido */
-@keyframes amountPulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
-        background-color: #ecfdf5;
-        border-color: #10b981;
-    }
-    60% {
-        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
-        background-color: #ecfdf5;
-        border-color: #10b981;
-    }
-    100% {
-        box-shadow: none;
-        background-color: #ffffff;
-        border-color: var(--caja-border);
-    }
-}
-
-.amount-updated {
-    animation: amountPulse 0.9s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-/* Dinámica de campo bancario y campo concepto personalizado */
-.form-control--bancario {
-    border-color: var(--caja-bbva-border);
-    background: #f0f7ff;
-}
-
-.form-control--bancario:focus {
-    border-color: #2563eb;
-    background: #ffffff;
-}
-
-.bancario-badge-icon {
-    color: var(--caja-bbva);
-    display: inline-flex;
-    align-items: center;
-}
-
-#container-referencia-bancaria,
-#container-concepto-personalizado {
-    animation: slideDown 0.25s ease-out;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-5px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Acciones finales del formulario */
-.caja-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 12px;
-    padding-top: 8px;
-}
-
-.btn-spinner {
-    width: 15px;
-    height: 15px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-top-color: #ffffff;
-    border-radius: 50%;
-    animation: caja-spin 0.6s linear infinite;
-}
-
-/* ==========================================================
-   8. MODAL Y VOUCHER DE COMPROBANTE OFICIAL
-   ========================================================== */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(15, 23, 42, 0.65);
-    backdrop-filter: blur(4px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    padding: 20px;
-    animation: fadeIn 0.2s ease-in-out;
-}
-
-.modal-dialog {
-    background: #ffffff;
-    border-radius: var(--caja-radius);
-    box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.25);
-    max-width: 600px;
-    width: 100%;
-    max-height: 90vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.voucher-receipt {
-    padding: 26px;
-    background: #ffffff;
-    overflow-y: auto;
-}
-
-.voucher-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.voucher-logo-badge {
-    width: 46px;
-    height: 46px;
-    background: var(--caja-primary);
-    color: #ffffff;
-    font-weight: 800;
-    font-size: 17px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    letter-spacing: 1px;
-}
-
-.voucher-inst-title {
-    font-size: 16.5px;
-    font-weight: 800;
-    color: var(--caja-dark);
-    margin: 0;
-}
-
-.voucher-inst-sub {
-    font-size: 12px;
-    color: var(--caja-gray-text);
-    margin: 2px 0 4px 0;
-}
-
-.voucher-badge-official {
-    display: inline-block;
-    background: #e0f2fe;
-    color: #0369a1;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 7px;
-    border-radius: 4px;
-    text-transform: uppercase;
-}
-
-.voucher-divider {
-    height: 1px;
-    background: #e2e8f0;
-    margin: 14px 0;
-}
-
-.voucher-meta-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px 16px;
-    font-size: 12px;
-}
-
-.voucher-folio {
-    color: var(--caja-primary);
-    font-size: 13.5px;
-    letter-spacing: 0.5px;
-}
-
-.voucher-badge-status {
-    background: #ecfdf5;
-    color: #065f46;
-    padding: 2px 7px;
-    border-radius: 4px;
-    font-size: 10.5px;
-    font-weight: 700;
-}
-
-.voucher-alumno-box {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 10px 14px;
-    margin-bottom: 14px;
-}
-
-.voucher-alumno-line {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    margin-bottom: 3px;
-}
-
-.voucher-alumno-name {
-    font-size: 14px;
-    color: var(--caja-dark);
-}
-
-.voucher-alumno-sub {
-    font-size: 11.5px;
-    color: var(--caja-gray-text);
-    display: flex;
-    gap: 12px;
-}
-
-.voucher-table-wrapper {
-    margin-bottom: 12px;
-}
-
-.voucher-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12px;
-}
-
-.voucher-table th {
-    background: #f1f5f9;
-    padding: 8px 10px;
-    text-align: left;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--caja-slate);
-    text-transform: uppercase;
-}
-
-.voucher-table td {
-    padding: 9px 10px;
-    border-bottom: 1px solid #e2e8f0;
-    color: var(--caja-slate);
-}
-
-.text-right {
-    text-align: right;
-}
-
-.font-bold {
-    font-weight: 700;
-}
-
-.voucher-total-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #f0f7ff;
-    border: 1px solid #bfdbfe;
-    border-radius: 8px;
-    padding: 11px 16px;
-    margin-bottom: 12px;
-}
-
-.voucher-total-label {
-    font-size: 13.5px;
-    font-weight: 700;
-    color: var(--caja-dark);
-}
-
-.voucher-total-amount {
-    font-size: 19px;
-    font-weight: 800;
-    color: var(--caja-primary);
-}
-
-.voucher-notes {
-    font-size: 11.5px;
-    color: var(--caja-gray-text);
-    background: #fffbeb;
-    border: 1px solid #fde68a;
-    padding: 7px 12px;
-    border-radius: 6px;
-    margin-bottom: 12px;
-}
-
-.voucher-footer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 7px;
-    text-align: center;
-    padding-top: 8px;
-}
-
-.voucher-barcode {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    font-family: monospace;
-    font-size: 10.5px;
-    letter-spacing: 2px;
-    color: var(--caja-slate);
-}
-
-.barcode-lines {
-    width: 150px;
-    height: 22px;
-    background: repeating-linear-gradient(90deg, #1e293b, #1e293b 2px, transparent 2px, transparent 4px, #1e293b 4px, #1e293b 7px, transparent 7px, transparent 9px);
-}
-
-.voucher-disclaimer {
-    font-size: 10px;
-    color: var(--caja-gray-light);
-    line-height: 1.4;
-    margin: 0;
-    max-width: 460px;
-}
-
-.modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 20px;
-    background: #f8fafc;
-    border-top: 1px solid var(--caja-border);
-}
-
-/* ==========================================================
-   9. ESTILOS DE IMPRESIÓN OFICIAL (@media print)
-   ========================================================== */
-@media print {
-    body * {
-        visibility: hidden;
-    }
-    #voucher-printable, #voucher-printable * {
-        visibility: visible;
-    }
-    #modal-comprobante {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background: transparent;
-        backdrop-filter: none;
-        padding: 0;
-    }
-    .modal-dialog {
-        box-shadow: none;
-        max-width: 100%;
-        width: 100%;
-        border-radius: 0;
-    }
-    .modal-actions {
-        display: none !important;
-    }
-    .voucher-receipt {
-        padding: 0;
-        margin: 0 auto;
-        max-width: 650px;
-    }
-}
-
-/* ==========================================================
-   10. RENGLONES DINÁMICOS DE CONCEPTOS Y MONTOS DE COBRO
-   ========================================================== */
-.caja-section--conceptos {
-    overflow: visible;
-    border-bottom: none;
-}
-
 .caja-conceptos-wrapper {
-    margin-top: 6px;
+    margin-top: 2px;
 }
 
-/* Encabezado de columnas alineado */
 .caja-conceptos-header {
     display: grid;
     grid-template-columns: 36px 1fr 200px 48px;
     gap: 12px;
     align-items: center;
-    padding: 10px 14px;
+    padding: 9px 14px;
     background: #f8fafc;
-    border: 1px solid var(--caja-border);
+    border: 1px solid var(--caja-border-light);
     border-bottom: 2px solid #e2e8f0;
-    border-radius: 8px 8px 0 0;
+    border-radius: 6px 6px 0 0;
 }
 
 .col-header {
@@ -1615,7 +1146,6 @@
     text-align: center;
 }
 
-/* Lista de Renglones */
 .caja-conceptos-rows {
     display: flex;
     flex-direction: column;
@@ -1626,36 +1156,31 @@
     grid-template-columns: 36px 1fr 200px 48px;
     gap: 12px;
     align-items: flex-start;
-    padding: 12px 14px;
+    padding: 10px 14px;
     background: #ffffff;
-    border: 1px solid var(--caja-border);
+    border: 1px solid var(--caja-border-light);
     border-top: none;
-    transition: all 0.18s ease;
-    animation: rowFadeIn 0.22s ease-out;
+    transition: all 0.15s ease;
+    animation: rowFadeIn 0.2s ease-out;
 }
 
 @keyframes rowFadeIn {
-    from { opacity: 0; transform: translateY(-4px); }
+    from { opacity: 0; transform: translateY(-3px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
 .caja-concepto-row:last-child {
-    border-bottom: 1px solid var(--caja-border);
-    border-radius: 0 0 8px 8px;
+    border-bottom: 1px solid var(--caja-border-light);
+    border-radius: 0 0 6px 6px;
 }
 
 .caja-concepto-row:hover {
     background: #fafbfc;
 }
 
-/* Renglón proveniente de Cargo CARE */
 .caja-concepto-row.is-care-row {
     background: #fffdf8;
     border-left: 3.5px solid #f59e0b;
-}
-
-.caja-concepto-row.is-care-row:hover {
-    background: #fffbeb;
 }
 
 .row-cell--num {
@@ -1720,6 +1245,29 @@
     flex-direction: column;
 }
 
+.input-money-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.input-money-symbol {
+    position: absolute;
+    left: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--caja-slate);
+    pointer-events: none;
+}
+
+.form-control--amount {
+    padding-left: 24px !important;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--caja-primary);
+}
+
 .row-cell--actions {
     display: flex;
     align-items: center;
@@ -1727,41 +1275,32 @@
     padding-top: 1px;
 }
 
-/* Botón de Borrar Renglón */
 .btn-remove-row {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     border-radius: var(--caja-radius-sm);
-    border: 1px solid var(--caja-border);
+    border: 1px solid var(--caja-border-light);
     background: #ffffff;
     color: #94a3b8;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.16s ease-in-out;
+    transition: all 0.15s ease-in-out;
 }
 
 .btn-remove-row:hover {
     background: #fef2f2;
     border-color: #fecaca;
     color: #ef4444;
-    transform: scale(1.06);
-    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.15);
 }
 
-.btn-remove-row:focus-visible {
-    outline: 2px solid #ef4444;
-    outline-offset: 2px;
-}
-
-/* Barra de Botón (+) */
 .caja-conceptos-toolbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 14px 2px 6px;
+    padding: 12px 2px 4px;
     flex-wrap: wrap;
 }
 
@@ -1769,7 +1308,7 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 18px;
+    padding: 7px 16px;
     background: rgba(37, 99, 235, 0.05);
     color: var(--caja-primary);
     border: 1.5px dashed var(--caja-primary);
@@ -1777,24 +1316,13 @@
     font-size: 13px;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.15s ease-in-out;
 }
 
 .btn-add-row:hover {
     background: var(--caja-primary);
     color: #ffffff;
     border-style: solid;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-    transform: translateY(-1.5px);
-}
-
-.btn-add-row:active {
-    transform: translateY(0);
-}
-
-.btn-add-row:focus-visible {
-    outline: 3px solid rgba(37, 99, 235, 0.4);
-    outline-offset: 2px;
 }
 
 .caja-toolbar-hint {
@@ -1802,21 +1330,14 @@
     color: var(--caja-gray-text);
 }
 
-/* Barra de Total General Consolidado */
 .caja-total-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 12px 4px;
-    background: transparent;
     color: #1e293b;
-    border: none;
-    border-top: 3px solid #1e293b;
-    border-bottom: none;
-    border-radius: 0;
+    border-top: 2px solid #2b3e50;
     margin-top: 14px;
-    box-shadow: none;
-    animation: totalBarPulse 0.3s ease-out;
 }
 
 .caja-total-bar__info {
@@ -1826,7 +1347,7 @@
 }
 
 .caja-total-bar__title {
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 800;
     color: #1e293b;
     text-transform: uppercase;
@@ -1835,8 +1356,8 @@
 
 .caja-total-bar__count {
     font-size: 11px;
-    font-weight: 700;
-    color: #475569;
+    font-weight: 600;
+    color: #64748b;
 }
 
 .caja-total-bar__value {
@@ -1856,7 +1377,6 @@
     font-weight: 800;
     color: #0f172a;
     letter-spacing: -0.5px;
-    font-variant-numeric: tabular-nums;
 }
 
 .caja-total-bar__currency {
@@ -1866,8 +1386,6 @@
     margin-left: 4px;
 }
 
-
-/* Responsividad para móviles */
 @media (max-width: 680px) {
     .caja-conceptos-header {
         display: none;
@@ -1908,3 +1426,353 @@
     }
 }
 
+/* ==========================================================
+   9. COMPLEMENTOS ESPECÍFICOS DE FORMULARIO (SECCIÓN 3)
+   ========================================================== */
+.form-textarea {
+    resize: vertical;
+    min-height: 54px;
+    line-height: 1.45;
+}
+
+.form-hint {
+    font-size: 11px;
+    color: var(--caja-gray-text);
+    margin-top: 4px;
+    display: block;
+}
+
+.optional-tag {
+    font-size: 11px;
+    font-weight: normal;
+    color: var(--caja-gray-light);
+}
+
+.form-control--bancario {
+    border-color: var(--caja-bbva-border) !important;
+    background: #f0f7ff !important;
+}
+
+.form-control--bancario:focus {
+    border-color: #2563eb !important;
+    background: #ffffff !important;
+}
+
+.bancario-badge-icon {
+    color: var(--caja-bbva);
+    display: inline-flex;
+    align-items: center;
+}
+
+#container-referencia-bancaria {
+    animation: slideDown 0.25s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.caja-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 8px;
+}
+
+.btn-spinner {
+    width: 15px;
+    height: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: caja-spin 0.6s linear infinite;
+}
+
+/* ==========================================================
+   10. MODAL Y VOUCHER DE COMPROBANTE OFICIAL
+   ========================================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.modal-dialog {
+    background: #ffffff;
+    border-radius: var(--caja-radius);
+    box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.25);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.voucher-receipt {
+    padding: 24px;
+    background: #ffffff;
+    overflow-y: auto;
+}
+
+.voucher-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.voucher-logo-badge {
+    width: 44px;
+    height: 44px;
+    background: var(--caja-primary);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 16px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 1px;
+}
+
+.voucher-inst-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--caja-dark);
+    margin: 0;
+}
+
+.voucher-inst-sub {
+    font-size: 12px;
+    color: var(--caja-gray-text);
+    margin: 2px 0 4px 0;
+}
+
+.voucher-badge-official {
+    display: inline-block;
+    background: #e0f2fe;
+    color: #0369a1;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.voucher-divider {
+    height: 1px;
+    background: #e2e8f0;
+    margin: 14px 0;
+}
+
+.voucher-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 16px;
+    font-size: 12px;
+}
+
+.voucher-folio {
+    color: var(--caja-primary);
+    font-size: 13.5px;
+    letter-spacing: 0.5px;
+}
+
+.voucher-badge-status {
+    background: #ecfdf5;
+    color: #065f46;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 10.5px;
+    font-weight: 700;
+}
+
+.voucher-alumno-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+}
+
+.voucher-alumno-line {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 3px;
+}
+
+.voucher-alumno-name {
+    font-size: 14px;
+    color: var(--caja-dark);
+}
+
+.voucher-alumno-sub {
+    font-size: 11.5px;
+    color: var(--caja-gray-text);
+    display: flex;
+    gap: 12px;
+}
+
+.voucher-table-wrapper {
+    margin-bottom: 12px;
+}
+
+.voucher-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.voucher-table th {
+    background: #f1f5f9;
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--caja-slate);
+    text-transform: uppercase;
+}
+
+.voucher-table td {
+    padding: 9px 10px;
+    border-bottom: 1px solid #e2e8f0;
+    color: var(--caja-slate);
+}
+
+.text-right {
+    text-align: right;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.voucher-total-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f0f7ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+}
+
+.voucher-total-label {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--caja-dark);
+}
+
+.voucher-total-amount {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--caja-primary);
+}
+
+.voucher-notes {
+    font-size: 11.5px;
+    color: var(--caja-gray-text);
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    padding: 7px 12px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.voucher-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+    padding-top: 8px;
+}
+
+.voucher-barcode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-family: monospace;
+    font-size: 10.5px;
+    letter-spacing: 2px;
+    color: var(--caja-slate);
+}
+
+.barcode-lines {
+    width: 150px;
+    height: 22px;
+    background: repeating-linear-gradient(90deg, #1e293b, #1e293b 2px, transparent 2px, transparent 4px, #1e293b 4px, #1e293b 7px, transparent 7px, transparent 9px);
+}
+
+.voucher-disclaimer {
+    font-size: 10px;
+    color: var(--caja-gray-light);
+    line-height: 1.4;
+    margin: 0;
+    max-width: 460px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: #f8fafc;
+    border-top: 1px solid var(--caja-border-light);
+}
+
+/* Estilos de Impresión Oficial */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #voucher-printable, #voucher-printable * {
+        visibility: visible;
+    }
+    #modal-comprobante {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        backdrop-filter: none;
+        padding: 0;
+    }
+    .modal-dialog {
+        box-shadow: none;
+        max-width: 100%;
+        width: 100%;
+        border-radius: 0;
+    }
+    .modal-actions {
+        display: none !important;
+    }
+    .voucher-receipt {
+        padding: 0;
+        margin: 0 auto;
+        max-width: 650px;
+    }
+}
