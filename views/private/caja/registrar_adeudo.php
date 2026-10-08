@@ -1,9 +1,9 @@
 <?php
 /**
  * Vista: Registrar Cargo (Servicios CARE: Transporte, Lunch, Estancia)
- * Grupo:     Cargos
- * Archivo:   registrar_cargo.php
- * Ruta:      views/private/cargos/registrar_cargo.php
+ * Grupo:     Caja
+ * Archivo:   registrar_adeudo.php
+ * Ruta:      views/private/caja/registrar_adeudo.php
  * Assets:    assets/css/registrar_cargo.css
  *            assets/js/registrar_cargo.js
  */
@@ -38,23 +38,44 @@ $baseUrl          = $baseUrl ?? rtrim(Router::url('', 'public'), '/');
 
 <div class="cargos-container">
 
-    <!-- 1. Encabezado de Página -->
+    <!-- 1. Encabezado Institucional de la Vista -->
     <header class="cargos-header">
         <div class="cargos-header__info">
             <nav class="cargos-breadcrumb" aria-label="Migas de pan">
-                <span class="cargos-breadcrumb__item">Servicios Escolares</span>
+                <span class="cargos-breadcrumb__item">Módulo Financiero</span>
                 <span class="cargos-breadcrumb__separator">/</span>
-                <span class="cargos-breadcrumb__item">Cargos y Adeudos</span>
+                <span class="cargos-breadcrumb__item">Caja</span>
                 <span class="cargos-breadcrumb__separator">/</span>
-                <span class="cargos-breadcrumb__active">Registrar Cargo</span>
+                <span class="cargos-breadcrumb__active">Registrar Adeudo CARE</span>
             </nav>
             <h1 class="cargos-title">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: #2563eb; flex-shrink: 0;">
+                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                    <line x1="2" y1="10" x2="22" y2="10"></line>
+                </svg>
                 <span>Registrar Adeudo Escolar</span>
                 <span class="cargos-badge-care">Servicios CARE</span>
             </h1>
             <p class="cargos-subtitle">
                 Genera cargos individuales y adeudos programados para los servicios de transporte institucional, comedor escolar y estancia infantil.
             </p>
+        </div>
+
+        <div class="cargos-header__actions" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <a href="<?= htmlspecialchars(Router::url('caja/registrar_pago', 'private')) ?>" class="btn-secondary" title="Ir a Ventanilla de Pagos">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                    <line x1="2" y1="10" x2="22" y2="10"></line>
+                </svg>
+                <span>Ventanilla de Pagos</span>
+            </a>
+            <a href="<?= htmlspecialchars(Router::url('dashboard')) ?>" class="btn-secondary" title="Volver al panel principal">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>Panel Principal</span>
+            </a>
         </div>
     </header>
 
@@ -92,29 +113,27 @@ $baseUrl          = $baseUrl ?? rtrim(Router::url('', 'public'), '/');
         <?php endif; ?>
     </div>
 
-    <!-- 3. Formulario Principal de Registro de Cargo -->
+    <!-- 3. Formulario Principal de Registro de Cargo (Estructura Modular ASRS) -->
     <form id="form-registrar-cargo" action="" method="POST" class="cargos-form" novalidate>
 
-        <div class="cargos-card">
-            <div class="cargos-card__header">
-                <div class="cargos-card__header-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-                        <line x1="2" y1="10" x2="22" y2="10"></line>
-                        <line x1="6" y1="15" x2="10" y2="15"></line>
+        <!-- ======================================================== -->
+        <!-- SECCIÓN 1: SELECCIÓN E IDENTIFICACIÓN DEL ALUMNO        -->
+        <!-- ======================================================== -->
+        <div class="asrs-form-container">
+            <div class="asrs-section-header">
+                <div class="asrs-section-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
                     </svg>
+                    <span>1. Identificación y Selección del Alumno Titular</span>
                 </div>
-                <div>
-                    <h2 class="cargos-card__title">Información del Adeudo / Servicio</h2>
-                    <p class="cargos-card__subtitle">Completa los datos del alumno y las especificaciones del servicio CARE a devengar.</p>
-                </div>
+                <span class="asrs-section-toggle-icon">▼</span>
             </div>
 
-            <div class="cargos-card__body">
-
-                <!-- SECCIÓN 1: SELECCIÓN DE ALUMNO -->
-                <div class="form-group">
-                    <label for="input-alumno-search" class="form-label">
+            <div class="asrs-section-body">
+                <div class="asrs-form-group">
+                    <label for="input-alumno-search" class="asrs-form-label">
                         Alumno Titular <span class="required-mark">*</span>
                     </label>
 
@@ -128,7 +147,7 @@ $baseUrl          = $baseUrl ?? rtrim(Router::url('', 'public'), '/');
                             <input 
                                 type="text" 
                                 id="input-alumno-search" 
-                                class="form-control" 
+                                class="asrs-form-control form-control" 
                                 placeholder="Escribe el nombre, apellidos o CURP del alumno..." 
                                 autocomplete="off"
                             >
@@ -155,12 +174,24 @@ $baseUrl          = $baseUrl ?? rtrim(Router::url('', 'public'), '/');
                         <button type="button" class="btn-change-alumno" id="btn-change-alumno">Cambiar Alumno</button>
                     </div>
 
+                    <!-- Ficha institucional contextual (.asrs-collapsible-info) -->
+                    <div class="asrs-collapsible-info is-expanded" id="adeudo-alumno-info" style="margin-top: 14px;">
+                        <div style="font-size: 13px; color: #475569; display: flex; align-items: center; gap: 9px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            <span>Los adeudos registrados se sincronizan automáticamente con la cuenta corriente del alumno y la ventanilla de cobro en Caja.</span>
+                        </div>
+                    </div>
+
                     <!-- Input oculto para el envío del ID -->
                     <input type="hidden" name="alumno_id" id="input-alumno-id" value="">
 
                     <!-- Selector Fallback para accesibilidad o sin JS -->
                     <noscript>
-                        <select name="alumno_id" id="select-alumno-fallback" class="form-control" style="margin-top: 8px;">
+                        <select name="alumno_id" id="select-alumno-fallback" class="asrs-form-control form-select" style="margin-top: 8px;">
                             <option value="">-- Selecciona un alumno de la lista --</option>
                             <?php foreach ($alumnosRecientes as $al): ?>
                                 <option value="<?= (int)$al['id'] ?>">
@@ -172,10 +203,29 @@ $baseUrl          = $baseUrl ?? rtrim(Router::url('', 'public'), '/');
 
                     <small class="form-hint">Escribe al menos 2 letras para desplegar sugerencias de alumnos inscritos.</small>
                 </div>
+            </div>
+        </div>
 
-                <!-- SECCIÓN 2: CONCEPTO DEL SERVICIO CARE -->
-                <div class="form-group">
-                    <label class="form-label">
+        <!-- ======================================================== -->
+        <!-- SECCIÓN 2: CONCEPTO DEL SERVICIO Y MONTO CARE           -->
+        <!-- ======================================================== -->
+        <div class="asrs-form-container">
+            <div class="asrs-section-header">
+                <div class="asrs-section-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                        <line x1="2" y1="10" x2="22" y2="10"></line>
+                        <line x1="6" y1="15" x2="10" y2="15"></line>
+                    </svg>
+                    <span>2. Concepto del Servicio e Importe a Devengar</span>
+                </div>
+                <span class="asrs-section-toggle-icon">▼</span>
+            </div>
+
+            <div class="asrs-section-body">
+                <!-- Concepto del Servicio CARE -->
+                <div class="asrs-form-group">
+                    <label class="asrs-form-label">
                         Concepto de Servicio CARE <span class="required-mark">*</span>
                     </label>
 
@@ -252,7 +302,7 @@ $baseUrl          = $baseUrl ?? rtrim(Router::url('', 'public'), '/');
 
                     <!-- Selector opcional de contingencia -->
                     <noscript>
-                        <select name="concepto" class="form-control" required>
+                        <select name="concepto" class="asrs-form-control form-select" required>
                             <option value="">-- Selecciona el servicio --</option>
                             <option value="Transporte">Transporte Escolar</option>
                             <option value="Lunch">Lunch / Comedor</option>
@@ -261,9 +311,9 @@ $baseUrl          = $baseUrl ?? rtrim(Router::url('', 'public'), '/');
                     </noscript>
                 </div>
 
-                <!-- SECCIÓN 3: MONTO DEL CARGO -->
-                <div class="form-group">
-                    <label for="input-monto" class="form-label">
+                <!-- Monto del cargo -->
+                <div class="asrs-form-group">
+                    <label for="input-monto" class="asrs-form-label">
                         Monto del Adeudo (MXN) <span class="required-mark">*</span>
                     </label>
                     <div class="monto-input-wrapper">
@@ -272,7 +322,7 @@ $baseUrl          = $baseUrl ?? rtrim(Router::url('', 'public'), '/');
                             type="number" 
                             id="input-monto" 
                             name="monto" 
-                            class="form-control form-control--monto" 
+                            class="asrs-form-control form-control form-control--monto" 
                             placeholder="0.00" 
                             step="0.01" 
                             min="0.01" 
@@ -282,12 +332,31 @@ $baseUrl          = $baseUrl ?? rtrim(Router::url('', 'public'), '/');
                     </div>
                     <small class="form-hint">Puedes modificar la tarifa sugerida según el periodo o plan acordado con el padre de familia.</small>
                 </div>
+            </div>
+        </div>
 
-                <!-- SECCIÓN 4: DOBLE FECHA (SOLICITUD Y SERVICIO) -->
-                <div class="form-grid-2">
+        <!-- ======================================================== -->
+        <!-- SECCIÓN 3: PROGRAMACIÓN DE FECHAS Y CONFIRMACIÓN        -->
+        <!-- ======================================================== -->
+        <div class="asrs-form-container">
+            <div class="asrs-section-header">
+                <div class="asrs-section-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span>3. Programación de Fechas y Confirmación del Adeudo</span>
+                </div>
+                <span class="asrs-section-toggle-icon">▼</span>
+            </div>
+
+            <div class="asrs-section-body">
+                <div class="asrs-form-row-2">
                     <!-- Fecha de Solicitud -->
-                    <div class="form-group">
-                        <label for="input-fecha-solicitud" class="form-label">
+                    <div class="asrs-form-group">
+                        <label for="input-fecha-solicitud" class="asrs-form-label">
                             Fecha de Solicitud <span class="required-mark">*</span>
                         </label>
                         <div class="date-input-wrap">
@@ -301,7 +370,7 @@ $baseUrl          = $baseUrl ?? rtrim(Router::url('', 'public'), '/');
                                 type="date" 
                                 id="input-fecha-solicitud" 
                                 name="fecha_solicitud" 
-                                class="form-control" 
+                                class="asrs-form-control form-control" 
                                 value="<?= htmlspecialchars($fechaHoy) ?>" 
                                 required
                             >
@@ -310,8 +379,8 @@ $baseUrl          = $baseUrl ?? rtrim(Router::url('', 'public'), '/');
                     </div>
 
                     <!-- Fecha de Servicio -->
-                    <div class="form-group">
-                        <label for="input-fecha-servicio" class="form-label">
+                    <div class="asrs-form-group">
+                        <label for="input-fecha-servicio" class="asrs-form-label">
                             Fecha del Servicio a Brindar <span class="required-mark">*</span>
                         </label>
                         <div class="date-input-wrap">
@@ -323,7 +392,7 @@ $baseUrl          = $baseUrl ?? rtrim(Router::url('', 'public'), '/');
                                 type="date" 
                                 id="input-fecha-servicio" 
                                 name="fecha_servicio" 
-                                class="form-control" 
+                                class="asrs-form-control form-control" 
                                 value="<?= htmlspecialchars($fechaHoy) ?>" 
                                 required
                             >
@@ -332,7 +401,7 @@ $baseUrl          = $baseUrl ?? rtrim(Router::url('', 'public'), '/');
                     </div>
                 </div>
 
-                <!-- SECCIÓN 5: BOTONES DE ACCIÓN -->
+                <!-- Botones de Acción -->
                 <div class="cargos-form-actions">
                     <button type="button" class="btn-secondary" id="btn-clear-cargo">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -352,17 +421,18 @@ $baseUrl          = $baseUrl ?? rtrim(Router::url('', 'public'), '/');
                         <span id="btn-submit-text">Registrar Adeudo</span>
                     </button>
                 </div>
-
             </div>
         </div>
 
     </form>
 
-    <!-- 4. Tabla de Últimos Cargos Registrados -->
-    <div class="cargos-card">
-        <div class="cargos-card__header">
-            <div class="cargos-card__header-icon cargos-card__header-icon--history">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 4: TABLA DE HISTORIAL DE ÚLTIMOS CARGOS          -->
+    <!-- ======================================================== -->
+    <div class="asrs-form-container">
+        <div class="asrs-section-header">
+            <div class="asrs-section-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="8" y1="6" x2="21" y2="6"></line>
                     <line x1="8" y1="12" x2="21" y2="12"></line>
                     <line x1="8" y1="18" x2="21" y2="18"></line>
@@ -370,74 +440,74 @@ $baseUrl          = $baseUrl ?? rtrim(Router::url('', 'public'), '/');
                     <line x1="3" y1="12" x2="3.01" y2="12"></line>
                     <line x1="3" y1="18" x2="3.01" y2="18"></line>
                 </svg>
+                <span>4. Últimos Adeudos Registrados en el Sistema</span>
             </div>
-            <div>
-                <h3 class="cargos-card__title">Últimos Cargos Registrados</h3>
-                <p class="cargos-card__subtitle">Historial reciente de adeudos pendientes en cargos_alumnos_cea.</p>
-            </div>
+            <span class="asrs-section-toggle-icon">▼</span>
         </div>
 
-        <div class="table-responsive">
-            <table class="cargos-table">
-                <thead>
-                    <tr>
-                        <th>Folio</th>
-                        <th>Alumno</th>
-                        <th>Concepto CARE</th>
-                        <th>Monto</th>
-                        <th>Fecha Solicitud</th>
-                        <th>Fecha Servicio</th>
-                        <th>Estatus</th>
-                        <th>Registrado</th>
-                    </tr>
-                </thead>
-                <tbody id="tabla-ultimos-cargos-body">
-                    <?php if (empty($ultimosCargos)): ?>
-                        <tr id="cargos-empty-row">
-                            <td colspan="8">
-                                <div class="empty-state">
-                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                                        <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-                                        <line x1="2" y1="10" x2="22" y2="10"></line>
-                                    </svg>
-                                    <p>Aún no se han registrado adeudos para servicios CARE.</p>
-                                </div>
-                            </td>
+        <div class="asrs-section-body" style="padding: 0;">
+            <div class="table-responsive">
+                <table class="cargos-table">
+                    <thead>
+                        <tr>
+                            <th>Folio</th>
+                            <th>Alumno</th>
+                            <th>Concepto CARE</th>
+                            <th>Monto</th>
+                            <th>Fecha Solicitud</th>
+                            <th>Fecha Servicio</th>
+                            <th>Estatus</th>
+                            <th>Registrado</th>
                         </tr>
-                    <?php else: ?>
-                        <?php foreach ($ultimosCargos as $c): ?>
-                            <?php 
-                                $cLower = strtolower($c['concepto']);
-                                $badgeClass = 'concept-badge--otro';
-                                if (str_contains($cLower, 'transporte')) $badgeClass = 'concept-badge--transporte';
-                                elseif (str_contains($cLower, 'lunch') || str_contains($cLower, 'comedor')) $badgeClass = 'concept-badge--lunch';
-                                elseif (str_contains($cLower, 'estancia')) $badgeClass = 'concept-badge--estancia';
-                            ?>
-                            <tr>
-                                <td><strong>#<?= (int)$c['id'] ?></strong></td>
-                                <td>
-                                    <strong><?= htmlspecialchars($c['alumno_nombre']) ?></strong><br>
-                                    <small style="color: #64748b;"><?= htmlspecialchars($c['curp']) ?> &bull; <?= htmlspecialchars("{$c['grado']} {$c['grupo']}") ?> (<?= htmlspecialchars($c['nivel_educativo']) ?>)</small>
+                    </thead>
+                    <tbody id="tabla-ultimos-cargos-body">
+                        <?php if (empty($ultimosCargos)): ?>
+                            <tr id="cargos-empty-row">
+                                <td colspan="8">
+                                    <div class="empty-state">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                                            <line x1="2" y1="10" x2="22" y2="10"></line>
+                                        </svg>
+                                        <p>Aún no se han registrado adeudos para servicios CARE.</p>
+                                    </div>
                                 </td>
-                                <td>
-                                    <span class="concept-badge <?= $badgeClass ?>">
-                                        <?= htmlspecialchars($c['concepto']) ?>
-                                    </span>
-                                </td>
-                                <td><strong style="color: #0f172a;">$<?= number_format((float)$c['monto'], 2) ?></strong></td>
-                                <td><span style="font-size: 12px; color: #475569;"><?= htmlspecialchars($c['fecha_solicitud']) ?></span></td>
-                                <td><span style="font-size: 12px; color: #475569;"><?= htmlspecialchars($c['fecha_servicio']) ?></span></td>
-                                <td>
-                                    <span class="status-badge status-badge--<?= htmlspecialchars($c['estatus']) ?>">
-                                        <?= htmlspecialchars(ucfirst($c['estatus'])) ?>
-                                    </span>
-                                </td>
-                                <td><small style="color: #94a3b8;"><?= date('d/m/Y H:i', strtotime($c['created_at'])) ?></small></td>
                             </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+                        <?php else: ?>
+                            <?php foreach ($ultimosCargos as $c): ?>
+                                <?php 
+                                    $cLower = strtolower($c['concepto']);
+                                    $badgeClass = 'concept-badge--otro';
+                                    if (str_contains($cLower, 'transporte')) $badgeClass = 'concept-badge--transporte';
+                                    elseif (str_contains($cLower, 'lunch') || str_contains($cLower, 'comedor')) $badgeClass = 'concept-badge--lunch';
+                                    elseif (str_contains($cLower, 'estancia')) $badgeClass = 'concept-badge--estancia';
+                                ?>
+                                <tr>
+                                    <td><strong>#<?= (int)$c['id'] ?></strong></td>
+                                    <td>
+                                        <strong><?= htmlspecialchars($c['alumno_nombre']) ?></strong><br>
+                                        <small style="color: #64748b;"><?= htmlspecialchars($c['curp']) ?> &bull; <?= htmlspecialchars("{$c['grado']} {$c['grupo']}") ?> (<?= htmlspecialchars($c['nivel_educativo']) ?>)</small>
+                                    </td>
+                                    <td>
+                                        <span class="concept-badge <?= $badgeClass ?>">
+                                            <?= htmlspecialchars($c['concepto']) ?>
+                                        </span>
+                                    </td>
+                                    <td><strong style="color: #0f172a;">$<?= number_format((float)$c['monto'], 2) ?></strong></td>
+                                    <td><span style="font-size: 12px; color: #475569;"><?= htmlspecialchars($c['fecha_solicitud']) ?></span></td>
+                                    <td><span style="font-size: 12px; color: #475569;"><?= htmlspecialchars($c['fecha_servicio']) ?></span></td>
+                                    <td>
+                                        <span class="status-badge status-badge--<?= htmlspecialchars($c['estatus']) ?>">
+                                            <?= htmlspecialchars(ucfirst($c['estatus'])) ?>
+                                        </span>
+                                    </td>
+                                    <td><small style="color: #94a3b8;"><?= date('d/m/Y H:i', strtotime($c['created_at'])) ?></small></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

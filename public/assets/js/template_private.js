@@ -36,4 +36,21 @@ document.addEventListener('DOMContentLoaded', () => {
             // }
         });
     }
-});
+
+    // ── COLLAPSIBLE SECTION HEADERS EN FORMULARIOS ASRS ──────
+    document.addEventListener('click', (e) => {
+        const header = e.target.closest('.asrs-section-header');
+        if (!header) return;
+
+        // Si el clic ocurrió sobre un control interactivo (botón, enlace, input, select), no colapsar
+        if (e.target.closest('button, a, input, select, textarea') && !e.target.closest('.asrs-section-toggle-icon')) {
+            return;
+        }
+
+        const container = header.closest('.asrs-form-container');
+        if (container) {
+            container.classList.toggle('is-collapsed');
+        }
+    });
+});
+
