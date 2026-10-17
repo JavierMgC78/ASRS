@@ -1,0 +1,17 @@
+/* ==========================================================
+ * Vista de Contenido: Login (vw_login.css)
+ * Ubicación: public/assets/core/css/views_content/vw_login.css
+ * ========================================================== */
+
+.asrs-login-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.asrs-login-card:hover {
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(227, 179, 49, 0.2);
+}
+
+.asrs-form-input:focus {
+    border-color: var(--asrs-neon-gold) !important;
+    box-shadow: 0 0 10px rgba(227, 179, 49, 0.3);
+}

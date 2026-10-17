@@ -1,0 +1,249 @@
+/* ==========================================================
+ * Vista de Contenido: Inicio (vw_home.css)
+ * Identidad Visual ASRS (Tema Oscuro Neón & Alta Fidelidad)
+ * Ubicación: public/assets/core/css/views_content/vw_home.css
+ * ========================================================== */
+
+/* Hero Principal */
+.asrs-hero {
+    text-align: center;
+    padding: 60px 20px 40px;
+    position: relative;
+}
+
+.asrs-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(227, 179, 49, 0.12);
+    border: 1px solid var(--asrs-neon-gold);
+    color: var(--asrs-neon-gold);
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    margin-bottom: 24px;
+    box-shadow: 0 0 15px rgba(227, 179, 49, 0.2);
+    animation: asrsPulse 3s infinite ease-in-out;
+}
+
+.asrs-badge-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--asrs-neon-gold);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--asrs-neon-gold);
+}
+
+.asrs-hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: var(--asrs-white);
+    letter-spacing: -0.5px;
+}
+
+.asrs-gradient-text {
+    background: linear-gradient(135deg, var(--asrs-neon-gold) 0%, #ffdf78 50%, var(--asrs-neon-red) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(227, 179, 49, 0.25);
+}
+
+.asrs-hero-subtitle {
+    font-size: 1.15rem;
+    color: var(--asrs-border-silver);
+    max-width: 800px;
+    margin: 0 auto 35px;
+    line-height: 1.6;
+}
+
+.asrs-hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.asrs-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 28px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.asrs-btn-primary {
+    background: linear-gradient(135deg, var(--asrs-neon-gold) 0%, #c4961d 100%);
+    color: #0b111a;
+    box-shadow: 0 4px 15px rgba(227, 179, 49, 0.35);
+}
+
+.asrs-btn-primary:hover {
+    box-shadow: 0 6px 25px rgba(227, 179, 49, 0.6);
+    transform: translateY(-2px);
+}
+
+.asrs-btn-secondary {
+    background: rgba(22, 34, 53, 0.8);
+    color: var(--asrs-border-silver);
+    border: 1px solid rgba(212, 217, 237, 0.25);
+    backdrop-filter: blur(8px);
+}
+
+.asrs-btn-secondary:hover {
+    color: var(--asrs-white);
+    border-color: var(--asrs-neon-gold);
+    box-shadow: 0 0 15px rgba(227, 179, 49, 0.25);
+    transform: translateY(-2px);
+}
+
+/* Grid de Métricas de Rendimiento */
+.asrs-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin: 50px 0;
+}
+
+.asrs-metric-card {
+    background: var(--asrs-panel-bg);
+    border: 1px solid rgba(212, 217, 237, 0.15);
+    border-radius: 8px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.asrs-metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: transparent;
+    transition: background 0.3s ease;
+}
+
+.asrs-metric-card.glow-gold::before { background: var(--asrs-neon-gold); }
+.asrs-metric-card.glow-silver::before { background: var(--asrs-border-silver); }
+.asrs-metric-card.glow-red::before { background: var(--asrs-neon-red); }
+
+.asrs-metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.asrs-metric-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.asrs-metric-icon {
+    font-size: 1.25rem;
+}
+
+.asrs-metric-label {
+    font-size: 0.85rem;
+    color: var(--asrs-text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.asrs-metric-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--asrs-white);
+    letter-spacing: -0.5px;
+}
+
+.asrs-metric-footer {
+    font-size: 0.8rem;
+    color: var(--asrs-border-silver);
+}
+
+/* Sección de Características */
+.asrs-features-section {
+    margin: 60px 0 30px;
+}
+
+.asrs-section-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.asrs-section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--asrs-white);
+    margin-bottom: 10px;
+}
+
+.asrs-section-desc {
+    color: var(--asrs-text-muted);
+    font-size: 1rem;
+}
+
+.asrs-features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.asrs-feature-card {
+    background: var(--asrs-panel-bg);
+    border: 1px solid rgba(212, 217, 237, 0.12);
+    border-radius: 8px;
+    padding: 30px;
+    transition: all 0.3s ease;
+}
+
+.asrs-feature-card:hover {
+    border-color: rgba(227, 179, 49, 0.4);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    transform: translateY(-3px);
+}
+
+.asrs-feature-icon {
+    color: var(--asrs-neon-gold);
+    margin-bottom: 18px;
+}
+
+.asrs-feature-card h3 {
+    color: var(--asrs-white);
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+}
+
+.asrs-feature-card p {
+    color: var(--asrs-border-silver);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.asrs-feature-card code {
+    background: #0d1520;
+    color: var(--asrs-neon-gold);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    border: 1px solid rgba(227, 179, 49, 0.2);
+}
+
+@keyframes asrsPulse {
+    0%, 100% { box-shadow: 0 0 15px rgba(227, 179, 49, 0.2); }
+    50% { box-shadow: 0 0 25px rgba(227, 179, 49, 0.4); }
+}

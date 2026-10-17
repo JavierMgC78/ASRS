@@ -1,0 +1,154 @@
+/* ==========================================================
+ * Layout Público - Identidad Visual ASRS (Tema Oscuro Neón)
+ * ========================================================== */
+
+:root {
+    --asrs-bg-deep: #101926;
+    --asrs-panel-bg: #162235;
+    --asrs-border-silver: #D4D9ED;
+    --asrs-neon-gold: #E3B331;
+    --asrs-neon-red: #D92525;
+    --asrs-white: #FFFFFF;
+    --asrs-text-muted: #8b9bb4;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body.asrs-layout-public {
+    background-color: var(--asrs-bg-deep);
+    color: var(--asrs-white);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Menú Superior (Navbar) */
+.asrs-navbar {
+    background-color: var(--asrs-panel-bg);
+    border-bottom: 1px solid rgba(212, 217, 237, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.asrs-nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: var(--asrs-neon-gold);
+    text-shadow: 0 0 8px rgba(227, 179, 49, 0.3);
+}
+
+.asrs-brand-icon {
+    font-size: 1.4rem;
+}
+
+.asrs-brand-text small {
+    font-size: 0.75rem;
+    color: var(--asrs-border-silver);
+    font-weight: normal;
+}
+
+.asrs-nav-links {
+    display: flex;
+    gap: 30px;
+}
+
+.asrs-nav-item {
+    color: var(--asrs-border-silver);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.asrs-nav-item:hover {
+    color: var(--asrs-neon-gold);
+    text-shadow: 0 0 6px rgba(227, 179, 49, 0.4);
+}
+
+/* Botón de Acceso (Login) */
+.asrs-btn-login {
+    background: linear-gradient(135deg, var(--asrs-neon-red), #9c1515);
+    color: var(--asrs-white);
+    padding: 8px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 10px rgba(217, 37, 37, 0.4);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.asrs-btn-login:hover {
+    box-shadow: 0 0 15px rgba(217, 37, 37, 0.7);
+    transform: translateY(-1px);
+}
+
+/* Cuerpo Principal (Body Content) */
+.asrs-main-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+.asrs-content-wrapper {
+    width: 100%;
+    max-width: 1100px;
+}
+
+/* Footer Profesional */
+.asrs-footer {
+    background-color: var(--asrs-panel-bg);
+    border-top: 1px solid rgba(212, 217, 237, 0.15);
+    padding: 20px 40px;
+    text-align: center;
+}
+
+.asrs-footer-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.asrs-footer-copy {
+    font-size: 0.85rem;
+    color: var(--asrs-text-muted);
+}
+
+.asrs-footer-author {
+    font-size: 0.9rem;
+    color: var(--asrs-border-silver);
+    letter-spacing: 0.5px;
+}
+
+.asrs-footer-author strong {
+    color: var(--asrs-neon-gold);
+}
+
+/* Utilidad de Alerta interna */
+.asrs-alert-error {
+    background: #2a1215;
+    border-left: 4px solid var(--asrs-neon-red);
+    padding: 15px;
+    color: #ffcccc;
+    border-radius: 4px;
+    font-family: monospace;
+}

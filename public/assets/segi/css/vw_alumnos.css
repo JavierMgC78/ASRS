@@ -1,0 +1,8 @@
+/* ==========================================================
+ * Vista Modular SEGI: Alumnos (vw_alumnos.css)
+ * Ubicación: public/assets/segi/css/vw_alumnos.css
+ * ========================================================== */
+
+.segi-table-row:hover {
+    background-color: rgba(227, 179, 49, 0.05);
+}

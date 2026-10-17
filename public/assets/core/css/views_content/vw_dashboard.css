@@ -1,0 +1,9 @@
+/* ==========================================================
+ * Vista de Contenido: Dashboard (vw_dashboard.css)
+ * Ubicación: public/assets/core/css/views_content/vw_dashboard.css
+ * ========================================================== */
+
+.asrs-admin-panel {
+    border-left: 4px solid #4ade80;
+    box-shadow: 0 0 20px rgba(74, 222, 128, 0.15);
+}

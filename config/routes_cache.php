@@ -1,7 +1,7 @@
 <?php
 /**
  * Archivo generado automáticamente por ASRS
- * Fecha de compilación: 2026-10-17 07:14:27
+ * Fecha de compilación: 2026-10-17 23:19:27
  */
 
 return [
@@ -14,8 +14,8 @@ return [
         'roles'      => array (
 ),
         'assets'     => [
-            'css' => '/AXE/public/assets/core/css/home.css',
-            'js'  => '/AXE/public/assets/core/js/home.js'
+            'css' => '/assets/core/css/views_content/vw_home.css',
+            'js'  => '/assets/core/js/views_content/vw_home.js'
         ]
     ],
     '/login' => [
@@ -27,8 +27,8 @@ return [
         'roles'      => array (
 ),
         'assets'     => [
-            'css' => '/AXE/public/assets/core/css/auth.css',
-            'js'  => '/AXE/public/assets/core/js/auth.js'
+            'css' => '/AXE/public/assets/core/css/views_content/vw_login.css',
+            'js'  => '/AXE/public/assets/core/js/views_content/vw_login.js'
         ]
     ],
     '/admin/dashboard' => [
@@ -41,8 +41,8 @@ return [
   0 => 'admin',
 ),
         'assets'     => [
-            'css' => '/AXE/public/assets/core/css/dashboard.css',
-            'js'  => '/AXE/public/assets/core/js/dashboard.js'
+            'css' => '/AXE/public/assets/core/css/views_content/vw_dashboard.css',
+            'js'  => '/AXE/public/assets/core/js/views_content/vw_dashboard.js'
         ]
     ],
     '/segi/alumnos' => [
@@ -56,8 +56,8 @@ return [
   1 => 'teacher',
 ),
         'assets'     => [
-            'css' => '/AXE/public/assets/segi/css/alumnos.css',
-            'js'  => '/AXE/public/assets/segi/js/alumnos.js'
+            'css' => '/AXE/public/assets/segi/css/vw_alumnos.css',
+            'js'  => '/AXE/public/assets/segi/js/vw_alumnos.js'
         ]
     ],
 ];
