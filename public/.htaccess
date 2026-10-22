@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Permitir acceso directo a archivos y carpetas reales (como los assets)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Redirigir el resto del tráfico al punto de entrada único del framework
+    RewriteRule ^(.*)$ index.php?uri=$1 [QSA,L]
+</IfModule>
+
