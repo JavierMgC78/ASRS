@@ -3,9 +3,15 @@
 require_once __DIR__ . '/../asrsCore/Helpers/global_functions.php';
 
 use asrsCore\Core\Conection;
+use asrsCore\Core\CacheRoutesBuilder;
 
 // Capturar la URI solicitada desde el parámetro de Apache (.htaccess)
 $uri = $_GET['uri'] ?? '/';
+
+// Caché de rutas: se genera solo si no existe; si existe no se toca.
+$routesCacheFile = __DIR__ . '/../asrsCore/Cache/routes_cache.php';
+$routesCacheReady = CacheRoutesBuilder::buildIfNotExists($routesCacheFile);
+$routes = $routesCacheReady ? (require $routesCacheFile) : [];
 
 // Interfaz básica de prueba del Kernel y Conexión
 ?>
