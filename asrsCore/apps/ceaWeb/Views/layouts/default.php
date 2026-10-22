@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="<?= htmlspecialchars($baseUrl) ?>">
     <title>Centro Educativo América | CEA</title>
     <!-- Estilos CSS -->
-    <link rel="stylesheet" href="assets/css/layouts/default.css">
+    <?php foreach ($cssFiles as $css): ?>
+    <link rel="stylesheet" href="<?= htmlspecialchars($css) ?>">
+    <?php endforeach; ?>
+    <link rel="stylesheet" href="assets/ceaWeb/css/contents/pages.css">
     <!-- Google Fonts: Inter & Playfair Display -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome para iconos -->
@@ -17,26 +21,26 @@
     <header class="cea-header" id="ceaHeader">
         <div class="cea-header-container">
             <!-- Espacio para el Logotipo -->
-            <a href="#" class="cea-logo">
+            <a href="webcea/inicio" class="cea-logo">
                 <img src="assets/images/logo-cea.png" alt="Logotipo Centro Educativo América" id="logoImg">
             </a>
 
             <!-- Menú de Navegación -->
             <nav class="cea-nav" id="ceaNav">
                 <ul class="cea-nav-list">
-                    <li><a href="#inicio" class="active">Inicio</a></li>
-                    <li><a href="#nosotros">Nosotros</a></li>
-                    <li><a href="#oferta">Oferta Educativa</a></li>
-                    <li><a href="#care">C.A.R.E.</a></li>
-                    <li><a href="#vida-escolar">Vida Escolar</a></li>
-                    <li><a href="#admisiones">Admisiones</a></li>
-                    <li><a href="#contacto">Contacto</a></li>
+                    <li><a href="webcea/inicio" class="<?= in_array($currentUri, ['', 'webcea/inicio'], true) ? 'active' : '' ?>">Inicio</a></li>
+                    <li><a href="webcea/nosotros" class="<?= $currentUri === 'webcea/nosotros' ? 'active' : '' ?>">Nosotros</a></li>
+                    <li><a href="webcea/oferta_educativa" class="<?= str_starts_with($currentUri, 'webcea/oferta_educativa') ? 'active' : '' ?>">Oferta Educativa</a></li>
+                    <li><a href="webcea/servicios_care">C.A.R.E.</a></li>
+                    <li><a href="webcea/vida_escolar">Vida Escolar</a></li>
+                    <li><a href="webcea/admisiones">Admisiones</a></li>
+                    <li><a href="webcea/contacto">Contacto</a></li>
                 </ul>
             </nav>
 
             <!-- Botón de Acceso / CTA -->
             <div class="cea-actions">
-                <a href="#portal" class="cea-btn-access"><i class="fa-solid fa-user-lock"></i> Acceder</a>
+                <a href="webcea/plataforma" class="cea-btn-access"><i class="fa-solid fa-user-lock"></i> Acceder</a>
                 <button class="cea-menu-toggle" id="menuToggle" aria-label="Abrir menú">
                     <i class="fa-solid fa-bars"></i>
                 </button>
@@ -46,11 +50,7 @@
 
     <!-- Contenido Principal (Slot para las vistas) -->
     <main class="cea-main-content">
-        <!-- Aquí se inyectará el contenido dinámico de cada vista -->
-        <section style="padding: 100px 20px; text-align: center; min-height: 60vh;">
-            <h1>Educación, Formación y Desarrollo</h1>
-            <p>Contenido principal de la vista en curso...</p>
-        </section>
+        <?php require $contentFile; ?>
     </main>
 
     <!-- Footer Institucional -->
@@ -87,6 +87,8 @@
     </footer>
 
     <!-- Script JS -->
-    <script src="assets/js/layout.js"></script>
+    <?php foreach ($jsFiles as $js): ?>
+    <script src="<?= htmlspecialchars($js) ?>"></script>
+    <?php endforeach; ?>
 </body>
 </html>

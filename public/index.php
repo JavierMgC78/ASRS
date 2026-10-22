@@ -1,56 +1,38 @@
 <?php
-// Inicialización del Kernel ASRS v1.0
+// Kernel ASRS v1.0 - Front controller
 require_once __DIR__ . '/../asrsCore/Helpers/global_functions.php';
 
-use asrsCore\Core\Conection;
 use asrsCore\Core\CacheRoutesBuilder;
+use asrsCore\Core\RoutingEngine;
 
-// Capturar la URI solicitada desde el parámetro de Apache (.htaccess)
-$uri = $_GET['uri'] ?? '/';
+// URI solicitada (Apache .htaccess -> index.php?uri=...)
+$uri = $_GET['uri'] ?? '';
 
 // Caché de rutas: se genera solo si no existe; si existe no se toca.
 $routesCacheFile = __DIR__ . '/../asrsCore/Cache/routes_cache.php';
-$routesCacheReady = CacheRoutesBuilder::buildIfNotExists($routesCacheFile);
-$routes = $routesCacheReady ? (require $routesCacheFile) : [];
+$routes = CacheRoutesBuilder::buildIfNotExists($routesCacheFile)
+    ? (require $routesCacheFile)
+    : [];
 
-// Interfaz básica de prueba del Kernel y Conexión
-?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>ASRS v1 - Kernel Active</title>
-    <style>
-        body { background-color: #101926; color: #D4D9ED; font-family: monospace; padding: 40px; }
-        .box { border: 1px solid #D4D9ED; padding: 20px; border-radius: 6px; max-width: 600px; margin: auto; }
-        h1 { color: #E3B331; font-size: 20px; }
-        .success { color: #2ecc71; }
-        .error { color: #e74c3c; }
-    </style>
-</head>
-<body>
-    <div class="box">
-        <h1>ASRS v1 // Kernel Central Activo</h1>
-        <p><strong>URI Solicitada:</strong> <?= htmlspecialchars($uri) ?></p>
-        
-        <hr style="border-color: #2c3e50;">
+$route = RoutingEngine::resolve($uri, $routes);
 
-        <h3>Estado de Conexión a Base de Datos:</h3>
-        <?php
-        try {
-            // Probando la instancia Singleton de PDO
-            $pdo = Conection::getInstance();
-            echo "<p class='success'>[OK] ¡Conexión exitosa a la base de datos a través de Conection (Singleton)!</p>";
-            
-            // Opcional: Consulta rápida para verificar que responde
-            $stmt = $pdo->query("SELECT VERSION() as version");
-            $row = $stmt->fetch();
-            echo "<p>Versión de MySQL/MariaDB: <strong>" . htmlspecialchars($row['version']) . "</strong></p>";
+if ($route === null) {
+    http_response_code(404);
+    echo '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>404</title></head>'
+       . '<body style="font-family:sans-serif;text-align:center;padding:4rem">'
+       . '<h1>404</h1><p>La página solicitada no existe.</p></body></html>';
+    exit;
+}
 
-        } catch (\Exception $e) {
-            echo "<p class='error'>[ERROR CRÍTICO] No se pudo conectar a la base de datos:<br>" . htmlspecialchars($e->getMessage()) . "</p>";
-        }
-        ?>
-    </div>
-</body>
-</html>
+// <base href> para que los assets y enlaces relativos funcionen en cualquier profundidad de URI
+$scriptDir = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
+$baseUrl   = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http')
+           . '://' . $_SERVER['HTTP_HOST'] . $scriptDir . '/';
+
+// Variables disponibles en el layout: $route, $baseUrl, $contentFile, $cssFiles, $jsFiles
+$contentFile = $route['contentFile'];
+$cssFiles    = $route['cssFiles'];
+$jsFiles     = $route['jsFiles'];
+$currentUri  = trim($uri, '/');
+
+require $route['layoutFile'];
