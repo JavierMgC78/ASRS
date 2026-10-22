@@ -1,0 +1,226 @@
+/* Variables y Paleta Institucional CEA */
+:root {
+    --cea-primary: #1A237E;      /* Azul Marino de Autoridad */
+    --cea-royal: #2962FF;        /* Azul Royal */
+    --cea-sky: #A7CAF0;          /* Azul Celeste */
+    --cea-amber: #FFB300;        /* Preescolar */
+    --cea-red: #B71C1C;          /* Secundaria */
+    --cea-dark: #222222;
+    --cea-light: #F8F9FA;
+    --cea-white: #FFFFFF;
+    --font-serif: 'Playfair Display', serif;
+    --font-sans: 'Inter', sans-serif;
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-sans);
+    color: var(--cea-dark);
+    background-color: var(--cea-white);
+    line-height: 1.6;
+}
+
+/* --- HEADER & STICKY NAV --- */
+.cea-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--cea-white);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    z-index: 1000;
+    transition: var(--transition);
+}
+
+.cea-header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cea-logo img {
+    height: 45px;
+    width: auto;
+    display: block;
+}
+
+/* Navegación Desktop */
+.cea-nav-list {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+}
+
+.cea-nav-list a {
+    text-decoration: none;
+    color: var(--cea-primary);
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+.cea-nav-list a:hover, 
+.cea-nav-list a.active {
+    color: var(--cea-royal);
+}
+
+/* Botón de Acceso (CTA) */
+.cea-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.cea-btn-access {
+    background-color: transparent;
+    border: 2px solid var(--cea-primary);
+    color: var(--cea-primary);
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.cea-btn-access:hover {
+    background-color: var(--cea-primary);
+    color: var(--cea-white);
+}
+
+.cea-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--cea-primary);
+    cursor: pointer;
+}
+
+/* --- MAIN CONTENT --- */
+.cea-main-content {
+    margin-top: 75px; /* Altura estimada del header */
+}
+
+/* --- FOOTER --- */
+.cea-footer {
+    background-color: var(--cea-primary);
+    color: var(--cea-white);
+    padding: 50px 20px 20px 20px;
+}
+
+.cea-footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-logo {
+    height: 40px;
+    margin-bottom: 15px;
+}
+
+.cea-footer-col h4 {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: var(--cea-sky);
+}
+
+.cea-footer-col p, .cea-footer-col ul {
+    font-size: 0.9rem;
+    color: #E0E0E0;
+    list-style: none;
+}
+
+.cea-footer-col ul li {
+    margin-bottom: 10px;
+}
+
+.cea-footer-col ul li a {
+    color: #E0E0E0;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.cea-footer-col ul li a:hover {
+    color: var(--cea-sky);
+}
+
+.cea-socials {
+    margin-top: 15px;
+    display: flex;
+    gap: 12px;
+}
+
+.cea-socials a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background-color: rgba(255,255,255,0.1);
+    color: var(--cea-white);
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.cea-socials a:hover {
+    background-color: var(--cea-royal);
+}
+
+.cea-footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    text-align: center;
+    font-size: 0.8rem;
+    color: #B0BEC5;
+}
+
+/* --- RESPONSIVE DESIGN (MOBILE FIRST) --- */
+@media (max-width: 992px) {
+    .cea-menu-toggle {
+        display: block;
+    }
+
+    .cea-nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--cea-white);
+        box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+    }
+
+    .cea-nav.active {
+        max-height: 450px;
+    }
+
+    .cea-nav-list {
+        flex-direction: column;
+        padding: 20px;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .cea-nav-list a {
+        font-size: 1.1rem;
+    }
+}
