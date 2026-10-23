@@ -50,7 +50,7 @@
 
     <!-- Contenido Principal (Slot para las vistas) -->
     <main class="cea-main-content">
-        <?php require $contentFile; ?>
+        <?= $content ?>
     </main>
 
     <!-- Footer Institucional -->

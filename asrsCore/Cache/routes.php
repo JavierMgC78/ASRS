@@ -180,4 +180,80 @@ return array (
     'css_path_view' => NULL,
     'js_path_view' => NULL,
   ),
+  'asrsWeb|' => 
+  array (
+    'uri' => '',
+    'app' => 'asrsWeb',
+    'type' => 'public',
+    'controller' => '',
+    'method' => '',
+    'layout' => 'default',
+    'content' => 'inicio',
+    'roles' => 
+    array (
+    ),
+    'css_path_view' => NULL,
+    'js_path_view' => NULL,
+  ),
+  'asrsWeb|asraweb/inicio' => 
+  array (
+    'uri' => 'asraweb/inicio',
+    'app' => 'asrsWeb',
+    'type' => 'public',
+    'controller' => '',
+    'method' => '',
+    'layout' => 'default',
+    'content' => 'inicio',
+    'roles' => 
+    array (
+    ),
+    'css_path_view' => NULL,
+    'js_path_view' => NULL,
+  ),
+  'asrsWeb|asraweb/arquitectura' => 
+  array (
+    'uri' => 'asraweb/arquitectura',
+    'app' => 'asrsWeb',
+    'type' => 'public',
+    'controller' => '',
+    'method' => '',
+    'layout' => 'default',
+    'content' => 'arquitectura',
+    'roles' => 
+    array (
+    ),
+    'css_path_view' => NULL,
+    'js_path_view' => NULL,
+  ),
+  'asrsWeb|asraweb/seguridad' => 
+  array (
+    'uri' => 'asraweb/seguridad',
+    'app' => 'asrsWeb',
+    'type' => 'public',
+    'controller' => '',
+    'method' => '',
+    'layout' => 'default',
+    'content' => 'seguridad',
+    'roles' => 
+    array (
+    ),
+    'css_path_view' => NULL,
+    'js_path_view' => NULL,
+  ),
+  'asrsWeb|asraweb/login' => 
+  array (
+    'uri' => 'asraweb/login',
+    'app' => 'asrsWeb',
+    'type' => 'public',
+    'controller' => '',
+    'method' => '',
+    'layout' => 'default',
+    'content' => 'login',
+    'roles' => 
+    array (
+    ),
+    'css_path_view' => NULL,
+    'js_path_view' => NULL,
+  ),
+  '@default_app' => 'pablitoClavoUnClavito',
 );

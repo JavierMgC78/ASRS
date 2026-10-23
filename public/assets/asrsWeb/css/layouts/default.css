@@ -1,0 +1,169 @@
+/* ==========================================================================
+   ASRS KERNEL - ESTÉTICA NEÓN DARK & WIREFRAME OUTLINE UI
+   ========================================================================== */
+
+:root {
+    --bg-deep: #101926;
+    --border-silver: #D4D9ED;
+    --accent-gold: #E3B331;
+    --accent-red: #D92525;
+    --text-main: #FFFFFF;
+    --text-muted: #94A3B8;
+    --glow-cyan: rgba(0, 243, 255, 0.15);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace; /* Estética de consola moderna */
+}
+
+body {
+    background-color: var(--bg-deep);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Contenedor Global */
+.asrs-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* --- HEADER --- */
+.asrs-header {
+    border-bottom: 1px solid var(--border-silver);
+    background-color: rgba(16, 25, 38, 0.95);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 1rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.nav-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.asrs-logo-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.asrs-logo {
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--accent-gold);
+    padding: 2px;
+}
+
+.asrs-brand-text {
+    font-size: 1.1rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: var(--border-silver);
+}
+
+.highlight {
+    color: var(--accent-gold);
+}
+
+/* --- NAVEGACIÓN --- */
+.asrs-nav .nav-list {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+    padding: 6px 12px;
+    border: 1px solid transparent;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--text-main);
+    border-color: var(--accent-gold);
+    background: var(--glow-cyan);
+}
+
+/* --- BOTÓN ACCEDER (Outline UI Neon) --- */
+.btn-neon-outline {
+    color: var(--accent-gold);
+    border: 1px solid var(--accent-gold);
+    padding: 8px 20px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    background: transparent;
+}
+
+.btn-neon-outline:hover {
+    background-color: var(--accent-gold);
+    color: var(--bg-deep);
+    box-shadow: 0 0 15px rgba(227, 179, 49, 0.4);
+}
+
+/* --- MAIN CONTENT AREA --- */
+.asrs-main-content {
+    flex: 1;
+    padding: 3rem 0;
+}
+
+.asrs-main-content .asrs-container {
+    display: block; /* Para permitir flujo normal en vistas inyectadas */
+}
+
+.asrs-error-box {
+    border: 1px dashed var(--accent-red);
+    padding: 2rem;
+    text-align: center;
+    color: var(--accent-red);
+}
+
+/* --- FOOTER PROFESIONAL --- */
+.asrs-footer {
+    border-top: 1px solid var(--border-silver);
+    padding: 1.5rem 0;
+    background-color: #0b111a;
+    font-size: 0.8rem;
+}
+
+.footer-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-copy {
+    color: var(--text-muted);
+}
+
+.footer-author {
+    color: var(--border-silver);
+    letter-spacing: 1px;
+}
+
+.footer-author strong {
+    color: var(--accent-gold);
+}
