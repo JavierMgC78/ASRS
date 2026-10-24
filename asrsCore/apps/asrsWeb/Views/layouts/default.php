@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ASRS | Axe Secure Router System</title>
+    <link rel="stylesheet" href="/assets/asrsWeb/css/defaultStyles.css">
     <!-- Estilos CSS: layout + contenido (convención contents/{content}.css), resueltos por RoutingEngine -->
     <?php foreach (($cssFiles ?? []) as $css): ?>
     <link rel="stylesheet" href="/<?= htmlspecialchars(ltrim($css, '/')) ?>">
@@ -30,7 +31,7 @@
 
             <!-- 3) Botón de Acceder -->
             <div class="asrs-actions">
-                <a href="/asraweb/login" class="btn-neon-outline">Acceder</a>
+                <a href="/asrsweb/login" class="btn-neon-outline">Acceder</a>
             </div>
         </div>
     </header>

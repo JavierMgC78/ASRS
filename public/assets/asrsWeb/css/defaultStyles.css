@@ -1,0 +1,202 @@
+/* ==========================================================
+ * Estética Institucional ASRS - Tema Oscuro con Bordes Neón
+ * ========================================================== */
+
+:root {
+    --asrs-bg-deep: #101926;
+    --asrs-border-silver: #D4D9ED;
+    --asrs-neon-gold: #E3B331;
+    --asrs-neon-red: #D92525;
+    --asrs-white: #FFFFFF;
+    --asrs-panel-bg: #162235;
+}
+
+body {
+    background-color: var(--asrs-bg-deep);
+    color: var(--asrs-white);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Contenedor Principal del Formulario */
+.asrs-form-container {
+    background-color: var(--asrs-panel-bg);
+    border: 1px solid var(--asrs-border-silver);
+    border-radius: 8px;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 25px;
+    box-shadow: 0 0 15px rgba(227, 179, 49, 0.15); /* Brillo neón sutil técnico */
+}
+
+/* Título Principal */
+.asrs-form-header-title h2 {
+    color: var(--asrs-neon-gold);
+    text-align: center;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+    text-shadow: 0 0 8px rgba(227, 179, 49, 0.4);
+}
+
+/* Secciones Colapsables */
+.asrs-section {
+    border: 1px solid var(--asrs-border-silver);
+    border-radius: 6px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(212, 217, 237, 0.05);
+    transition: all 0.3s ease;
+}
+
+/* Franja de Color de la Sección */
+.asrs-section-bar {
+    background: linear-gradient(90deg, #101926, var(--asrs-neon-gold));
+    color: var(--asrs-bg-deep);
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+
+.asrs-section-title {
+    color: var(--asrs-white);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    letter-spacing: 1px;
+}
+
+/* Botón de Colapso */
+.asrs-collapse-btn {
+    background: transparent;
+    border: 1px solid var(--asrs-white);
+    color: var(--asrs-white);
+    border-radius: 4px;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.asrs-collapse-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.asrs-icon-arrow {
+    font-size: 10px;
+    transition: transform 0.3s ease;
+}
+
+/* Estado Colapsado de la Sección */
+.asrs-section.collapsed .asrs-section-content {
+    display: none;
+}
+
+.asrs-section.collapsed .asrs-icon-arrow {
+    transform: rotate(-90deg);
+}
+
+/* Contenido Interno de la Sección */
+.asrs-section-content {
+    padding: 20px;
+    background-color: var(--asrs-bg-deep);
+}
+
+/* Cuadrícula de Campos (Fields) */
+.asrs-fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.asrs-field-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.asrs-field-group label {
+    font-size: 0.85rem;
+    color: var(--asrs-border-silver);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Entradas de Texto (Inputs con borde neón al foco) */
+.asrs-input {
+    background-color: #0b111a;
+    border: 1px solid #324463;
+    border-radius: 4px;
+    padding: 10px;
+    color: var(--asrs-white);
+    font-size: 0.95rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.asrs-input:focus {
+    outline: none;
+    border-color: var(--asrs-neon-gold);
+    box-shadow: 0 0 8px rgba(227, 179, 49, 0.4);
+}
+
+/* Acciones Generales del Formulario */
+.asrs-form-actions {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.asrs-btn {
+    background-color: transparent;
+    border: 1px solid var(--asrs-neon-red);
+    color: var(--asrs-white);
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.asrs-btn-primary {
+    background: linear-gradient(135deg, var(--asrs-neon-red), #9c1515);
+    border: none;
+    box-shadow: 0 0 10px rgba(217, 37, 37, 0.4);
+}
+
+.asrs-btn-primary:hover {
+    box-shadow: 0 0 15px rgba(217, 37, 37, 0.7);
+}
+
+/* Contenido Interno de la Sección (Transición fluida sin retraso) */
+.asrs-section-content {
+    max-height: 400px; /* Reducido para que la animación reaccione al instante */
+    opacity: 1;
+    padding: 20px;
+    overflow: hidden;
+    background-color: var(--asrs-bg-deep);
+    transition: max-height 0.3s cubic-bezier(0, 1, 0, 1), 
+                opacity 0.2s ease-in-out, 
+                padding 0.3s ease-in-out;
+}
+
+/* Animación de la flecha indicadora */
+.asrs-icon-arrow {
+    font-size: 10px;
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Estado Colapsado (Cierre suave y natural) */
+.asrs-section.collapsed .asrs-section-content {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.asrs-section.collapsed .asrs-icon-arrow {
+    transform: rotate(-90deg);
+}
