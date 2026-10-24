@@ -16,7 +16,7 @@
         <div class="asrs-container nav-container">
             <!-- 1) Área para Logo -->
             <div class="asrs-logo-box">
-                <img src="/assets/asrsWeb/img/logo_axe.png" alt="ASRS Shield Logo" class="asrs-logo">
+                <img src="/assets/asrsWeb/img/logo_axe_web.png" alt="ASRS Shield Logo" class="asrs-logo">
                 <span class="asrs-brand-text">ASRS <span class="highlight">KERNEL</span></span>
             </div>
 
