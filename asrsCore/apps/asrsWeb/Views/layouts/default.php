@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ASRS | Axe Secure Router System</title>
-    <!-- Estilos CSS específicos de la UI -->
-    <link rel="stylesheet" href="/assets/asrsWeb/css/layouts/default.css">
+    <!-- Estilos CSS: layout + contenido (convención contents/{content}.css), resueltos por RoutingEngine -->
+    <?php foreach (($cssFiles ?? []) as $css): ?>
+    <link rel="stylesheet" href="/<?= htmlspecialchars(ltrim($css, '/')) ?>">
+    <?php endforeach; ?>
 </head>
 <body>
     <!-- HEADER / BARRA DE NAVEGACIÓN PERIMETRAL -->
@@ -20,9 +22,9 @@
             <!-- 2) Menú de Navegación (3 opciones) -->
             <nav class="asrs-nav">
                 <ul class="nav-list">
-                    <li><a href="/asraweb/inicio" class="nav-link active">Home</a></li>
-                    <li><a href="/asraweb/arquitectura" class="nav-link">Arquitectura</a></li>
-                    <li><a href="/asraweb/seguridad" class="nav-link">Seguridad</a></li>
+                    <li><a href="/asrsweb/inicio" class="nav-link active">Home</a></li>
+                    <li><a href="/asrsweb/arquitectura" class="nav-link">Arquitectura</a></li>
+                    <li><a href="/asrsweb/seguridad" class="nav-link">Seguridad</a></li>
                 </ul>
             </nav>
 
@@ -48,7 +50,9 @@
         </div>
     </footer>
 
-    <!-- Scripts de cliente -->
-    <script src="/assets/asrsWeb/layouts/default.js"></script>
+    <!-- Scripts de cliente: layout + contenido (convención contents/{content}.js) -->
+    <?php foreach (($jsFiles ?? []) as $js): ?>
+    <script src="/<?= htmlspecialchars(ltrim($js, '/')) ?>"></script>
+    <?php endforeach; ?>
 </body>
 </html>

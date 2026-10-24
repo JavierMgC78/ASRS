@@ -195,9 +195,9 @@ return array (
     'css_path_view' => NULL,
     'js_path_view' => NULL,
   ),
-  'asrsWeb|asraweb/inicio' => 
+  'asrsWeb|asrsweb/inicio' => 
   array (
-    'uri' => 'asraweb/inicio',
+    'uri' => 'asrsweb/inicio',
     'app' => 'asrsWeb',
     'type' => 'public',
     'controller' => '',
@@ -210,9 +210,9 @@ return array (
     'css_path_view' => NULL,
     'js_path_view' => NULL,
   ),
-  'asrsWeb|asraweb/arquitectura' => 
+  'asrsWeb|asrsweb/arquitectura' => 
   array (
-    'uri' => 'asraweb/arquitectura',
+    'uri' => 'asrsweb/arquitectura',
     'app' => 'asrsWeb',
     'type' => 'public',
     'controller' => '',
@@ -225,9 +225,9 @@ return array (
     'css_path_view' => NULL,
     'js_path_view' => NULL,
   ),
-  'asrsWeb|asraweb/seguridad' => 
+  'asrsWeb|asrsweb/seguridad' => 
   array (
-    'uri' => 'asraweb/seguridad',
+    'uri' => 'asrsweb/seguridad',
     'app' => 'asrsWeb',
     'type' => 'public',
     'controller' => '',
@@ -240,9 +240,9 @@ return array (
     'css_path_view' => NULL,
     'js_path_view' => NULL,
   ),
-  'asrsWeb|asraweb/login' => 
+  'asrsWeb|asrsweb/login' => 
   array (
-    'uri' => 'asraweb/login',
+    'uri' => 'asrsweb/login',
     'app' => 'asrsWeb',
     'type' => 'public',
     'controller' => '',
